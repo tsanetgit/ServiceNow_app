@@ -1,0 +1,6 @@
+{
+    "scope": "x_2256809_connect",
+    "scopeId": "d08b132453e046a8ba384aa930b4b88a",
+    "name": "TSANet Connect",
+    "tsconfigPath": "./src/server/tsconfig.json"
+}
