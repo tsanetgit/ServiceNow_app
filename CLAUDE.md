@@ -7,7 +7,7 @@ TSANet Connect for ServiceNow: a scoped app that TSANet members install on their
 ## Build and test
 
 ```bash
-npm install                        # once per checkout; needs Node 20.18 or later
+npm install                        # once per checkout; needs Node 20.18 or later and npm 11.16 or later
 npm run build                      # now-sdk build: compiles to dist/app
 npx now-sdk build --frozenKeys     # the CI check: fails if keys.ts is out of date
 python3 tools/cert_check.py dist/app   # optional, after a build: the most common Store certification failures
@@ -16,6 +16,8 @@ python3 tools/cert_check.py dist/app   # optional, after a build: the most commo
 `tools/cert_check.py` comes from the devkit's `templates/servicenow-sdk/tools/` and needs Python 3.9 or later (on Windows the command may be `python` or `py`). It is optional: copy it in to use it, and delete this paragraph and its run line if the repo doesn't. Where it's copied in, run it after every build that changes records. It is a pre-check only: ServiceNow's Certification Self-Test Tool on the vendor instance stays the authority.
 
 `src/fluent/generated/keys.ts` is repo-generated: `npm run build` regenerates it, and it maps each record's ID to its sys_id. Commit it with the change that produced it, never edit it by hand. Without it, deploys from different machines give the same record different sys_ids and create duplicates.
+
+Some of the SDK's dependencies have install scripts the build needs. npm 12 and later skip a dependency's install script unless `allowScripts` in `package.json` approves it (npm 11.16 and later only warn), and the build can break without them. The approvals are committed in `package.json`, never kept in anyone's own npm config. They are pinned to a version, so a dependency update lists them as pending again. If `npm install` ends by listing packages with pending install scripts, stop and tell the person which ones. Approving or denying them is their decision: run `npm approve-scripts <pkg>` or `npm deny-scripts <pkg>` only for the packages they name (npm's own messages call these `npm install-scripts approve` and `deny`, the same commands), and commit `package.json` with the change. Approving doesn't run the skipped scripts, and a plain `npm install` then reports up to date, so run `npm ci` (or `npm rebuild <pkg>`) before building.
 
 The SDK's own guides are in `node_modules/@servicenow/sdk/docs/`.
 
@@ -52,3 +54,5 @@ npm run deploy                     # now-sdk install, to your developer instance
 - Hand edits to `src/fluent/generated/keys.ts`.
 - `dist/`, `node_modules/` and `.now/`.
 - The scope in `now.config.json`, unless the task is to change it.
+- `allowScripts` in `package.json`, except `npm approve-scripts` or `npm deny-scripts` (or `npm install-scripts approve` or `deny`) for the packages the person names (see Build and test).
+- npm settings or flags that bypass `allowScripts`, such as `--dangerously-allow-all-scripts`.
