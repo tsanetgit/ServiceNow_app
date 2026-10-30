@@ -2,7 +2,7 @@
 
 ## What this repo is
 
-TSANet Connect for ServiceNow: a scoped app that TSANet members install on their own ServiceNow instance to work their TSANet Connect collaboration cases there. It is a client of the Connect REST API (`tsanetgit/Connect-API-Code`, whose `openapi.yaml` is the contract) and calls it from server scripts. A ServiceNow scoped app built with the ServiceNow SDK (Fluent): TypeScript `.now.ts` source in `src/fluent/`, server scripts in `src/server/`.
+TSANet Connect for ServiceNow: a scoped app that TSANet members install on their own ServiceNow instance to work their TSANet Connect collaboration cases there. It is a client of the Connect REST API (`tsanetgit/Connect-API-Code`, whose `openapi.yaml` is the contract) and calls it from server scripts. A ServiceNow scoped app built with the ServiceNow SDK (Fluent): TypeScript `.now.ts` source in `src/fluent/`, server scripts in `src/server/`. This repo is public, so its settings leave the Claude Code advisor off, since they would turn it on for anyone who opens it. Turn it on yourself with `/advisor opus`.
 
 ## Build and test
 
