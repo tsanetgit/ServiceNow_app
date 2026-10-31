@@ -44,7 +44,7 @@ npm run deploy                     # now-sdk install, to your developer instance
 
 ## Conventions
 
-- Branch from `main` as `feat/<slug>` or `fix/<slug>`. Open draft PRs. Never push to `main` directly.
+- Branch from `main` as `feat/<slug>` or `fix/<slug>`. Open draft PRs. A draft is only the starting point. The person who asked for the change reads it and takes it out of draft (Claude doesn't), Copilot reviews it, QA runs in a new session, and a person approves and merges. A PR should be out of draft when it merges. Never push to `main` directly.
 - Change the app in code. `now-sdk transform` pulls edits made on an instance back into code, but rewrites unrelated lines and can drop `$id` entries: review its output hunk by hunk, never commit it whole.
 - `gs.print` isn't allowed in scoped apps; use `gs.info`.
 - Every module and app menu has roles, and every table has a read, write, create and delete ACL. The ServiceNow Store's certification fails apps without them.
