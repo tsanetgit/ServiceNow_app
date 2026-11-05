@@ -9,6 +9,10 @@ declare global {
                         table: 'sys_module'
                         id: '4487cc33ad644a75860d83db24a15e35'
                     }
+                    csp_credential_get_attribute: {
+                        table: 'sys_scope_privilege'
+                        id: '76b79d012e834fbb98cbc026280d8a01'
+                    }
                     csp_credentials_get_by_alias: {
                         table: 'sys_scope_privilege'
                         id: '6050304ed46b4dc2bfd0e6f9c5d36074'

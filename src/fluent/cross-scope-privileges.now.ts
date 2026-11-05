@@ -23,6 +23,15 @@ CrossScopePrivilege({
 })
 
 CrossScopePrivilege({
+    $id: Now.ID['csp_credential_get_attribute'],
+    targetName: 'ScriptableStandardCredential.getAttribute',
+    targetScope: 'global',
+    targetType: 'scriptable',
+    operation: 'execute',
+    status: 'allowed',
+})
+
+CrossScopePrivilege({
     $id: Now.ID['csp_rest_set_http_method'],
     targetName: 'ScriptableRESTMessageClient.setHttpMethod',
     targetScope: 'global',
