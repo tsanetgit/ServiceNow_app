@@ -9,6 +9,50 @@ declare global {
                         table: 'sys_module'
                         id: '4487cc33ad644a75860d83db24a15e35'
                     }
+                    csp_credentials_get_by_alias: {
+                        table: 'sys_scope_privilege'
+                        id: '6050304ed46b4dc2bfd0e6f9c5d36074'
+                    }
+                    csp_glide_properties: {
+                        table: 'sys_scope_privilege'
+                        id: 'a5e7c90afb4f484facc897552688d7d0'
+                    }
+                    csp_rest_execute: {
+                        table: 'sys_scope_privilege'
+                        id: '067c345de116496e9c678f4f3a71f199'
+                    }
+                    csp_rest_get_body: {
+                        table: 'sys_scope_privilege'
+                        id: '58a31c0389fa457789ebdf7e301c8ae2'
+                    }
+                    csp_rest_get_status_code: {
+                        table: 'sys_scope_privilege'
+                        id: 'c9f8e8e5f0fe43969cae1008fe4e4ff2'
+                    }
+                    csp_rest_have_error: {
+                        table: 'sys_scope_privilege'
+                        id: 'f4c9056206a24dcf868bd74179cd5b19'
+                    }
+                    csp_rest_set_endpoint: {
+                        table: 'sys_scope_privilege'
+                        id: '0c1c1d28a3454c0b9f3c664e7e9ba283'
+                    }
+                    csp_rest_set_http_method: {
+                        table: 'sys_scope_privilege'
+                        id: '7ce4015e615a4702bc8ace680b5d9275'
+                    }
+                    csp_rest_set_http_timeout: {
+                        table: 'sys_scope_privilege'
+                        id: 'b8ebe0921c3f46e5a75f3edc11e56813'
+                    }
+                    csp_rest_set_request_body: {
+                        table: 'sys_scope_privilege'
+                        id: 'f21b1e6d147b41aab55a79fc62c6f30f'
+                    }
+                    csp_rest_set_request_header: {
+                        table: 'sys_scope_privilege'
+                        id: 'b24d68f7456742e2a9d46b46eb48c70b'
+                    }
                     module_credential: {
                         table: 'sys_app_module'
                         id: '1d049e3fdc9b40a7a4bfd990b5094dc7'
