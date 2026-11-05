@@ -29,6 +29,10 @@ declare global {
                         table: 'sys_scope_privilege'
                         id: '58a31c0389fa457789ebdf7e301c8ae2'
                     }
+                    csp_rest_get_error_message: {
+                        table: 'sys_scope_privilege'
+                        id: '9182ca22d34b4ed780a8d6b611f3fe10'
+                    }
                     csp_rest_get_status_code: {
                         table: 'sys_scope_privilege'
                         id: 'c9f8e8e5f0fe43969cae1008fe4e4ff2'

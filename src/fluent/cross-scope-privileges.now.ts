@@ -104,6 +104,15 @@ CrossScopePrivilege({
 })
 
 CrossScopePrivilege({
+    $id: Now.ID['csp_rest_get_error_message'],
+    targetName: 'ScriptableRESTResponse.getErrorMessage',
+    targetScope: 'global',
+    targetType: 'scriptable',
+    operation: 'execute',
+    status: 'allowed',
+})
+
+CrossScopePrivilege({
     $id: Now.ID['csp_rest_have_error'],
     targetName: 'ScriptableRESTResponse.haveError',
     targetScope: 'global',
