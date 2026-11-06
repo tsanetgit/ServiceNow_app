@@ -1,4 +1,4 @@
-import { Form, List, default_view } from '@servicenow/sdk/core'
+import { Form, List, Record, default_view } from '@servicenow/sdk/core'
 
 Form({
     table: 'x_2256809_connect_case',
@@ -120,4 +120,34 @@ List({
         'request_date',
         'response_sla',
     ],
+})
+
+// Notes and responses under the TSANet Case form, through their reference to it.
+const caseRelatedLists = Record({
+    $id: Now.ID['case_related_lists'],
+    table: 'sys_ui_related_list',
+    data: {
+        name: 'x_2256809_connect_case',
+        view: 'Default view',
+    },
+})
+
+Record({
+    $id: Now.ID['case_related_list_notes'],
+    table: 'sys_ui_related_list_entry',
+    data: {
+        list_id: caseRelatedLists,
+        position: 0,
+        related_list: 'x_2256809_connect_note.tsanet_case',
+    },
+})
+
+Record({
+    $id: Now.ID['case_related_list_responses'],
+    table: 'sys_ui_related_list_entry',
+    data: {
+        list_id: caseRelatedLists,
+        position: 1,
+        related_list: 'x_2256809_connect_response.tsanet_case',
+    },
 })
