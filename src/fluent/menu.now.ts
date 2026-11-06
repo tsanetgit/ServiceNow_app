@@ -13,6 +13,51 @@ export const tsanetMenu = ApplicationMenu({
 // Orders follow the prototype; the request, note and response modules (phase 2)
 // and the poll job module (phase 3) fill the gaps.
 Record({
+    $id: Now.ID['module_cases_inbound_open'],
+    table: 'sys_app_module',
+    data: {
+        title: 'Inbound - Open',
+        application: tsanetMenu,
+        link_type: 'LIST',
+        name: 'x_2256809_connect_case',
+        filter: 'direction=INBOUND^status=OPEN^ORDERBYDESCrequest_date',
+        roles: ['x_2256809_connect.user'],
+        active: true,
+        order: 100,
+    },
+})
+
+Record({
+    $id: Now.ID['module_cases_outbound'],
+    table: 'sys_app_module',
+    data: {
+        title: 'Outbound',
+        application: tsanetMenu,
+        link_type: 'LIST',
+        name: 'x_2256809_connect_case',
+        filter: 'direction=OUTBOUND^ORDERBYDESCrequest_date',
+        roles: ['x_2256809_connect.user'],
+        active: true,
+        order: 200,
+    },
+})
+
+Record({
+    $id: Now.ID['module_cases_all'],
+    table: 'sys_app_module',
+    data: {
+        title: 'All',
+        application: tsanetMenu,
+        link_type: 'LIST',
+        name: 'x_2256809_connect_case',
+        filter: 'ORDERBYDESCrequest_date',
+        roles: ['x_2256809_connect.user'],
+        active: true,
+        order: 300,
+    },
+})
+
+Record({
     $id: Now.ID['module_setup'],
     table: 'sys_app_module',
     data: {
