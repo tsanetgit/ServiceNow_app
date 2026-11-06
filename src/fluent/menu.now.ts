@@ -58,6 +58,36 @@ Record({
 })
 
 Record({
+    $id: Now.ID['module_notes'],
+    table: 'sys_app_module',
+    data: {
+        title: 'Notes',
+        application: tsanetMenu,
+        link_type: 'LIST',
+        name: 'x_2256809_connect_note',
+        filter: 'ORDERBYDESCtsanet_created',
+        roles: ['x_2256809_connect.user'],
+        active: true,
+        order: 400,
+    },
+})
+
+Record({
+    $id: Now.ID['module_responses'],
+    table: 'sys_app_module',
+    data: {
+        title: 'Responses',
+        application: tsanetMenu,
+        link_type: 'LIST',
+        name: 'x_2256809_connect_response',
+        filter: 'ORDERBYDESCtsanet_created',
+        roles: ['x_2256809_connect.user'],
+        active: true,
+        order: 500,
+    },
+})
+
+Record({
     $id: Now.ID['module_setup'],
     table: 'sys_app_module',
     data: {
