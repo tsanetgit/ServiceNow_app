@@ -40,8 +40,8 @@ const hostTable = Property({
     $id: Now.ID['prop_host_table'],
     name: 'x_2256809_connect.host.table',
     type: 'string',
-    value: 'incident',
-    description: 'Host table. Table whose number links to a TSANet request (incident, or sn_customerservice_case)',
+    value: 'sn_customerservice_case',
+    description: 'Host table. Table whose records link to a TSANet case (sn_customerservice_case, or incident)',
     roles: { read: [userRole], write: [adminRole] },
 })
 
@@ -50,7 +50,7 @@ const inboundCreateHost = Property({
     name: 'x_2256809_connect.inbound.create_host',
     type: 'boolean',
     value: 'true',
-    description: 'Create host records for inbound requests. Create an Incident for an inbound request that matches none',
+    description: 'Create host records for inbound requests. Create a record in the host table for an inbound request that matches none',
     roles: { read: [userRole], write: [adminRole] },
 })
 

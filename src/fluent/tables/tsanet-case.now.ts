@@ -1,0 +1,92 @@
+import {
+    BooleanColumn,
+    ChoiceColumn,
+    DateTimeColumn,
+    EmailColumn,
+    HtmlColumn,
+    ReferenceColumn,
+    StringColumn,
+    Table,
+} from '@servicenow/sdk/core'
+
+// One TSANet collaboration request, inbound or outbound. Mirrors the Salesforce
+// app's TSANetCase__c; the choice values are the Connect API's own values, so the
+// sync stores what the API sends.
+export const x_2256809_connect_case = Table({
+    name: 'x_2256809_connect_case',
+    label: 'TSANet Case',
+    display: 'number',
+    autoNumber: { prefix: 'TSN', number: 1001, numberOfDigits: 7 },
+    index: [{ name: 'token', unique: false, element: 'token' }],
+    schema: {
+        number: StringColumn({
+            label: 'Number',
+            maxLength: 40,
+            readOnly: true,
+            default: 'javascript:global.getNextObjNumberPadded();',
+        }),
+        // Covers CSM cases and incidents; the member's record itself is never changed.
+        host_record: ReferenceColumn({ label: 'Case', referenceTable: 'task' }),
+        direction: ChoiceColumn({
+            label: 'Direction',
+            dropdown: 'dropdown_with_none',
+            choices: {
+                INBOUND: { label: 'Inbound', sequence: 10 },
+                OUTBOUND: { label: 'Outbound', sequence: 20 },
+            },
+        }),
+        status: ChoiceColumn({
+            label: 'Status',
+            dropdown: 'dropdown_with_none',
+            choices: {
+                OPEN: { label: 'Open', sequence: 10 },
+                ACCEPTED: { label: 'Accepted', sequence: 20 },
+                INFORMATION: { label: 'Information', sequence: 30 },
+                CLOSED: { label: 'Closed', sequence: 40 },
+                REJECTED: { label: 'Rejected', sequence: 50 },
+            },
+        }),
+        priority: ChoiceColumn({
+            label: 'Priority',
+            dropdown: 'dropdown_with_none',
+            choices: {
+                LOW: { label: 'Low', sequence: 10 },
+                MEDIUM: { label: 'Medium', sequence: 20 },
+                HIGH: { label: 'High', sequence: 30 },
+            },
+        }),
+        token: StringColumn({ label: 'TSANet token', maxLength: 255 }),
+        tsanet_case_id: StringColumn({ label: 'TSANet case ID', maxLength: 255 }),
+        summary: StringColumn({ label: 'Summary', maxLength: 4000 }),
+        description: StringColumn({ label: 'Description', maxLength: 32000 }),
+        priority_note: HtmlColumn({ label: 'Priority note', maxLength: 32000 }),
+        escalation_instructions: HtmlColumn({ label: 'Escalation instructions', maxLength: 32000 }),
+        admin_note: StringColumn({ label: 'Admin note', maxLength: 32000 }),
+        custom_fields: StringColumn({ label: 'Custom fields', maxLength: 32000 }),
+        partner: StringColumn({ label: 'Member (Partner)', maxLength: 255 }),
+        document_id: StringColumn({ label: 'Document ID', maxLength: 255 }),
+        document_name: StringColumn({ label: 'Document name', maxLength: 255 }),
+        submitter_name: StringColumn({ label: 'Submitter name', maxLength: 255 }),
+        submitter_first_name: StringColumn({ label: 'Submitter first name', maxLength: 255 }),
+        submitter_last_name: StringColumn({ label: 'Submitter last name', maxLength: 255 }),
+        submitter_email: EmailColumn({ label: 'Submitter email', maxLength: 255 }),
+        submitter_phone: StringColumn({ label: 'Submitter phone', maxLength: 40 }),
+        submitter_case_number: StringColumn({ label: 'Submitter case number', maxLength: 255 }),
+        submitted_company_id: StringColumn({ label: 'Company ID (submitted)', maxLength: 255 }),
+        submitted_company_name: StringColumn({ label: 'Company name (submitted)', maxLength: 255 }),
+        receiver_name: StringColumn({ label: 'Receiver name', maxLength: 255 }),
+        receiver_email: StringColumn({ label: 'Receiver email', maxLength: 255 }),
+        receiver_phone: StringColumn({ label: 'Receiver phone', maxLength: 40 }),
+        receiver_case_number: StringColumn({ label: 'Receiver case number', maxLength: 255 }),
+        received_company_id: StringColumn({ label: 'Company ID (received)', maxLength: 255 }),
+        received_company_name: StringColumn({ label: 'Company name (received)', maxLength: 255 }),
+        tsanet_contact: StringColumn({ label: 'TSANet contact', maxLength: 255 }),
+        tsanet_email: StringColumn({ label: 'TSANet email', maxLength: 255 }),
+        request_date: DateTimeColumn({ label: 'Request date' }),
+        response_sla: DateTimeColumn({ label: 'Response SLA' }),
+        tsanet_updated: DateTimeColumn({ label: 'Updated in TSANet' }),
+        responded: BooleanColumn({ label: 'Responded', default: false }),
+        reminder_sent: BooleanColumn({ label: 'Reminder sent', default: false }),
+        feedback_requested: BooleanColumn({ label: 'Feedback requested', default: false }),
+    },
+})
