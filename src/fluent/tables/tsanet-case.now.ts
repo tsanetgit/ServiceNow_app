@@ -16,8 +16,9 @@ export const x_2256809_connect_case = Table({
     name: 'x_2256809_connect_case',
     label: 'TSANet Case',
     display: 'number',
-    autoNumber: { prefix: 'TSN', number: 1001, numberOfDigits: 7 },
-    index: [{ name: 'token', unique: false, element: 'token' }],
+    autoNumber: { prefix: 'TSA', number: 1001, numberOfDigits: 7 },
+    // One TSANet token is one collaboration request; overlapping sync runs must not insert it twice.
+    index: [{ name: 'token', unique: true, element: 'token' }],
     schema: {
         number: StringColumn({
             label: 'Number',

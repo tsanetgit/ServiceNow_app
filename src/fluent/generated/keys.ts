@@ -281,6 +281,14 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_number'
+                        id: '09fb8953ee174a17aba0f62640962c6f'
+                        key: {
+                            category: 'x_2256809_connect_case'
+                            prefix: 'TSA'
+                        }
+                    },
+                    {
                         table: 'sys_security_acl_role'
                         id: '0ad5fa9b71664c479dd66548e24d8c16'
                         key: {
@@ -1634,6 +1642,7 @@ declare global {
                     {
                         table: 'sys_number'
                         id: 'a6ef27540b32492ab94a1c8cc77d28bc'
+                        deleted: true
                         key: {
                             category: 'x_2256809_connect_case'
                             prefix: 'TSN'
