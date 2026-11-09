@@ -8,7 +8,7 @@ import { display } from '../utils/fields'
 import { getCase, getCurrentUser } from './services'
 import './app.css'
 
-// PROVISIONAL(tsanetgit/ServiceNow_app#16): partner search, the partner's form and
+// PROVISIONAL(tsanetgit/ServiceNow_app#19): partner search, the partner's form and
 // submit are placeholders until the API is connected; their design comes with it.
 export default function App() {
     const caseId = new URLSearchParams(window.location.search).get('sysparm_case') || ''
@@ -17,7 +17,7 @@ export default function App() {
     const [error, setError] = useState('')
 
     useEffect(() => {
-        if (!caseId) {
+        if (!/^[0-9a-f]{32}$/.test(caseId)) {
             setError('Open this from a case: ⋯ Create TSANet Case.')
             return
         }

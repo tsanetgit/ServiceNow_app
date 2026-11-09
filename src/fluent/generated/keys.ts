@@ -37,6 +37,10 @@ declare global {
                         table: 'sys_security_acl'
                         id: '075e87d06c6644ad9462e45b235ece0d'
                     }
+                    acl_page_create_case_read: {
+                        table: 'sys_security_acl'
+                        id: 'aecb84bfd08c4dbdb8feb8e2f9ca1301'
+                    }
                     acl_response_create: {
                         table: 'sys_security_acl'
                         id: '90f3eafcfb6847a5ad120b38b99c3df5'
@@ -1084,6 +1088,19 @@ declare global {
                         id: '2aa4643edc234e6f80cc9e894581ba51'
                         key: {
                             name: 'x_2256809_connect_case'
+                        }
+                    },
+                    {
+                        table: 'sys_security_acl_role'
+                        id: '2acfdbf3768c4c739b350c0eda492e43'
+                        key: {
+                            sys_security_acl: 'aecb84bfd08c4dbdb8feb8e2f9ca1301'
+                            sys_user_role: {
+                                id: '13c64c9ef7b54505a80e6f46530c6f51'
+                                key: {
+                                    name: 'x_2256809_connect.user'
+                                }
+                            }
                         }
                     },
                     {
