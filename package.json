@@ -15,6 +15,7 @@
     "devDependencies": {
         "@servicenow/sdk": "4.14.0",
         "@servicenow/glide": "27.0.5",
+        "@types/react": "18.3.12",
         "typescript": "5.5.4"
     },
     "allowScripts": {
@@ -22,5 +23,10 @@
         "libxmljs2@0.37.0": true,
         "@parcel/watcher@2.6.0": true,
         "fsevents@2.3.3": false
+    },
+    "dependencies": {
+        "@servicenow/react-components": "^0.1.8",
+        "react": "18.2.0",
+        "react-dom": "18.2.0"
     }
 }

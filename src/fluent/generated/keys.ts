@@ -53,6 +53,10 @@ declare global {
                         table: 'sys_security_acl'
                         id: 'df470c48ecd949b980b9ebe4ce6379e2'
                     }
+                    action_create_tsanet_case: {
+                        table: 'sys_ui_action'
+                        id: '422d2538bf3d4e7e88acdd8184ef8959'
+                    }
                     bom_json: {
                         table: 'sys_module'
                         id: '4487cc33ad644a75860d83db24a15e35'
@@ -669,6 +673,19 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_action_role'
+                        id: '0edff4015ccf44359088fbea10e44908'
+                        key: {
+                            sys_ui_action: '422d2538bf3d4e7e88acdd8184ef8959'
+                            sys_user_role: {
+                                id: '13c64c9ef7b54505a80e6f46530c6f51'
+                                key: {
+                                    name: 'x_2256809_connect.user'
+                                }
+                            }
+                        }
+                    },
+                    {
                         table: 'sys_documentation'
                         id: '0f9d002c7d164385b5c0ec754fc03fa5'
                         key: {
@@ -968,6 +985,13 @@ declare global {
                         id: '27607f5da2054ed6b2c661e8510ba431'
                         key: {
                             name: 'x_2256809_connect_case'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_page'
+                        id: '282183f7e10445b68e44febe09613392'
+                        key: {
+                            endpoint: 'x_2256809_connect_create_case.do'
                         }
                     },
                     {
@@ -1403,6 +1427,13 @@ declare global {
                         }
                     },
                     {
+                        table: 'sn_glider_source_artifact'
+                        id: '4279f3107f8b43c4b3c513be8a32d4a5'
+                        key: {
+                            name: 'x_2256809_connect_create_case.do - BYOUI Files'
+                        }
+                    },
+                    {
                         table: 'sys_dictionary'
                         id: '4375ef3961e94a1f8f1a498f830ee0da'
                         key: {
@@ -1596,6 +1627,13 @@ declare global {
                                 }
                             }
                             sys_domain: 'global'
+                        }
+                    },
+                    {
+                        table: 'sys_ux_lib_asset'
+                        id: '4dffd763740e4678aaacb50c9f58e21b'
+                        key: {
+                            name: 'x_2256809_connect/create-case/main.js.map'
                         }
                     },
                     {
@@ -2810,6 +2848,14 @@ declare global {
                         }
                     },
                     {
+                        table: 'sn_glider_source_artifact_m2m'
+                        id: '99a9138516e2467b9c2afbef5b6a0ba0'
+                        key: {
+                            application_file: '4dffd763740e4678aaacb50c9f58e21b'
+                            source_artifact: '4279f3107f8b43c4b3c513be8a32d4a5'
+                        }
+                    },
+                    {
                         table: 'sys_ui_element'
                         id: '99eb8723042748cd87d664fd8da69a77'
                         key: {
@@ -3439,6 +3485,13 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ux_lib_asset'
+                        id: 'bcaad298f3d44c53b845af3fbbc0f33f'
+                        key: {
+                            name: 'x_2256809_connect/create-case/main'
+                        }
+                    },
+                    {
                         table: 'sys_ui_element'
                         id: 'bd0f6ce3898349108a65a8ff2805e3d2'
                         key: {
@@ -3785,6 +3838,14 @@ declare global {
                             }
                             element: 'tsanet_created'
                             position: '4'
+                        }
+                    },
+                    {
+                        table: 'sn_glider_source_artifact_m2m'
+                        id: 'c81d8f6dc5364093839e829280c91518'
+                        key: {
+                            application_file: 'bcaad298f3d44c53b845af3fbbc0f33f'
+                            source_artifact: '4279f3107f8b43c4b3c513be8a32d4a5'
                         }
                     },
                     {
@@ -4823,6 +4884,14 @@ declare global {
                                     sys_domain: 'global'
                                 }
                             }
+                        }
+                    },
+                    {
+                        table: 'sn_glider_source_artifact_m2m'
+                        id: 'fbc2d2de92784ec4bf71c32e6a83885b'
+                        key: {
+                            application_file: '282183f7e10445b68e44febe09613392'
+                            source_artifact: '4279f3107f8b43c4b3c513be8a32d4a5'
                         }
                     },
                     {
