@@ -133,6 +133,18 @@ declare global {
                         table: 'sys_scope_privilege'
                         id: 'b24d68f7456742e2a9d46b46eb48c70b'
                     }
+                    form_action_item_create_tsanet_case: {
+                        table: 'sys_ux_form_action_layout_item'
+                        id: '20f4f4a107764e72a343d432df499f41'
+                    }
+                    form_action_item_link_case: {
+                        table: 'sys_ux_m2m_action_layout_item'
+                        id: '017d8d3564a6499bb0dd266fb6a146f6'
+                    }
+                    form_action_item_link_front_line: {
+                        table: 'sys_ux_m2m_action_layout_item'
+                        id: 'b6214ea8eb6c4974b87fbaa4a6d93c1e'
+                    }
                     module_cases_all: {
                         table: 'sys_app_module'
                         id: '7193a88d530c491f80fe302df20d1933'
@@ -3808,6 +3820,13 @@ declare global {
                             name: 'x_2256809_connect_case'
                             element: 'reminder_sent'
                             language: 'en'
+                        }
+                    },
+                    {
+                        table: 'sys_ux_form_action'
+                        id: 'c63f247388ee40e3b3deef702543600f'
+                        key: {
+                            ui_action: '422d2538bf3d4e7e88acdd8184ef8959'
                         }
                     },
                     {
