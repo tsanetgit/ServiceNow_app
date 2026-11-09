@@ -69,6 +69,10 @@ declare global {
                         table: 'sys_ui_related_list'
                         id: '88fa7d2d9ff946d3b78b790e4f28bf83'
                     }
+                    csm_case_related_list_tsanet: {
+                        table: 'sys_ui_related_list_entry'
+                        id: '7e0cb14e3a3b43cf9b9e14f8d010e1f8'
+                    }
                     csp_credential_get_attribute: {
                         table: 'sys_scope_privilege'
                         id: '76b79d012e834fbb98cbc026280d8a01'
