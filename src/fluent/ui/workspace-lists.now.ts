@@ -9,6 +9,9 @@ const CSM_WORKSPACE_LIST_MENU = '0b62b8ba77d650102c30945caa106138'
 
 const COLUMNS = 'number,host_record,direction,status,priority,partner,summary,request_date,response_sla'
 
+// The lists' roles are the role name as text: Record() data can't take a Role object
+// (it renders as [object Object]), unlike Applicability's roles.
+
 const tsanetAudience = Applicability({
     $id: Now.ID['ws_audience_user'],
     name: 'TSANet Connect - User',
