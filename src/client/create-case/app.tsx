@@ -26,7 +26,7 @@ export default function App() {
                 setHostCase(c)
                 setAgent(u)
             })
-            .catch((e) => setError(`Could not read the case: ${e.message}`))
+            .catch((e) => setError(e.message))
     }, [caseId])
 
     if (error) return <Alert status="critical" header="Create TSANet Case" content={error} />
