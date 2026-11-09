@@ -69,6 +69,10 @@ declare global {
                         table: 'sys_ui_related_list'
                         id: '88fa7d2d9ff946d3b78b790e4f28bf83'
                     }
+                    csm_case_related_list_tsanet: {
+                        table: 'sys_ui_related_list_entry'
+                        id: '7e0cb14e3a3b43cf9b9e14f8d010e1f8'
+                    }
                     csp_credential_get_attribute: {
                         table: 'sys_scope_privilege'
                         id: '76b79d012e834fbb98cbc026280d8a01'
@@ -240,6 +244,38 @@ declare global {
                     tsanet_menu: {
                         table: 'sys_app_application'
                         id: '63f7f870c83b4b27ad97c086245792e7'
+                    }
+                    ws_audience_user: {
+                        table: 'sys_ux_applicability'
+                        id: '7ce54f380bbf420399b26c0d10e7af9d'
+                    }
+                    ws_category_tsanet: {
+                        table: 'sys_ux_list_category'
+                        id: 'd4d12f979a604da1a6c8a22ebe9f0fd4'
+                    }
+                    ws_list_all: {
+                        table: 'sys_ux_list'
+                        id: 'ef7713c791bc455d90055f506baa118a'
+                    }
+                    ws_list_all_audience: {
+                        table: 'sys_ux_applicability_m2m_list'
+                        id: '406371ec08884b4a854d1e74da4035f0'
+                    }
+                    ws_list_inbound_open: {
+                        table: 'sys_ux_list'
+                        id: 'c84c6ceb3c1146748eba0a0708792f91'
+                    }
+                    ws_list_inbound_open_audience: {
+                        table: 'sys_ux_applicability_m2m_list'
+                        id: 'a28ee59c8ccc4fc9ae2e19bfc630cd5a'
+                    }
+                    ws_list_outbound: {
+                        table: 'sys_ux_list'
+                        id: 'f665c6b63b53499fa6a2eedaee31a702'
+                    }
+                    ws_list_outbound_audience: {
+                        table: 'sys_ux_applicability_m2m_list'
+                        id: 'e19102142e8c42bf8906008858ae23fa'
                     }
                 }
                 composite: [
