@@ -21,6 +21,10 @@ declare global {
                         table: 'sys_security_acl'
                         id: 'e3eb8734cd0046c7a19db070017445b5'
                     }
+                    acl_create_case_api: {
+                        table: 'sys_security_acl'
+                        id: 'd4e687bcfb6345d99579c385b8583d8d'
+                    }
                     acl_note_create: {
                         table: 'sys_security_acl'
                         id: '2677b3e546bf4f288d31b4608fedff03'
@@ -84,14 +88,17 @@ declare global {
                     csp_connection_info_get: {
                         table: 'sys_scope_privilege'
                         id: 'bc494caae862474baac221df031aecf4'
+                        deleted: true
                     }
                     csp_connection_info_get_attribute: {
                         table: 'sys_scope_privilege'
                         id: 'fa5dc08e172548ecac9b329ee4d9b01a'
+                        deleted: true
                     }
                     csp_connection_info_get_credential_attribute: {
                         table: 'sys_scope_privilege'
                         id: '277048ee18c74e498081496bb964a38a'
+                        deleted: true
                     }
                     csp_credential_get_attribute: {
                         table: 'sys_scope_privilege'
@@ -106,6 +113,26 @@ declare global {
                     csp_glide_properties: {
                         table: 'sys_scope_privilege'
                         id: 'a5e7c90afb4f484facc897552688d7d0'
+                    }
+                    csp_glide_record_insert: {
+                        table: 'sys_scope_privilege'
+                        id: '1dfce811626c47e88466d786a7f92797'
+                    }
+                    csp_glide_record_secure_get_value: {
+                        table: 'sys_scope_privilege'
+                        id: 'fcb41743e148403cb17423501542a738'
+                    }
+                    csp_glide_record_set_value: {
+                        table: 'sys_scope_privilege'
+                        id: '465dea2627bc4866bd915898d657e420'
+                    }
+                    csp_rest_api_request: {
+                        table: 'sys_scope_privilege'
+                        id: '011786327d584309a915b7c06df3f10b'
+                    }
+                    csp_rest_api_request_body: {
+                        table: 'sys_scope_privilege'
+                        id: 'a42e3e462ce6453e9b120761c54e9029'
                     }
                     csp_rest_execute: {
                         table: 'sys_scope_privilege'
@@ -154,6 +181,38 @@ declare global {
                     csp_rest_set_requestor_profile: {
                         table: 'sys_scope_privilege'
                         id: 'f6119b2d353a47adb506fcac82f8b7bf'
+                    }
+                    csp_service_error_set_message: {
+                        table: 'sys_scope_privilege'
+                        id: '096959aa706342969e178836d8ae56fe'
+                    }
+                    csp_service_error_set_status: {
+                        table: 'sys_scope_privilege'
+                        id: 'ef58cbb316c148b08dc5c0a99fb9aa13'
+                    }
+                    csp_service_result_set_body: {
+                        table: 'sys_scope_privilege'
+                        id: '410eb328ce304233837964a5a288bfa0'
+                    }
+                    csp_service_result_set_status: {
+                        table: 'sys_scope_privilege'
+                        id: 'be66a435e22a4fdb958527e79c622eca'
+                    }
+                    csp_table_customerservice_case_read: {
+                        table: 'sys_scope_privilege'
+                        id: 'c90477a6c9864734bc78e5225b8b5323'
+                    }
+                    csp_table_http_connection_read: {
+                        table: 'sys_scope_privilege'
+                        id: '5371b2d99d9a4f1b9a4db8aad9fdc068'
+                    }
+                    csp_table_oauth_credentials_read: {
+                        table: 'sys_scope_privilege'
+                        id: '30e1bbf6529e4be3ad293d5c69b632bc'
+                    }
+                    csp_table_sys_user_read: {
+                        table: 'sys_scope_privilege'
+                        id: '2644aa90b6a5478a8739788cf1b1a4e8'
                     }
                     form_action_item_create_tsanet_case: {
                         table: 'sys_ux_form_action_layout_item'
@@ -236,6 +295,38 @@ declare global {
                         table: 'sys_properties'
                         id: 'f90bf43f8afb4b4db23923d272662bc4'
                     }
+                    rest_create_case: {
+                        table: 'sys_ws_definition'
+                        id: 'e964e9b764284af59d3493ef9cc418a3'
+                    }
+                    rest_create_case_form: {
+                        table: 'sys_ws_operation'
+                        id: '30110d94b3304439a5fc5d1bc78457fc'
+                    }
+                    rest_create_case_form_company: {
+                        table: 'sys_ws_query_parameter'
+                        id: '6594a9ce9dc24e378a0d40730621fb7f'
+                    }
+                    rest_create_case_form_department: {
+                        table: 'sys_ws_query_parameter'
+                        id: 'edbb0819c78d47eabcb051943f575f07'
+                    }
+                    rest_create_case_partners: {
+                        table: 'sys_ws_operation'
+                        id: '55cc1d93b6db49e3afdcae8a2755c31b'
+                    }
+                    rest_create_case_partners_q: {
+                        table: 'sys_ws_query_parameter'
+                        id: 'd9d67e14da944347a8f49a95f23b94c0'
+                    }
+                    rest_create_case_submit: {
+                        table: 'sys_ws_operation'
+                        id: '0999f9db964f44b998b391c350cc2cc5'
+                    }
+                    rest_create_case_v1: {
+                        table: 'sys_ws_version'
+                        id: 'b8cc6bdee0a645a487b88b50fdcde060'
+                    }
                     setup_api_base_url: {
                         table: 'sys_properties_category_m2m'
                         id: '310c12115e014275a4f24574412688d3'
@@ -288,6 +379,10 @@ declare global {
                     tsanet_client: {
                         table: 'sys_script_include'
                         id: 'c38a84a6cfea43f1a0f150b67b6e1d33'
+                    }
+                    tsanet_create_case: {
+                        table: 'sys_script_include'
+                        id: '74581165f2064e3784f92e83062fefac'
                     }
                     tsanet_menu: {
                         table: 'sys_app_application'
@@ -1620,6 +1715,14 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ws_query_parameter_map'
+                        id: '4b1884d9775b470bbdddb9ae7509ca15'
+                        key: {
+                            web_service_operation: '55cc1d93b6db49e3afdcae8a2755c31b'
+                            web_service_query_parameter: 'd9d67e14da944347a8f49a95f23b94c0'
+                        }
+                    },
+                    {
                         table: 'sys_dictionary'
                         id: '4d12785e5f434ea88fb6826b694c2074'
                         key: {
@@ -2323,6 +2426,14 @@ declare global {
                                 }
                             }
                             element: 'status'
+                        }
+                    },
+                    {
+                        table: 'sys_ws_query_parameter_map'
+                        id: '78f25f2fec6c457ea624ff88c5209c34'
+                        key: {
+                            web_service_operation: '30110d94b3304439a5fc5d1bc78457fc'
+                            web_service_query_parameter: 'edbb0819c78d47eabcb051943f575f07'
                         }
                     },
                     {
@@ -3252,6 +3363,19 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_security_acl_role'
+                        id: 'ad94a7ce5f0c4318a8cd3280ab973941'
+                        key: {
+                            sys_security_acl: 'd4e687bcfb6345d99579c385b8583d8d'
+                            sys_user_role: {
+                                id: '13c64c9ef7b54505a80e6f46530c6f51'
+                                key: {
+                                    name: 'x_2256809_connect.user'
+                                }
+                            }
+                        }
+                    },
+                    {
                         table: 'sys_dictionary'
                         id: 'ae3a7d854c2244fabf898e79663f6260'
                         key: {
@@ -4090,6 +4214,14 @@ declare global {
                             value: 'APPROVAL'
                             language: 'en'
                             dependent_value: 'NULL'
+                        }
+                    },
+                    {
+                        table: 'sys_ws_query_parameter_map'
+                        id: 'cea16a1c6e0f4b22b531057399c144ff'
+                        key: {
+                            web_service_operation: '30110d94b3304439a5fc5d1bc78457fc'
+                            web_service_query_parameter: '6594a9ce9dc24e378a0d40730621fb7f'
                         }
                     },
                     {
