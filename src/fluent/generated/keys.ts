@@ -81,13 +81,27 @@ declare global {
                         table: 'sys_ui_related_list_entry'
                         id: '7e0cb14e3a3b43cf9b9e14f8d010e1f8'
                     }
+                    csp_connection_info_get: {
+                        table: 'sys_scope_privilege'
+                        id: 'bc494caae862474baac221df031aecf4'
+                    }
+                    csp_connection_info_get_attribute: {
+                        table: 'sys_scope_privilege'
+                        id: 'fa5dc08e172548ecac9b329ee4d9b01a'
+                    }
+                    csp_connection_info_get_credential_attribute: {
+                        table: 'sys_scope_privilege'
+                        id: '277048ee18c74e498081496bb964a38a'
+                    }
                     csp_credential_get_attribute: {
                         table: 'sys_scope_privilege'
                         id: '76b79d012e834fbb98cbc026280d8a01'
+                        deleted: true
                     }
                     csp_credentials_get_by_alias: {
                         table: 'sys_scope_privilege'
                         id: '6050304ed46b4dc2bfd0e6f9c5d36074'
+                        deleted: true
                     }
                     csp_glide_properties: {
                         table: 'sys_scope_privilege'
@@ -113,6 +127,10 @@ declare global {
                         table: 'sys_scope_privilege'
                         id: 'f4c9056206a24dcf868bd74179cd5b19'
                     }
+                    csp_rest_set_authentication_profile: {
+                        table: 'sys_scope_privilege'
+                        id: '5d303639bfde400faaf5b9cb40262470'
+                    }
                     csp_rest_set_endpoint: {
                         table: 'sys_scope_privilege'
                         id: '0c1c1d28a3454c0b9f3c664e7e9ba283'
@@ -132,6 +150,10 @@ declare global {
                     csp_rest_set_request_header: {
                         table: 'sys_scope_privilege'
                         id: 'b24d68f7456742e2a9d46b46eb48c70b'
+                    }
+                    csp_rest_set_requestor_profile: {
+                        table: 'sys_scope_privilege'
+                        id: 'f6119b2d353a47adb506fcac82f8b7bf'
                     }
                     form_action_item_create_tsanet_case: {
                         table: 'sys_ux_form_action_layout_item'
@@ -180,6 +202,7 @@ declare global {
                     prop_api_base_url: {
                         table: 'sys_properties'
                         id: 'f8a5e1d2ffa4486a893390a384180225'
+                        deleted: true
                     }
                     prop_api_credential_alias: {
                         table: 'sys_properties'
@@ -216,6 +239,7 @@ declare global {
                     setup_api_base_url: {
                         table: 'sys_properties_category_m2m'
                         id: '310c12115e014275a4f24574412688d3'
+                        deleted: true
                     }
                     setup_api_credential_alias: {
                         table: 'sys_properties_category_m2m'
@@ -256,6 +280,10 @@ declare global {
                     tsanet_api_alias: {
                         table: 'sys_alias'
                         id: '33bcb81f89e6424ab7b700383d41d033'
+                    }
+                    tsanet_api_oauth_template: {
+                        table: 'sys_alias_templates'
+                        id: '50fb810c859c41b9b13bdf9cb7a95931'
                     }
                     tsanet_client: {
                         table: 'sys_script_include'

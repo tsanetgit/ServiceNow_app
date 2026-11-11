@@ -1,21 +1,6 @@
 import { Property, Record } from '@servicenow/sdk/core'
 import { adminRole, userRole } from './roles.now'
 
-const baseUrl = Property({
-    $id: Now.ID['prop_api_base_url'],
-    name: 'x_2256809_connect.api.base_url',
-    type: 'choicelist',
-    choices: [
-        'Dev=https://connect2.tahoelab.us',
-        'Beta=https://connect2.tsanet.net',
-        'Production=https://connect2.tsanet.org',
-    ],
-    value: 'https://connect2.tahoelab.us',
-    description:
-        'TSANet API base URL. Dev https://connect2.tahoelab.us, Beta https://connect2.tsanet.net, Production https://connect2.tsanet.org',
-    roles: { read: [userRole], write: [adminRole] },
-})
-
 const credentialAlias = Property({
     $id: Now.ID['prop_api_credential_alias'],
     name: 'x_2256809_connect.api.credential_alias',
@@ -23,7 +8,7 @@ const credentialAlias = Property({
     // sys_id of the "TSANet Connect API" alias (key tsanet_api_alias in generated/keys.ts).
     value: '33bcb81f89e6424ab7b700383d41d033',
     description:
-        'Credential alias sys_id. sys_id of the Connection & Credential alias that holds the TSANet API username and password',
+        'Connection alias sys_id. sys_id of the Connection & Credential alias that holds the TSANet API URL and OAuth client credentials',
     roles: { read: [userRole], write: [adminRole] },
 })
 
@@ -102,11 +87,6 @@ export const setupCategory = Record({
 })
 
 // Setup page entries, in the prototype's order.
-Record({
-    $id: Now.ID['setup_api_base_url'],
-    table: 'sys_properties_category_m2m',
-    data: { category: setupCategory, property: baseUrl, order: 10 },
-})
 Record({
     $id: Now.ID['setup_api_credential_alias'],
     table: 'sys_properties_category_m2m',

@@ -14,8 +14,8 @@ CrossScopePrivilege({
 })
 
 CrossScopePrivilege({
-    $id: Now.ID['csp_credentials_get_by_alias'],
-    targetName: 'ScriptableStandardCredentialsProvider.getCredentialByAliasID',
+    $id: Now.ID['csp_connection_info_get'],
+    targetName: 'ScriptableConnectionInfoProvider.getConnectionInfo',
     targetScope: 'global',
     targetType: 'scriptable',
     operation: 'execute',
@@ -23,8 +23,35 @@ CrossScopePrivilege({
 })
 
 CrossScopePrivilege({
-    $id: Now.ID['csp_credential_get_attribute'],
-    targetName: 'ScriptableStandardCredential.getAttribute',
+    $id: Now.ID['csp_connection_info_get_attribute'],
+    targetName: 'ScriptableConnectionInfo.getAttribute',
+    targetScope: 'global',
+    targetType: 'scriptable',
+    operation: 'execute',
+    status: 'allowed',
+})
+
+CrossScopePrivilege({
+    $id: Now.ID['csp_connection_info_get_credential_attribute'],
+    targetName: 'ScriptableConnectionInfo.getCredentialAttribute',
+    targetScope: 'global',
+    targetType: 'scriptable',
+    operation: 'execute',
+    status: 'allowed',
+})
+
+CrossScopePrivilege({
+    $id: Now.ID['csp_rest_set_authentication_profile'],
+    targetName: 'ScriptableRESTMessageClient.setAuthenticationProfile',
+    targetScope: 'global',
+    targetType: 'scriptable',
+    operation: 'execute',
+    status: 'allowed',
+})
+
+CrossScopePrivilege({
+    $id: Now.ID['csp_rest_set_requestor_profile'],
+    targetName: 'ScriptableRESTMessageClient.setRequestorProfile',
     targetScope: 'global',
     targetType: 'scriptable',
     operation: 'execute',
