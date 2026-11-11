@@ -158,18 +158,28 @@ TSANetClient.prototype = {
         return { status: status, body: parsed, text: text };
     },
 
-    /** The API URL and OAuth profile from the alias's active connection, read once per client. */
+    /**
+     * The API URL and OAuth profile from the alias's active connection, read once per client.
+     * Read with GlideRecord, not ConnectionInfoProvider: that one applies the signed-in user's
+     * ACLs, and the agents who call TSANet can't read connections or credentials (they need
+     * connection_admin or credential_admin). The records stay on the server.
+     */
     _connection: function() {
         if (this.connection)
             return this.connection;
         if (!this.aliasId)
             throw this._error('Property ' + this.SCOPE + '.api.credential_alias is not set', 0);
-        var info = new sn_cc.ConnectionInfoProvider().getConnectionInfo(this.aliasId);
-        if (!info)
+        var conn = new GlideRecord('http_connection');
+        conn.addQuery('connection_alias', this.aliasId);
+        conn.addActiveQuery();
+        conn.query();
+        if (!conn.next())
             throw this._error('No active connection is set up for the TSANet Connect API alias', 0);
-        var baseUrl = String(info.getAttribute('connection_url') || '').replace(/\/+$/, '');
-        var credential = info.getCredentialAttribute('sys_id');
-        var oauthProfile = info.getCredentialAttribute('oauth_entity_profile');
+        var baseUrl = String(conn.getValue('connection_url') || '').replace(/\/+$/, '');
+        var credential = conn.getValue('credential');
+        // Only an OAuth 2.0 credential has a profile; any other credential type leaves it empty.
+        var cred = new GlideRecord('oauth_2_0_credentials');
+        var oauthProfile = credential && cred.get(credential) ? cred.getValue('oauth_entity_profile') : '';
         if (!baseUrl || !credential || !oauthProfile)
             throw this._error('The TSANet Connect API connection is missing its URL or OAuth credential', 0);
         this.connection = { baseUrl: baseUrl, credential: credential, oauthProfile: oauthProfile };
