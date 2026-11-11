@@ -53,6 +53,9 @@ export default function App() {
     const [submitting, setSubmitting] = useState(false)
     const [created, setCreated] = useState(null)
     const searchTimer = useRef(null)
+    // Each search and form load takes a number; an answer whose number is no longer current is dropped.
+    const searchSeq = useRef(0)
+    const formSeq = useRef(0)
 
     useEffect(() => {
         if (!/^[0-9a-f]{32}$/.test(caseId)) {
@@ -73,33 +76,43 @@ export default function App() {
     const search = (text) => {
         setTerm(text)
         clearTimeout(searchTimer.current)
-        if (!text.trim()) {
-            setPartners([])
-            return
-        }
+        const seq = ++searchSeq.current
+        setPartners([])
+        // Searching from the first keystroke, so "No partners found" doesn't flash during the delay.
+        setSearching(!!text.trim())
+        if (!text.trim()) return
         searchTimer.current = setTimeout(() => {
-            setSearching(true)
             setStepError('')
+            const current = () => seq === searchSeq.current
             searchPartners(text.trim())
-                .then(setPartners)
-                .catch((e) => setStepError(e.message))
-                .finally(() => setSearching(false))
+                .then((found) => current() && setPartners(found))
+                .catch((e) => current() && setStepError(e.message))
+                .finally(() => current() && setSearching(false))
         }, SEARCH_DELAY_MS)
     }
 
+    const changePartner = () => {
+        formSeq.current++
+        setPartner(null)
+        setForm(null)
+        setStepError('')
+    }
+
     const choose = (p) => {
+        const seq = ++formSeq.current
         setPartner(p)
         setForm(null)
         setStepError('')
         getPartnerForm(p)
             .then((f) => {
+                if (seq !== formSeq.current) return
                 const filled = prefill(hostCase)
                 const initial = {}
                 for (const field of f.customFields || []) initial[field.fieldId] = field.value || filled[field.label] || ''
                 setValues(initial)
                 setForm(f)
             })
-            .catch((e) => setStepError(e.message))
+            .catch((e) => seq === formSeq.current && setStepError(e.message))
     }
 
     const fields = [...(form?.customFields || [])]
@@ -158,7 +171,7 @@ export default function App() {
             {partner ? (
                 <div className="create-case__chosen">
                     <span>{partner.label}</span>
-                    <Button label="Change partner" variant="secondary" size="sm" onClicked={() => setPartner(null)} />
+                    <Button label="Change partner" variant="secondary" size="sm" onClicked={changePartner} />
                 </div>
             ) : (
                 <>

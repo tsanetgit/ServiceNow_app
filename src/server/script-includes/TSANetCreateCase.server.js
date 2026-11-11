@@ -59,7 +59,8 @@ TSANetCreateCase.prototype = {
         var values = input.fields || {};
         (request.customFields || []).forEach(function(field) {
             var key = String(field.fieldId);
-            if (values.hasOwnProperty(key) && values[key] !== null)
+            // A HIDDEN field keeps TSANet's value whatever the browser sends.
+            if (field.type != 'HIDDEN' && values.hasOwnProperty(key) && values[key] !== null)
                 field.value = String(values[key]);
             if (field.required && field.type != 'HIDDEN' && !String(field.value || '').trim())
                 missing.push(field.label);
@@ -77,10 +78,47 @@ TSANetCreateCase.prototype = {
         request.priority = priority;
         request.submitterContactDetails = this._engineer();
 
-        var created = this.client.createRequest(request);
+        // Resolve the connection first, so a setup error can't be mistaken for a lost answer below.
+        this.client._connection();
+        var started = new GlideDateTime();
+        var created;
+        try {
+            created = this.client.createRequest(request);
+        } catch (e) {
+            // TSANet answered with a 4xx: it refused the request and created nothing.
+            if (e.status >= 400 && e.status < 500)
+                throw e;
+            // No answer, or a 5xx: TSANet may still have created it. Look before inviting a resubmit.
+            created = this._findSubmitted(request, started);
+            if (!created)
+                throw this.client._error(e.message.replace(/^TSANet: /, '') +
+                    '. TSANet may still have received the request: check the case\'s TSANet Cases before submitting again.', 0);
+        }
         if (!created || !created.token)
             throw this.client._error('TSANet accepted the request but returned no token', 0);
         return this._store(hostCase.getUniqueValue(), created);
+    },
+
+    /**
+     * The outbound request TSANet created from this submit, if any: same case number and summary,
+     * created since the submit started (less a minute for clock drift). Null when none is found or
+     * TSANet can't be asked; the lookup never replaces the submit's own error.
+     */
+    _findSubmitted: function(request, started) {
+        var since = new GlideDateTime(started);
+        since.addSeconds(-60);
+        try {
+            var found = this.client.listRequests({
+                internalCaseNumber: request.internalCaseNumber,
+                type: 'OUTBOUND',
+                createdAfter: since.getValue().replace(' ', 'T') + 'Z',
+            }).filter(function(r) {
+                return r.summary == request.problemSummary;
+            });
+            return found.length ? found[found.length - 1] : null;
+        } catch (ignore) {
+            return null;
+        }
     },
 
     /** The case, read as the signed-in user, so an agent can only start from a case they can see. */
@@ -165,8 +203,10 @@ TSANetCreateCase.respond = function(response, fn) {
         response.setStatus(200);
         response.setBody(fn(new TSANetCreateCase()));
     } catch (e) {
-        // 400: the page's input; 422: TSANet refused it; 502: TSANet unreachable or failed.
-        var status = e.inputError ? 400 : (e.status >= 400 && e.status < 500 ? 422 : 502);
+        // 400: the page's input; 422: TSANet refused it; 502: TSANet unreachable or failed, or our
+        // connection to it is broken (TSANet's 401/403 mean the app's credentials, not the request).
+        var refused = e.status >= 400 && e.status < 500 && e.status != 401 && e.status != 403;
+        var status = e.inputError ? 400 : (refused ? 422 : 502);
         var err = new sn_ws_err.ServiceError();
         err.setStatus(status);
         err.setMessage(String(e.message || e));
