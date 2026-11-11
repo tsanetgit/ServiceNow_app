@@ -89,7 +89,7 @@ TSANetCreateCase.prototype = {
             if (e.status >= 400 && e.status < 500)
                 throw e;
             // No answer, or a 5xx: TSANet may still have created it. Look before inviting a resubmit.
-            created = this._findSubmitted(request, started);
+            created = this._findSubmitted(request, input.companyId, started);
             if (!created)
                 throw this.client._error(e.message.replace(/^TSANet: /, '') +
                     '. TSANet may still have received the request: check the case\'s TSANet Cases before submitting again.', 0);
@@ -100,11 +100,13 @@ TSANetCreateCase.prototype = {
     },
 
     /**
-     * The outbound request TSANet created from this submit, if any: same case number and summary,
-     * created since the submit started (less a minute for clock drift). Null when none is found or
-     * TSANet can't be asked; the lookup never replaces the submit's own error.
+     * The outbound request TSANet created from this submit, if any: same case number, partner and
+     * summary, created since the submit started (less a minute for clock drift), and not already
+     * stored here, so an earlier request from the same case is never taken for this one. The newest
+     * wins. Null when none is found or TSANet can't be asked; the lookup never replaces the submit's
+     * own error.
      */
-    _findSubmitted: function(request, started) {
+    _findSubmitted: function(request, companyId, started) {
         var since = new GlideDateTime(started);
         since.addSeconds(-60);
         try {
@@ -113,12 +115,24 @@ TSANetCreateCase.prototype = {
                 type: 'OUTBOUND',
                 createdAfter: since.getValue().replace(' ', 'T') + 'Z',
             }).filter(function(r) {
-                return r.summary == request.problemSummary;
+                return r.token && String(r.receiveCompanyId) == String(companyId) &&
+                    r.summary == request.problemSummary && !this._isStored(r.token);
+            }, this);
+            found.sort(function(a, b) {
+                return String(a.createdAt || '').localeCompare(String(b.createdAt || ''));
             });
             return found.length ? found[found.length - 1] : null;
         } catch (ignore) {
             return null;
         }
+    },
+
+    _isStored: function(token) {
+        var gr = new GlideRecord('x_2256809_connect_case');
+        gr.addQuery('token', token);
+        gr.setLimit(1);
+        gr.query();
+        return gr.hasNext();
     },
 
     /** The case, read as the signed-in user, so an agent can only start from a case they can see. */
