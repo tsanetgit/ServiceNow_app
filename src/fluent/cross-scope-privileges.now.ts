@@ -10,7 +10,9 @@ import { CrossScopePrivilege } from '@servicenow/sdk/core'
 CrossScopePrivilege({
     $id: Now.ID['csp_table_customerservice_case_read'],
     targetName: 'sn_customerservice_case',
-    targetScope: 'sn_customerservice',
+    // target_scope references sys_scope by sys_id; 'global' is its own sys_id, a plugin scope isn't.
+    // This is the Customer Service plugin's sn_customerservice scope, shipped with the plugin.
+    targetScope: '51d811fad7223100b7490ee60e61034f',
     targetType: 'sys_db_object',
     operation: 'read',
     status: 'allowed',
