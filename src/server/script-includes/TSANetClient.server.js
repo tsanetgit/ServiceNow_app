@@ -2,8 +2,9 @@
  * TSANetClient - the single client for the TSANet Connect REST API.
  *
  * Every outbound call goes through this class. Settings come from the
- * x_2256809_connect.* system properties; the API username and password come
- * from the "TSANet Connect API" credential alias, never from script.
+ * x_2256809_connect.* system properties; the API URL and the OAuth client
+ * credentials come from the "TSANet Connect API" connection alias, never from
+ * script. The platform gets, caches and renews the Azure AD token.
  *
  * Usage:
  *   var client = new x_2256809_connect.TSANetClient();
@@ -17,28 +18,13 @@ TSANetClient.prototype = {
     SCOPE: 'x_2256809_connect',
 
     initialize: function() {
-        this.baseUrl = String(this._prop('api.base_url', '')).replace(/\/+$/, '');
         this.aliasId = this._prop('api.credential_alias', '');
         this.timeoutMs = parseInt(this._prop('api.timeout_ms', '60000'), 10);
         this.debug = this._prop('debug', 'false') == 'true';
-        this.token = null;
-        this.tokenExpiresAt = 0;
+        this.connection = null;
     },
 
     /* ---------- Identity ---------- */
-
-    /** POST /v1/login. Caches the bearer token for this client instance. */
-    login: function() {
-        var cred = this._credentials();
-        var res = this._send('POST', '/v1/login', null, { username: cred.username, password: cred.password }, true);
-        if (!res.body || !res.body.accessToken)
-            throw this._error('Login succeeded but returned no accessToken', res.status, res.text);
-        this.token = res.body.accessToken;
-        // expiresIn is in seconds; renew a minute early. Default to 55 minutes if absent.
-        var ttl = res.body.expiresIn ? (res.body.expiresIn - 60) : 3300;
-        this.tokenExpiresAt = new Date().getTime() + ttl * 1000;
-        return res.body;
-    },
 
     /** GET /v1/me - the API user and its company. */
     me: function() {
@@ -125,34 +111,26 @@ TSANetClient.prototype = {
 
     /* ---------- Plumbing ---------- */
 
-    /** Authenticated call. Logs in when needed and retries once on 401. */
+    /** Authenticated call, with the connection's OAuth profile. */
     request: function(method, path, query, body) {
-        if (!this.token || new Date().getTime() >= this.tokenExpiresAt)
-            this.login();
-        try {
-            return this._send(method, path, query, body, false).body;
-        } catch (e) {
-            if (e.status == 401) {
-                this.login();
-                return this._send(method, path, query, body, false).body;
-            }
-            throw e;
-        }
+        return this._send(method, path, query, body, false).body;
     },
 
     _send: function(method, path, query, body, anonymous) {
-        if (!this.baseUrl)
-            throw this._error('Property ' + this.SCOPE + '.api.base_url is not set', 0);
+        var conn = this._connection();
 
         var rm = new sn_ws.RESTMessageV2();
         rm.setHttpMethod(method.toLowerCase());
-        rm.setEndpoint(this.baseUrl + path + this._queryString(query));
+        rm.setEndpoint(conn.baseUrl + path + this._queryString(query));
         rm.setHttpTimeout(this.timeoutMs);
         // RFC 7807 errors with real status codes (see the TSANet Integration Guide).
         rm.setRequestHeader('Accept', 'application/json, application/problem+json');
         rm.setRequestHeader('Content-Type', 'application/json');
-        if (!anonymous)
-            rm.setRequestHeader('Authorization', 'Bearer ' + this.token);
+        if (!anonymous) {
+            rm.setAuthenticationProfile('oauth2', conn.oauthProfile);
+            // The platform keeps the client-credentials token against the credential, not the user.
+            rm.setRequestorProfile('oauth_2_0_credentials', conn.credential);
+        }
         if (body)
             rm.setRequestBody(JSON.stringify(body));
 
@@ -180,17 +158,22 @@ TSANetClient.prototype = {
         return { status: status, body: parsed, text: text };
     },
 
-    _credentials: function() {
+    /** The API URL and OAuth profile from the alias's active connection, read once per client. */
+    _connection: function() {
+        if (this.connection)
+            return this.connection;
         if (!this.aliasId)
             throw this._error('Property ' + this.SCOPE + '.api.credential_alias is not set', 0);
-        var cred = new sn_cc.StandardCredentialsProvider().getCredentialByAliasID(this.aliasId);
-        if (!cred)
-            throw this._error('No active credential is attached to the TSANet Connect API alias', 0);
-        var username = cred.getAttribute('user_name');
-        var password = cred.getAttribute('password');
-        if (!username || !password)
-            throw this._error('The TSANet Connect API credential is missing a username or password', 0);
-        return { username: username, password: password };
+        var info = new sn_cc.ConnectionInfoProvider().getConnectionInfo(this.aliasId);
+        if (!info)
+            throw this._error('No active connection is set up for the TSANet Connect API alias', 0);
+        var baseUrl = String(info.getAttribute('connection_url') || '').replace(/\/+$/, '');
+        var credential = info.getCredentialAttribute('sys_id');
+        var oauthProfile = info.getCredentialAttribute('oauth_entity_profile');
+        if (!baseUrl || !credential || !oauthProfile)
+            throw this._error('The TSANet Connect API connection is missing its URL or OAuth credential', 0);
+        this.connection = { baseUrl: baseUrl, credential: credential, oauthProfile: oauthProfile };
+        return this.connection;
     },
 
     _path: function(token, suffix) {

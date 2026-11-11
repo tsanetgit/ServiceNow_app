@@ -105,11 +105,12 @@ Record({
     $id: Now.ID['module_credential'],
     table: 'sys_app_module',
     data: {
-        title: 'Credential',
+        title: 'Connection',
         application: tsanetMenu,
         link_type: 'DIRECT',
-        // Credentials tagged with the "TSANet Connect API" alias (key tsanet_api_alias in generated/keys.ts).
-        query: 'basic_auth_credentials_list.do?sysparm_query=tag=33bcb81f89e6424ab7b700383d41d033',
+        // The "TSANet Connect API" alias (key tsanet_api_alias in generated/keys.ts), where the admin
+        // creates the connection and credential.
+        query: 'sys_alias.do?sys_id=33bcb81f89e6424ab7b700383d41d033',
         roles: ['x_2256809_connect.admin'],
         active: true,
         order: 800,
