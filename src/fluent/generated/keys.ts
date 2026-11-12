@@ -126,6 +126,10 @@ declare global {
                         table: 'sys_scope_privilege'
                         id: '465dea2627bc4866bd915898d657e420'
                     }
+                    csp_glide_record_update: {
+                        table: 'sys_scope_privilege'
+                        id: 'ff972da503ab490f9141fd185c3844f3'
+                    }
                     csp_rest_api_request: {
                         table: 'sys_scope_privilege'
                         id: '011786327d584309a915b7c06df3f10b'
@@ -375,6 +379,10 @@ declare global {
                     tsanet_api_oauth_template: {
                         table: 'sys_alias_templates'
                         id: '50fb810c859c41b9b13bdf9cb7a95931'
+                    }
+                    tsanet_case_store: {
+                        table: 'sys_script_include'
+                        id: '88c4d10ece0242de93ea088d1458c7ac'
                     }
                     tsanet_client: {
                         table: 'sys_script_include'

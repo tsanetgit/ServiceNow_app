@@ -72,6 +72,16 @@ CrossScopePrivilege({
     status: 'allowed',
 })
 
+// TSANetCaseStore updates a TSANet Case when TSANet's data for it changed.
+CrossScopePrivilege({
+    $id: Now.ID['csp_glide_record_update'],
+    targetName: 'GlideRecord.update',
+    targetScope: 'global',
+    targetType: 'scriptable',
+    operation: 'execute',
+    status: 'allowed',
+})
+
 // The Create TSANet Case REST API's request, response and errors.
 CrossScopePrivilege({
     $id: Now.ID['csp_rest_api_request'],
