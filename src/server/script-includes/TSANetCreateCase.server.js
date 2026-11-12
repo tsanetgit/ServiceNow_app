@@ -153,53 +153,15 @@ TSANetCreateCase.prototype = {
         };
     },
 
-    /** Stores TSANet's answer as the outbound TSANet Case. The table's create ACL is admin-only, so this writes as the system. */
+    /** Stores TSANet's answer as the outbound TSANet Case, through the store the sync uses too. */
     _store: function(hostSysId, dto) {
-        var contact = dto.submitterContactDetails || {};
-        var gr = new GlideRecord('x_2256809_connect_case');
-        gr.initialize();
-        gr.setValue('host_record', hostSysId);
-        gr.setValue('direction', 'OUTBOUND');
-        gr.setValue('token', dto.token);
-        gr.setValue('tsanet_case_id', dto.id);
-        gr.setValue('status', dto.status);
-        gr.setValue('priority', dto.priority);
-        gr.setValue('summary', dto.summary);
-        gr.setValue('description', dto.description);
-        gr.setValue('partner', dto.receiveCompanyName);
-        gr.setValue('received_company_id', dto.receiveCompanyId);
-        gr.setValue('received_company_name', dto.receiveCompanyName);
-        gr.setValue('submitted_company_id', dto.submitCompanyId);
-        gr.setValue('submitted_company_name', dto.submitCompanyName);
-        gr.setValue('submitter_case_number', dto.submitterCaseNumber);
-        gr.setValue('submitter_name', contact.name);
-        gr.setValue('submitter_email', contact.email);
-        gr.setValue('submitter_phone', contact.phone);
-        gr.setValue('document_id', dto.contactDocumentId);
-        gr.setValue('document_name', dto.contactDocumentName);
-        gr.setValue('priority_note', dto.priorityNote);
-        gr.setValue('escalation_instructions', dto.escalationInstructions);
-        gr.setValue('custom_fields', JSON.stringify(dto.customFields || []));
-        gr.setValue('responded', !!dto.responded);
-        this._setDate(gr, 'request_date', dto.createdAt);
-        this._setDate(gr, 'response_sla', dto.respondBy);
-        this._setDate(gr, 'tsanet_updated', dto.updatedAt);
-        var sysId = gr.insert();
-        if (!sysId) {
+        var stored = new TSANetCaseStore().upsert(dto, hostSysId, 'OUTBOUND');
+        if (!stored) {
             // TSANet has the request; the sync finds it by its token. Say so rather than invite a resubmit.
             gs.error('[TSANet] Outbound request ' + dto.token + ' was created in TSANet but could not be stored');
             throw this.client._error('TSANet accepted the request (' + dto.token + '), but it could not be stored here. Do not submit it again.', 0);
         }
-        return { sysId: sysId, number: gr.getValue('number'), token: dto.token, partner: dto.receiveCompanyName };
-    },
-
-    /** API timestamps are ISO 8601 in UTC, e.g. 2026-11-11T17:28:53.123Z. */
-    _setDate: function(gr, field, iso) {
-        if (!iso)
-            return;
-        var gdt = new GlideDateTime();
-        gdt.setValueUTC(String(iso).replace('T', ' ').substring(0, 19), 'yyyy-MM-dd HH:mm:ss');
-        gr.setValue(field, gdt);
+        return { sysId: stored.sysId, number: stored.number, token: dto.token, partner: dto.receiveCompanyName };
     },
 
     _inputError: function(message) {
