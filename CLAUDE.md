@@ -4,6 +4,20 @@
 
 TSANet Connect for ServiceNow: a scoped app that TSANet members install on their own ServiceNow instance to work their TSANet Connect collaboration cases there. It is a client of the Connect REST API (`tsanetgit/Connect-API-Code`, whose `openapi.yaml` is the contract) and calls it from server scripts. A ServiceNow scoped app built with the ServiceNow SDK (Fluent): TypeScript `.now.ts` source in `src/fluent/`, server scripts in `src/server/`.
 
+## Repo workflow
+
+In this repo, this order overrides two parts of `/tsanet:coder`: "the Coder never deploys", and going from passing checks straight to commit, push and the draft PR. tsanetgit/ai-devkit#61 asks for the same as an opt-in in the skill.
+
+1. The plan, and the developer's go on it.
+2. Claude builds the branch and installs it on the developer's own developer instance with their own auth profile (see Instance check), then runs its own checks there.
+3. Claude stops and says what to test. It doesn't commit, push or open the PR yet.
+4. The developer tests on their instance.
+5. Claude commits, pushes and opens the draft PR only when the developer says so, with their test result in the PR's Instance check section.
+6. QA runs in a new session. After a fix push that changes instance behavior, Claude installs again and stops for the developer's re-test.
+7. A person takes the PR out of draft and merges it.
+
+If Claude can't install (no auth profile for the developer's instance, or the install fails), it stops and says so. It never installs on any other instance; the developer can deploy and test themselves instead. A PR opened before the developer's test keeps `Not deployed yet.` in its Instance check section until they test, and the section-only QA round after they fill it in confirms it.
+
 ## Build and test
 
 ```bash
@@ -23,10 +37,11 @@ The SDK's own guides are in `node_modules/@servicenow/sdk/docs/`.
 
 ## Instance check
 
-Forms, lists, filters, navigator modules and ACLs show their behavior only on an instance, so a change to any of them needs an Instance check: the person deploys the branch to their developer instance and records what they checked. Claude never deploys.
+Forms, lists, filters, navigator modules and ACLs show their behavior only on an instance, so a change to any of them needs an Instance check: the branch is installed on the developer's own instance, as Repo workflow says, and the PR's Instance check section records what the developer checked and saw, in their words or from their report.
 
 ```bash
 npm run deploy                     # now-sdk install, to your developer instance only
+npx now-sdk install -a <profile>   # the same with a named auth profile, the way Claude installs
 ```
 
 - **Your instance:** your own ServiceNow developer instance (each developer deploys to their own). Never production, and never a member's instance.
@@ -44,7 +59,7 @@ npm run deploy                     # now-sdk install, to your developer instance
 
 ## Conventions
 
-- Branch from `main` as `feat/<slug>` or `fix/<slug>`. Open draft PRs. A draft is only the starting point. The person who asked for the change reads it and takes it out of draft (Claude doesn't), Copilot reviews it, QA runs in a new session, and a person approves and merges. A PR should be out of draft when it merges. Never push to `main` directly.
+- Branch from `main` as `feat/<slug>` or `fix/<slug>`. Open draft PRs, after the developer's test (see Repo workflow). A draft is only the starting point. The person who asked for the change reads it and takes it out of draft (Claude doesn't), Copilot reviews it, QA runs in a new session, and a person approves and merges. A PR should be out of draft when it merges. Never push to `main` directly.
 - Change the app in code. `now-sdk transform` pulls edits made on an instance back into code, but rewrites unrelated lines and can drop `$id` entries: review its output hunk by hunk, never commit it whole.
 - `gs.print` isn't allowed in scoped apps; use `gs.info`.
 - Every module and app menu has roles, and every table has a read, write, create and delete ACL. The ServiceNow Store's certification fails apps without them.
