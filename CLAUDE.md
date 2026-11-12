@@ -13,8 +13,9 @@ In this repo, this order overrides two parts of `/tsanet:coder`: "the Coder neve
 3. Claude stops and says what to test. It doesn't commit, push or open the PR yet.
 4. The developer tests on their instance.
 5. Claude commits, pushes and opens the draft PR only when the developer says so, with their test result in the PR's Instance check section.
-6. QA runs in a new session. After a fix push that changes instance behavior, Claude installs again and stops for the developer's re-test.
-7. A person takes the PR out of draft and merges it.
+6. The developer takes the PR out of draft, Copilot reviews it, and QA runs in a new session.
+7. For a review fix that changes instance behavior, Claude makes the fix, installs it and stops for the developer's re-test, and pushes it only when the developer says so. A fix that doesn't change instance behavior is pushed when the developer asks.
+8. A person approves and merges the PR.
 
 If Claude can't install (no auth profile for the developer's instance, or the install fails), it stops and says so. It never installs on any other instance; the developer can deploy and test themselves instead. A PR opened before the developer's test keeps `Not deployed yet.` in its Instance check section until they test, and the section-only QA round after they fill it in confirms it.
 
