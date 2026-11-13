@@ -22,14 +22,16 @@ TSANetSync.prototype = {
         var started = new GlideDateTime();
         var requests;
         try {
-            requests = this.client.listRequests({ updatedAfter: this._since() });
+            // The raw answer, not listRequests(), which turns an empty body into []: an empty answer must
+            // not read as "nothing new", or the window would move past requests TSANet never sent.
+            requests = this.client.request('GET', '/v2/collaboration-requests/list', { updatedAfter: this._since() });
         } catch (e) {
             // Nothing stored, the last-success time doesn't move: the next run reads the same window again.
             gs.error('[TSANet] Sync could not read requests from TSANet: ' + e.message);
             return { error: e.message };
         }
         if (!Array.isArray(requests)) {
-            gs.error('[TSANet] Sync got an answer from TSANet that is not a list of requests; nothing was stored');
+            gs.error('[TSANet] Sync got an empty answer or one that is not a list of requests; nothing was stored');
             return { error: 'unexpected answer' };
         }
 
