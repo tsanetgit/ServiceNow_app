@@ -1,4 +1,4 @@
-import { UiAction } from '@servicenow/sdk/core'
+import { Record, UiAction } from '@servicenow/sdk/core'
 import { userRole } from '../roles.now'
 
 // Accept and Reject on an inbound TSANet Case in the CSM/FSM Configurable Workspace. Each
@@ -39,7 +39,7 @@ const SEND = `function send(method, params, done) {
         return '';
     }`
 
-UiAction({
+const acceptAction = UiAction({
     $id: Now.ID['action_tsanet_accept'],
     table: 'x_2256809_connect_case',
     actionName: 'x_2256809_connect_accept',
@@ -71,7 +71,7 @@ UiAction({
     },
 })
 
-UiAction({
+const rejectAction = UiAction({
     $id: Now.ID['action_tsanet_reject'],
     table: 'x_2256809_connect_case',
     actionName: 'x_2256809_connect_reject',
@@ -96,5 +96,96 @@ UiAction({
         send('ajaxReject', { sysparm_reason: value(result, 'reason') }, 'Rejected. TSANet has your answer.');
     });
 }`,
+    },
+})
+
+// The workspace builds a record's action bar from form action layouts, and the TSANet Case
+// table has none of its own (it isn't a task), so without these the buttons never show.
+// The layout is ours, on the CSM/FSM workspace's action config, which is only referenced.
+const CSM_WORKSPACE_ACTION_CONFIG = '46e658c35322101043d7ddeeff7b12b4'
+const BUTTON = 0
+
+const caseActionLayout = Record({
+    $id: Now.ID['form_action_layout_tsanet_case'],
+    table: 'sys_ux_form_action_layout',
+    data: {
+        name: 'TSANet Case Actions',
+        table: 'x_2256809_connect_case',
+        action_config: CSM_WORKSPACE_ACTION_CONFIG,
+        specificity: 10,
+        active: true,
+    },
+})
+
+// For each action: a form action, its layout item, and the item's link into the layout.
+const acceptFormAction = Record({
+    $id: Now.ID['form_action_tsanet_accept'],
+    table: 'sys_ux_form_action',
+    data: { name: 'Accept', table: 'x_2256809_connect_case', action_type: 'ui_action', ui_action: acceptAction, active: true },
+})
+
+const acceptItem = Record({
+    $id: Now.ID['form_action_item_tsanet_accept'],
+    table: 'sys_ux_form_action_layout_item',
+    data: {
+        name: 'Accept',
+        label: 'Accept',
+        table: 'x_2256809_connect_case',
+        item_type: 'action',
+        action: acceptFormAction,
+        overflow: false,
+        color: 'primary',
+        order: 100,
+        active: true,
+    },
+})
+
+Record({
+    $id: Now.ID['form_action_item_link_tsanet_accept'],
+    table: 'sys_ux_m2m_action_layout_item',
+    data: {
+        ux_form_action_layout: caseActionLayout,
+        ux_form_action_layout_item: acceptItem,
+        table: 'x_2256809_connect_case',
+        display_type: BUTTON,
+        variant: 'primary',
+        order: 100,
+        active: true,
+    },
+})
+
+const rejectFormAction = Record({
+    $id: Now.ID['form_action_tsanet_reject'],
+    table: 'sys_ux_form_action',
+    data: { name: 'Reject', table: 'x_2256809_connect_case', action_type: 'ui_action', ui_action: rejectAction, active: true },
+})
+
+const rejectItem = Record({
+    $id: Now.ID['form_action_item_tsanet_reject'],
+    table: 'sys_ux_form_action_layout_item',
+    data: {
+        name: 'Reject',
+        label: 'Reject',
+        table: 'x_2256809_connect_case',
+        item_type: 'action',
+        action: rejectFormAction,
+        overflow: false,
+        color: 'secondary',
+        order: 110,
+        active: true,
+    },
+})
+
+Record({
+    $id: Now.ID['form_action_item_link_tsanet_reject'],
+    table: 'sys_ux_m2m_action_layout_item',
+    data: {
+        ux_form_action_layout: caseActionLayout,
+        ux_form_action_layout_item: rejectItem,
+        table: 'x_2256809_connect_case',
+        display_type: BUTTON,
+        variant: 'secondary',
+        order: 110,
+        active: true,
     },
 })

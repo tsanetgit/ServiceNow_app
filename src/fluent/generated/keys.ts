@@ -245,27 +245,27 @@ declare global {
                     form_action_item_link_tsanet_accept: {
                         table: 'sys_ux_m2m_action_layout_item'
                         id: '15355d0c00234e7a8a15d8b9c6108626'
-                        deleted: true
+                        deleted: false
                     }
                     form_action_item_link_tsanet_reject: {
                         table: 'sys_ux_m2m_action_layout_item'
                         id: '02009508c1ba4ecc9836b42f7f87ab5e'
-                        deleted: true
+                        deleted: false
                     }
                     form_action_item_tsanet_accept: {
                         table: 'sys_ux_form_action_layout_item'
                         id: '7fc6bfab9a8d4efb9a461e0b6e750ad6'
-                        deleted: true
+                        deleted: false
                     }
                     form_action_item_tsanet_reject: {
                         table: 'sys_ux_form_action_layout_item'
                         id: 'db06034ec25d48c9855ec138cd9f616a'
-                        deleted: true
+                        deleted: false
                     }
                     form_action_layout_tsanet_case: {
                         table: 'sys_ux_form_action_layout'
                         id: 'bd47953964b54b00b3b734d65be967c6'
-                        deleted: true
+                        deleted: false
                     }
                     job_tsanet_sync: {
                         table: 'sysauto_script'
@@ -2806,7 +2806,7 @@ declare global {
                     {
                         table: 'sys_ux_form_action'
                         id: '8bf2cabe62d4456cac9e6c5e33a7e5f0'
-                        deleted: true
+                        deleted: false
                         key: {
                             ui_action: '7bba3df8080a4768a1e927e3bc01647f'
                         }
@@ -3904,7 +3904,7 @@ declare global {
                     {
                         table: 'sys_ux_form_action'
                         id: 'bf66268a628a415eaa46fbffd2da082f'
-                        deleted: true
+                        deleted: false
                         key: {
                             ui_action: '42cc2035b1ec41d39195c431bf08d1dc'
                         }
