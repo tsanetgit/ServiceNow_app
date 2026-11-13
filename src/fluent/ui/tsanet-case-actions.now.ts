@@ -16,16 +16,22 @@ const SEND = `function send(method, params, done) {
             for (var name in params)
                 ga.addParam(name, params[name]);
             ga.getXMLAnswer(function(answer) {
-                var result = {};
-                try {
-                    result = JSON.parse(answer || '{}');
-                } catch (e) {
-                    result = { error: 'Unexpected answer from the server: ' + answer };
+                // No answer means the call never got through (an expired session, say), not success.
+                var result = { error: 'No answer from the server. Your answer may not have reached TSANet; reload the form to check its status.' };
+                if (answer) {
+                    try {
+                        result = JSON.parse(answer);
+                    } catch (e) {
+                        result = { error: 'Unexpected answer from the server: ' + answer };
+                    }
                 }
-                if (result.error)
+                if (result.error) {
                     g_form.addErrorMessage(result.error);
-                else
+                } else {
+                    // The server changed the status and the link: show them, and hide Accept and Reject.
+                    g_form.reload();
                     g_form.addInfoMessage(done);
+                }
             });
         } catch (e) {
             g_form.addErrorMessage('Could not send the answer: ' + e.message);
