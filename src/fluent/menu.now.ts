@@ -116,3 +116,18 @@ Record({
         order: 800,
     },
 })
+
+Record({
+    $id: Now.ID['module_poll_job'],
+    table: 'sys_app_module',
+    data: {
+        title: 'Poll job',
+        application: tsanetMenu,
+        link_type: 'DIRECT',
+        // The "TSANet Connect - sync requests" scheduled job (key job_tsanet_sync in generated/keys.ts).
+        query: 'sysauto_script.do?sys_id=af88dff8b91c48d5977e57589216e551',
+        roles: ['x_2256809_connect.admin'],
+        active: true,
+        order: 900,
+    },
+})

@@ -34,7 +34,8 @@ const inboundCreateHost = Property({
     $id: Now.ID['prop_inbound_create_host'],
     name: 'x_2256809_connect.inbound.create_host',
     type: 'boolean',
-    value: 'true',
+    // Off by default: creating a case for an inbound request is each member's choice.
+    value: 'false',
     description: 'Create host records for inbound requests. Create a record in the host table for an inbound request that matches none',
     roles: { read: [userRole], write: [adminRole] },
 })
@@ -63,8 +64,19 @@ const overlapMinutes = Property({
     name: 'x_2256809_connect.sync.overlap_minutes',
     type: 'integer',
     value: '10',
-    description: 'Sync overlap (minutes). Each sync re-reads this many minutes before the newest stored update',
+    description: 'Sync overlap (minutes). Each sync re-reads this many minutes before the last successful sync',
     roles: { read: [userRole], write: [adminRole] },
+})
+
+// Written by the sync after each run that stored every request; not on the Setup page.
+// Clearing it makes the next run read back sync.lookback_days again.
+Property({
+    $id: Now.ID['prop_sync_last_success'],
+    name: 'x_2256809_connect.sync.last_success',
+    type: 'string',
+    value: '',
+    description: 'Last successful sync (UTC). When the last sync that stored every request started',
+    roles: { read: [adminRole], write: [adminRole] },
 })
 
 const debug = Property({

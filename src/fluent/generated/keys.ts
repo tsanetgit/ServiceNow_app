@@ -230,6 +230,10 @@ declare global {
                         table: 'sys_ux_m2m_action_layout_item'
                         id: 'b6214ea8eb6c4974b87fbaa4a6d93c1e'
                     }
+                    job_tsanet_sync: {
+                        table: 'sysauto_script'
+                        id: 'af88dff8b91c48d5977e57589216e551'
+                    }
                     module_cases_all: {
                         table: 'sys_app_module'
                         id: '7193a88d530c491f80fe302df20d1933'
@@ -249,6 +253,10 @@ declare global {
                     module_notes: {
                         table: 'sys_app_module'
                         id: '2c3bfb51707c4d5d9901bd86bd6600c5'
+                    }
+                    module_poll_job: {
+                        table: 'sys_app_module'
+                        id: 'd760efc93b4b46eb80381bc3de2d2786'
                     }
                     module_responses: {
                         table: 'sys_app_module'
@@ -290,6 +298,10 @@ declare global {
                     prop_notes_to_work_notes: {
                         table: 'sys_properties'
                         id: '5fac477cde6e451dab004e882d7a0e80'
+                    }
+                    prop_sync_last_success: {
+                        table: 'sys_properties'
+                        id: '20aaf99a5a7c4248a2de8de34dfbd78b'
                     }
                     prop_sync_lookback_days: {
                         table: 'sys_properties'
@@ -372,6 +384,10 @@ declare global {
                         table: 'sys_properties_category_m2m'
                         id: '9f115ded55744d04b7c58e2f7f5349ba'
                     }
+                    'src_server_scheduled-jobs_tsanet-sync-job_js': {
+                        table: 'sys_module'
+                        id: '3c07d40a06b24e92933e383deff8bd8a'
+                    }
                     tsanet_api_alias: {
                         table: 'sys_alias'
                         id: '33bcb81f89e6424ab7b700383d41d033'
@@ -395,6 +411,10 @@ declare global {
                     tsanet_menu: {
                         table: 'sys_app_application'
                         id: '63f7f870c83b4b27ad97c086245792e7'
+                    }
+                    tsanet_sync: {
+                        table: 'sys_script_include'
+                        id: '7f02adba7ec34f9883d57808c6443c01'
                     }
                     ws_audience_user: {
                         table: 'sys_ux_applicability'
