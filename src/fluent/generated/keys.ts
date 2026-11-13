@@ -61,9 +61,21 @@ declare global {
                         table: 'sys_security_acl'
                         id: 'df470c48ecd949b980b9ebe4ce6379e2'
                     }
+                    acl_tsanet_inbound_execute: {
+                        table: 'sys_security_acl'
+                        id: '627c272110cd4469a393cbbd5be92483'
+                    }
                     action_create_tsanet_case: {
                         table: 'sys_ui_action'
                         id: '422d2538bf3d4e7e88acdd8184ef8959'
+                    }
+                    action_tsanet_accept: {
+                        table: 'sys_ui_action'
+                        id: '7bba3df8080a4768a1e927e3bc01647f'
+                    }
+                    action_tsanet_reject: {
+                        table: 'sys_ui_action'
+                        id: '42cc2035b1ec41d39195c431bf08d1dc'
                     }
                     bom_json: {
                         table: 'sys_module'
@@ -229,6 +241,31 @@ declare global {
                     form_action_item_link_front_line: {
                         table: 'sys_ux_m2m_action_layout_item'
                         id: 'b6214ea8eb6c4974b87fbaa4a6d93c1e'
+                    }
+                    form_action_item_link_tsanet_accept: {
+                        table: 'sys_ux_m2m_action_layout_item'
+                        id: '15355d0c00234e7a8a15d8b9c6108626'
+                        deleted: true
+                    }
+                    form_action_item_link_tsanet_reject: {
+                        table: 'sys_ux_m2m_action_layout_item'
+                        id: '02009508c1ba4ecc9836b42f7f87ab5e'
+                        deleted: true
+                    }
+                    form_action_item_tsanet_accept: {
+                        table: 'sys_ux_form_action_layout_item'
+                        id: '7fc6bfab9a8d4efb9a461e0b6e750ad6'
+                        deleted: true
+                    }
+                    form_action_item_tsanet_reject: {
+                        table: 'sys_ux_form_action_layout_item'
+                        id: 'db06034ec25d48c9855ec138cd9f616a'
+                        deleted: true
+                    }
+                    form_action_layout_tsanet_case: {
+                        table: 'sys_ux_form_action_layout'
+                        id: 'bd47953964b54b00b3b734d65be967c6'
+                        deleted: true
                     }
                     job_tsanet_sync: {
                         table: 'sysauto_script'
@@ -407,6 +444,10 @@ declare global {
                     tsanet_create_case: {
                         table: 'sys_script_include'
                         id: '74581165f2064e3784f92e83062fefac'
+                    }
+                    tsanet_inbound: {
+                        table: 'sys_script_include'
+                        id: '231f5c07dccf4fbd93b06c20e0c578e3'
                     }
                     tsanet_menu: {
                         table: 'sys_app_application'
@@ -1638,6 +1679,19 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_action_role'
+                        id: '47b17fd3a51b4391afc7fae025b67b5b'
+                        key: {
+                            sys_ui_action: '7bba3df8080a4768a1e927e3bc01647f'
+                            sys_user_role: {
+                                id: '13c64c9ef7b54505a80e6f46530c6f51'
+                                key: {
+                                    name: 'x_2256809_connect.user'
+                                }
+                            }
+                        }
+                    },
+                    {
                         table: 'sys_dictionary'
                         id: '47fcb1273aa443c5aeebc87e2ab62cda'
                         key: {
@@ -2750,6 +2804,14 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ux_form_action'
+                        id: '8bf2cabe62d4456cac9e6c5e33a7e5f0'
+                        deleted: true
+                        key: {
+                            ui_action: '7bba3df8080a4768a1e927e3bc01647f'
+                        }
+                    },
+                    {
                         table: 'sys_choice_set'
                         id: '8c808e9f5de24647ba47f72a581647ae'
                         key: {
@@ -3344,6 +3406,19 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_action_role'
+                        id: 'a8ad49abc044482eb928a51e2bd17bc8'
+                        key: {
+                            sys_ui_action: '42cc2035b1ec41d39195c431bf08d1dc'
+                            sys_user_role: {
+                                id: '13c64c9ef7b54505a80e6f46530c6f51'
+                                key: {
+                                    name: 'x_2256809_connect.user'
+                                }
+                            }
+                        }
+                    },
+                    {
                         table: 'sys_documentation'
                         id: 'a8d0cc0934f542cdb1bcdb79caf519cd'
                         key: {
@@ -3467,6 +3542,19 @@ declare global {
                             value: 'CLOSED'
                             language: 'en'
                             dependent_value: 'NULL'
+                        }
+                    },
+                    {
+                        table: 'sys_security_acl_role'
+                        id: 'b245cdb946274fe1a211a84f40a278a1'
+                        key: {
+                            sys_security_acl: '627c272110cd4469a393cbbd5be92483'
+                            sys_user_role: {
+                                id: '13c64c9ef7b54505a80e6f46530c6f51'
+                                key: {
+                                    name: 'x_2256809_connect.user'
+                                }
+                            }
                         }
                     },
                     {
@@ -3811,6 +3899,14 @@ declare global {
                             name: 'x_2256809_connect_response'
                             element: 'type'
                             language: 'en'
+                        }
+                    },
+                    {
+                        table: 'sys_ux_form_action'
+                        id: 'bf66268a628a415eaa46fbffd2da082f'
+                        deleted: true
+                        key: {
+                            ui_action: '42cc2035b1ec41d39195c431bf08d1dc'
                         }
                     },
                     {
