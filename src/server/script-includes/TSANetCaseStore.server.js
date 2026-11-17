@@ -106,12 +106,16 @@ TSANetCaseStore.prototype = {
         gr.setValue(field, value == null ? '' : value);
     },
 
-    /** The partner form's answers as "Label: value" lines, for the form. HIDDEN fields and empty answers are left out. */
+    /**
+     * The partner form's answers as "Question: value" lines, for the form. HIDDEN fields and empty answers are left out.
+     * The fields are the request's CaseCustomFieldStatusDTO items, which name the question fieldName
+     * (label is only on the form's FieldMetadataDTO).
+     */
     _fieldsText: function(fields) {
         return fields.filter(function(f) {
             return f.type != 'HIDDEN' && f.value != null && String(f.value) !== '';
         }).map(function(f) {
-            return f.label + ': ' + f.value;
+            return f.fieldName + ': ' + f.value;
         }).join('\n');
     },
 
