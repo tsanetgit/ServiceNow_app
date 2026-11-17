@@ -98,7 +98,7 @@ Form({
                     layout: 'one-column',
                     elements: [
                         { field: 'admin_note', type: 'table_field' },
-                        { field: 'custom_fields', type: 'table_field' },
+                        { field: 'custom_fields_text', type: 'table_field' },
                     ],
                 },
             ],

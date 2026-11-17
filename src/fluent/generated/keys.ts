@@ -1022,6 +1022,14 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_dictionary'
+                        id: '1caa505c9dcd4c0ba621ec196b71b24e'
+                        key: {
+                            name: 'x_2256809_connect_case'
+                            element: 'custom_fields_text'
+                        }
+                    },
+                    {
                         table: 'sys_ui_element'
                         id: '1cb79d9033504bbe9d0829abce13dfd5'
                         key: {
@@ -3086,6 +3094,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: '990d682c668f435ca235d3b0f975ae24'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: '87c8d008f3c54db4ab9489b8f08e1650'
@@ -4447,6 +4456,15 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_documentation'
+                        id: 'd9046afeae2f43a092728005e2f7624b'
+                        key: {
+                            name: 'x_2256809_connect_case'
+                            element: 'custom_fields_text'
+                            language: 'en'
+                        }
+                    },
+                    {
                         table: 'sys_ui_form_section'
                         id: 'db684896ea124d19808e8133660a9b64'
                         key: {
@@ -5127,6 +5145,28 @@ declare global {
                         key: {
                             name: 'x_2256809_connect_case'
                             element: 'document_name'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: 'f9e460a7bdc746bf9af1cf357c2edb41'
+                        key: {
+                            sys_ui_section: {
+                                id: '87c8d008f3c54db4ab9489b8f08e1650'
+                                key: {
+                                    name: 'x_2256809_connect_case'
+                                    caption: 'Details'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'custom_fields_text'
+                            position: '12'
                         }
                     },
                     {

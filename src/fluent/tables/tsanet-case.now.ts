@@ -64,6 +64,7 @@ export const x_2256809_connect_case = Table({
         escalation_instructions: HtmlColumn({ label: 'Escalation instructions', maxLength: 32000 }),
         admin_note: StringColumn({ label: 'Admin note', maxLength: 32000 }),
         custom_fields: StringColumn({ label: 'Custom fields', maxLength: 32000 }),
+        custom_fields_text: StringColumn({ label: 'Partner form answers', maxLength: 32000, readOnly: true }),
         partner: StringColumn({ label: 'Member (Partner)', maxLength: 255 }),
         document_id: StringColumn({ label: 'Document ID', maxLength: 255 }),
         document_name: StringColumn({ label: 'Document name', maxLength: 255 }),

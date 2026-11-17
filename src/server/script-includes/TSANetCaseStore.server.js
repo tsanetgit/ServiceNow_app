@@ -52,8 +52,9 @@ TSANetCaseStore.prototype = {
         var elements = gr.getElements();
         for (var i = 0; i < elements.length; i++) {
             var name = elements[i].getName();
+            // An empty field reads as null once saved but as '' right after _set, so both count as empty.
             if (name.indexOf('sys_') != 0)
-                values[name] = String(gr.getValue(name));
+                values[name] = String(gr.getValue(name) || '');
         }
         return JSON.stringify(values);
     },
@@ -68,34 +69,50 @@ TSANetCaseStore.prototype = {
         var receiver = dto.receiverContactDetails || {};
         // The partner is the other company: the receiver of our outbound request, the submitter of an inbound one.
         var partner = direction == 'INBOUND' ? dto.submitCompanyName : dto.receiveCompanyName;
-        gr.setValue('direction', direction);
-        gr.setValue('tsanet_case_id', dto.id);
-        gr.setValue('status', dto.status);
-        gr.setValue('priority', dto.priority);
-        gr.setValue('summary', dto.summary);
-        gr.setValue('description', dto.description);
-        gr.setValue('partner', partner);
-        gr.setValue('received_company_id', dto.receiveCompanyId);
-        gr.setValue('received_company_name', dto.receiveCompanyName);
-        gr.setValue('submitted_company_id', dto.submitCompanyId);
-        gr.setValue('submitted_company_name', dto.submitCompanyName);
-        gr.setValue('submitter_case_number', dto.submitterCaseNumber);
-        gr.setValue('submitter_name', submitter.name);
-        gr.setValue('submitter_email', submitter.email);
-        gr.setValue('submitter_phone', submitter.phone);
-        gr.setValue('receiver_case_number', dto.receiverCaseNumber);
-        gr.setValue('receiver_name', receiver.name);
-        gr.setValue('receiver_email', receiver.email);
-        gr.setValue('receiver_phone', receiver.phone);
-        gr.setValue('document_id', dto.contactDocumentId);
-        gr.setValue('document_name', dto.contactDocumentName);
-        gr.setValue('priority_note', dto.priorityNote);
-        gr.setValue('escalation_instructions', dto.escalationInstructions);
-        gr.setValue('custom_fields', JSON.stringify(this._sortFields(dto.customFields || [])));
-        gr.setValue('responded', dto.responded ? 'true' : 'false');
+        this._set(gr, 'direction', direction);
+        this._set(gr, 'tsanet_case_id', dto.id);
+        this._set(gr, 'status', dto.status);
+        this._set(gr, 'priority', dto.priority);
+        this._set(gr, 'summary', dto.summary);
+        this._set(gr, 'description', dto.description);
+        this._set(gr, 'partner', partner);
+        this._set(gr, 'received_company_id', dto.receiveCompanyId);
+        this._set(gr, 'received_company_name', dto.receiveCompanyName);
+        this._set(gr, 'submitted_company_id', dto.submitCompanyId);
+        this._set(gr, 'submitted_company_name', dto.submitCompanyName);
+        this._set(gr, 'submitter_case_number', dto.submitterCaseNumber);
+        this._set(gr, 'submitter_name', submitter.name);
+        this._set(gr, 'submitter_email', submitter.email);
+        this._set(gr, 'submitter_phone', submitter.phone);
+        this._set(gr, 'receiver_case_number', dto.receiverCaseNumber);
+        this._set(gr, 'receiver_name', receiver.name);
+        this._set(gr, 'receiver_email', receiver.email);
+        this._set(gr, 'receiver_phone', receiver.phone);
+        this._set(gr, 'document_id', dto.contactDocumentId);
+        this._set(gr, 'document_name', dto.contactDocumentName);
+        this._set(gr, 'priority_note', dto.priorityNote);
+        this._set(gr, 'escalation_instructions', dto.escalationInstructions);
+        var fields = this._sortFields(dto.customFields || []);
+        this._set(gr, 'custom_fields', JSON.stringify(fields));
+        this._set(gr, 'custom_fields_text', this._fieldsText(fields));
+        this._set(gr, 'responded', dto.responded ? 'true' : 'false');
         this._setDate(gr, 'request_date', dto.createdAt);
         this._setDate(gr, 'response_sla', dto.respondBy);
         this._setDate(gr, 'tsanet_updated', dto.updatedAt);
+    },
+
+    /** TSANet leaves out fields it has no value for; store those as empty, not as the text "undefined". */
+    _set: function(gr, field, value) {
+        gr.setValue(field, value == null ? '' : value);
+    },
+
+    /** The partner form's answers as "Label: value" lines, for the form. HIDDEN fields and empty answers are left out. */
+    _fieldsText: function(fields) {
+        return fields.filter(function(f) {
+            return f.type != 'HIDDEN' && f.value != null && String(f.value) !== '';
+        }).map(function(f) {
+            return f.label + ': ' + f.value;
+        }).join('\n');
     },
 
     /**
