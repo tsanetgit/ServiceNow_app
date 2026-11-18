@@ -445,6 +445,10 @@ declare global {
                         table: 'sys_script_include'
                         id: '74581165f2064e3784f92e83062fefac'
                     }
+                    tsanet_engineer: {
+                        table: 'sys_script_include'
+                        id: '8616f52bbae94f59b001d2d2b8a6ff8e'
+                    }
                     tsanet_inbound: {
                         table: 'sys_script_include'
                         id: '231f5c07dccf4fbd93b06c20e0c578e3'

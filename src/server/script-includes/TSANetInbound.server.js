@@ -4,7 +4,7 @@
  * The TSANet Case's Accept and Reject actions call it through GlideAjax. It checks the
  * request on the server, sends the answer to TSANet, and stores TSANet's reply through
  * TSANetCaseStore, which also links the case on accept when the TSANet Case has none.
- * The case number and the engineer's details are read here, not taken from the browser.
+ * The case number is read here and the engineer's details through TSANetEngineer, not taken from the browser.
  */
 var TSANetInbound = Class.create();
 TSANetInbound.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
@@ -36,7 +36,7 @@ TSANetInbound.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
         nextSteps = String(nextSteps || '').trim();
         if (!nextSteps)
             throw this._inputError('Fill in: Next steps');
-        var engineer = this._engineer();
+        var engineer = new TSANetEngineer().current();
         var dto = this._client().approve(tsanetCase.getValue('token'), {
             caseNumber: host.getValue('number'),
             engineerName: engineer.name,
@@ -53,7 +53,7 @@ TSANetInbound.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
         reason = String(reason || '').trim();
         if (!reason)
             throw this._inputError('Fill in: Reason');
-        var engineer = this._engineer();
+        var engineer = new TSANetEngineer().current();
         var dto = this._client().reject(tsanetCase.getValue('token'), {
             engineerName: engineer.name,
             engineerEmail: engineer.email,
@@ -92,16 +92,6 @@ TSANetInbound.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
         if (!gr.get('number', hostNumber))
             throw this._inputError('No case ' + hostNumber + ' was found.');
         return gr;
-    },
-
-    _engineer: function() {
-        var user = new GlideRecord('sys_user');
-        user.get(gs.getUserID());
-        return {
-            name: user.getValue('name') || '',
-            email: user.getValue('email') || '',
-            phone: user.getValue('phone') || user.getValue('mobile_phone') || '',
-        };
     },
 
     /** Stores TSANet's reply, so the TSANet Case shows the new status straight away. */
