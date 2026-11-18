@@ -43,6 +43,8 @@ TSANetCreateCase.prototype = {
     create: function(input) {
         input = input || {};
         var hostCase = this._hostCase(input.caseSysId);
+        // Before the form is fetched, so an agent TSANet can't accept as engineer sends nothing.
+        var engineer = new TSANetEngineer().current();
         var summary = String(input.summary || '').trim();
         var description = String(input.description || '').trim();
         var priority = String(input.priority || '');
@@ -76,7 +78,7 @@ TSANetCreateCase.prototype = {
         request.problemSummary = summary;
         request.problemDescription = description;
         request.priority = priority;
-        request.submitterContactDetails = this._engineer();
+        request.submitterContactDetails = engineer;
 
         // Resolve the connection first, so a setup error can't be mistaken for a lost answer below.
         this.client._connection();
@@ -141,16 +143,6 @@ TSANetCreateCase.prototype = {
         if (!/^[0-9a-f]{32}$/.test(String(sysId || '')) || !gr.get(sysId))
             throw this._inputError('The case could not be read.');
         return gr;
-    },
-
-    _engineer: function() {
-        var user = new GlideRecord('sys_user');
-        user.get(gs.getUserID());
-        return {
-            name: user.getValue('name') || '',
-            email: user.getValue('email') || '',
-            phone: user.getValue('phone') || user.getValue('mobile_phone') || '',
-        };
     },
 
     /** Stores TSANet's answer as the outbound TSANet Case, through the store the sync uses too. */
