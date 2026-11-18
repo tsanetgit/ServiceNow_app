@@ -43,7 +43,7 @@ TSANetCreateCase.prototype = {
     create: function(input) {
         input = input || {};
         var hostCase = this._hostCase(input.caseSysId);
-        // Before the form is fetched, so an agent TSANet can't accept as engineer sends nothing.
+        // Resolve the engineer before fetching the form, so an incomplete profile cannot submit to TSANet.
         var engineer = new TSANetEngineer().current();
         var summary = String(input.summary || '').trim();
         var description = String(input.description || '').trim();
