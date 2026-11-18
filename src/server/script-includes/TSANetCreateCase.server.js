@@ -4,7 +4,7 @@
  * The page calls it through the "Create TSANet Case" REST API. It finds partners,
  * loads a partner's form, and submits an outbound collaboration request for a
  * case, storing the TSANet Case only once TSANet has accepted the request.
- * The case number and the engineer's details are read here, not taken from the browser.
+ * The case number is read here and the engineer's details through TSANetEngineer, not taken from the browser.
  */
 var TSANetCreateCase = Class.create();
 TSANetCreateCase.prototype = {

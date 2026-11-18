@@ -64,6 +64,13 @@ export default function App() {
         }
         Promise.all([getCase(caseId), getCurrentUser()])
             .then(([c, u]) => {
+                // Same check and wording as TSANetEngineer on the server, which still decides at Submit;
+                // here it only saves the agent filling in a form TSANet would refuse.
+                const missing = [!display(u.name).trim() && 'name', !display(u.email).trim() && 'email address'].filter(Boolean)
+                if (missing.length) {
+                    setError(`Your user profile has no ${missing.join(' or ')}. Add it before sending to TSANet.`)
+                    return
+                }
                 setHostCase(c)
                 setAgent(u)
                 setSummary(c.short_description?.value || '')

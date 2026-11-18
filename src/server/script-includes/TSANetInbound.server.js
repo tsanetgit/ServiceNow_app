@@ -4,7 +4,7 @@
  * The TSANet Case's Accept and Reject actions call it through GlideAjax. It checks the
  * request on the server, sends the answer to TSANet, and stores TSANet's reply through
  * TSANetCaseStore, which also links the case on accept when the TSANet Case has none.
- * The case number and the engineer's details are read here, not taken from the browser.
+ * The case number is read here and the engineer's details through TSANetEngineer, not taken from the browser.
  */
 var TSANetInbound = Class.create();
 TSANetInbound.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
