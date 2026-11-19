@@ -46,6 +46,9 @@ TSANetSync.prototype = {
                 var stored = this.store.upsert(request, this._hostFor(request, hostTable));
                 if (!stored)
                     throw new Error('it could not be stored');
+                // Counted as failed so the window doesn't move and the next run stores the rest.
+                if (stored.childFailed)
+                    throw new Error('not all of its notes and responses could be stored');
                 counts[stored.inserted ? 'inserted' : stored.updated ? 'updated' : 'unchanged']++;
             } catch (e) {
                 counts.failed++;

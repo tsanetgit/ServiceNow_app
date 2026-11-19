@@ -15,6 +15,7 @@ Form({
                         { field: 'type', type: 'table_field' },
                         { field: 'priority', type: 'table_field' },
                         { field: 'status', type: 'table_field' },
+                        { field: 'encrypted', type: 'table_field' },
                     ],
                     rightElements: [
                         { field: 'creator_name', type: 'table_field' },
