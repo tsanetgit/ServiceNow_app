@@ -59,8 +59,12 @@ TSANetSync.prototype = {
         // A skipped request is read again on the next run, so the window only moves when none failed.
         if (!counts.failed)
             gs.setProperty(this.SCOPE + '.' + this.LAST_SUCCESS, started.getValue());
-        if (counts.inserted || counts.updated || counts.failed)
+        // A run that found nothing new leaves no row, so the every-minute poll doesn't fill the log.
+        if (counts.inserted || counts.updated || counts.failed) {
             gs.info('[TSANet] Sync: ' + JSON.stringify(counts));
+            new TSANetLog().write({ operation: 'Sync', result: counts.failed ? 'FAILED' : 'SUCCESS', message: JSON.stringify(counts),
+                durationMs: new Date().getTime() - started.getNumericValue() });
+        }
         return counts;
     },
 
