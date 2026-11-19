@@ -558,6 +558,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: '0384051451a34a068c9a06d1f7ce89f8'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: '18c84d0bed3c47cc8e0f58a2ec120b3f'
@@ -673,6 +674,28 @@ declare global {
                             }
                             element: 'tsanet_updated'
                             position: '5'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: '066b5c627c9f46e585cac43e44a5138c'
+                        key: {
+                            sys_ui_section: {
+                                id: '18c84d0bed3c47cc8e0f58a2ec120b3f'
+                                key: {
+                                    name: 'x_2256809_connect_note'
+                                    caption: 'Note'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'creator_name'
+                            position: '8'
                         }
                     },
                     {
@@ -939,6 +962,28 @@ declare global {
                         key: {
                             name: 'x_2256809_connect_response'
                             element: 'engineer_name'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: '15d70547d8444818a209c3b3cec78aa3'
+                        key: {
+                            sys_ui_section: {
+                                id: '18c84d0bed3c47cc8e0f58a2ec120b3f'
+                                key: {
+                                    name: 'x_2256809_connect_note'
+                                    caption: 'Note'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'description'
+                            position: '15'
                         }
                     },
                     {
@@ -1254,6 +1299,28 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_element'
+                        id: '2936d70e26df431f92a13076770281c0'
+                        key: {
+                            sys_ui_section: {
+                                id: '18c84d0bed3c47cc8e0f58a2ec120b3f'
+                                key: {
+                                    name: 'x_2256809_connect_note'
+                                    caption: 'Note'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'copied_to_case'
+                            position: '12'
+                        }
+                    },
+                    {
                         table: 'sys_dictionary'
                         id: '2974800aa83a455f831dfea12873e46c'
                         key: {
@@ -1267,6 +1334,15 @@ declare global {
                         key: {
                             name: 'x_2256809_connect_case'
                             element: 'reminder_sent'
+                        }
+                    },
+                    {
+                        table: 'sys_documentation'
+                        id: '2a0037def8a246c0b4aef592cb89a162'
+                        key: {
+                            name: 'x_2256809_connect_note'
+                            element: 'encrypted'
+                            language: 'en'
                         }
                     },
                     {
@@ -1325,6 +1401,28 @@ declare global {
                         key: {
                             name: 'x_2256809_connect_case'
                             element: 'responded'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: '2d90c0bb82404958885ad13e8408e5ed'
+                        key: {
+                            sys_ui_section: {
+                                id: '18c84d0bed3c47cc8e0f58a2ec120b3f'
+                                key: {
+                                    name: 'x_2256809_connect_note'
+                                    caption: 'Note'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: '.end_split'
+                            position: '13'
                         }
                     },
                     {
@@ -1460,6 +1558,28 @@ declare global {
                     },
                     {
                         table: 'sys_ui_element'
+                        id: '3859c4d9c86b4c34bf3fb0ea2850157a'
+                        key: {
+                            sys_ui_section: {
+                                id: '18c84d0bed3c47cc8e0f58a2ec120b3f'
+                                key: {
+                                    name: 'x_2256809_connect_note'
+                                    caption: 'Note'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: '.split'
+                            position: '7'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
                         id: '388b21a57c8f4226acbebdf35e047e13'
                         key: {
                             sys_ui_section: {
@@ -1536,6 +1656,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: '3b91b267cdc04b5885dc5f1e048fbf5b'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: '18c84d0bed3c47cc8e0f58a2ec120b3f'
@@ -1594,6 +1715,28 @@ declare global {
                         key: {
                             name: 'x_2256809_connect_note'
                             element: 'type'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: '3dcad9f95ace4bed80db2832278bb5dd'
+                        key: {
+                            sys_ui_section: {
+                                id: '18c84d0bed3c47cc8e0f58a2ec120b3f'
+                                key: {
+                                    name: 'x_2256809_connect_note'
+                                    caption: 'Note'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'creator_email'
+                            position: '9'
                         }
                     },
                     {
@@ -2070,6 +2213,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: '5887f86220b243ffb581f2810c699980'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: '18c84d0bed3c47cc8e0f58a2ec120b3f'
@@ -2363,6 +2507,14 @@ declare global {
                             name: 'x_2256809_connect_note'
                             element: 'creator_username'
                             language: 'en'
+                        }
+                    },
+                    {
+                        table: 'sys_dictionary'
+                        id: '660d5ef9acd148a2891c328ec8fe8171'
+                        key: {
+                            name: 'x_2256809_connect_note'
+                            element: 'encrypted'
                         }
                     },
                     {
@@ -2733,6 +2885,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: '8610deca20d04a0da3f4fef6115f5b7b'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: '18c84d0bed3c47cc8e0f58a2ec120b3f'
@@ -2765,6 +2918,28 @@ declare global {
                                 }
                             }
                             sys_domain: 'global'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: '88545921962648d8a828afdc113537cf'
+                        key: {
+                            sys_ui_section: {
+                                id: '18c84d0bed3c47cc8e0f58a2ec120b3f'
+                                key: {
+                                    name: 'x_2256809_connect_note'
+                                    caption: 'Note'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'company_name'
+                            position: '10'
                         }
                     },
                     {
@@ -2989,6 +3164,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: '94456b35ac2148da9a9ae6915c709b23'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: '18c84d0bed3c47cc8e0f58a2ec120b3f'
@@ -3271,6 +3447,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: '9f93d58005dc48c8aecd11bc51969677'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: '18c84d0bed3c47cc8e0f58a2ec120b3f'
@@ -3573,6 +3750,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: 'b263e47d44db465397992e8688f14126'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: '18c84d0bed3c47cc8e0f58a2ec120b3f'
@@ -3656,6 +3834,28 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_element'
+                        id: 'b86255331e484f638c6ae26ceedf761c'
+                        key: {
+                            sys_ui_section: {
+                                id: '18c84d0bed3c47cc8e0f58a2ec120b3f'
+                                key: {
+                                    name: 'x_2256809_connect_note'
+                                    caption: 'Note'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'summary'
+                            position: '14'
+                        }
+                    },
+                    {
                         table: 'sys_documentation'
                         id: 'b8bfcc33a1124f07b18c942e605f6593'
                         key: {
@@ -3685,6 +3885,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: 'b9c5f633d48d42a4a0e0d9ef28af3a9c'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: '18c84d0bed3c47cc8e0f58a2ec120b3f'
@@ -4426,6 +4627,28 @@ declare global {
                                 }
                             }
                             element: 'number'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: 'd4318c36f6fd4f3d9f5139bf9fa35105'
+                        key: {
+                            sys_ui_section: {
+                                id: '18c84d0bed3c47cc8e0f58a2ec120b3f'
+                                key: {
+                                    name: 'x_2256809_connect_note'
+                                    caption: 'Note'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'encrypted'
+                            position: '6'
                         }
                     },
                     {
@@ -5176,6 +5399,7 @@ declare global {
                     {
                         table: 'sys_ui_element'
                         id: 'fa18e9698f6d4f3293f863f8dde65542'
+                        deleted: true
                         key: {
                             sys_ui_section: {
                                 id: '18c84d0bed3c47cc8e0f58a2ec120b3f'
@@ -5297,6 +5521,28 @@ declare global {
                         key: {
                             name: 'x_2256809_connect_case'
                             element: 'admin_note'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: 'ff20227deb1e44398d160f76aa7f0504'
+                        key: {
+                            sys_ui_section: {
+                                id: '18c84d0bed3c47cc8e0f58a2ec120b3f'
+                                key: {
+                                    name: 'x_2256809_connect_note'
+                                    caption: 'Note'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'tsanet_created'
+                            position: '11'
                         }
                     },
                     {

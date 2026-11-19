@@ -1,7 +1,7 @@
 /**
  * TSANetCaseStore - the one place a TSANet request (the API's CollaborationRequestStatusDTO)
- * becomes a TSANet Case record. Create TSANet Case and the sync both store through it, so a
- * request is mapped the same way whichever path brought it in.
+ * becomes a TSANet Case record, with its notes and responses. Create TSANet Case, Accept and Reject,
+ * and the sync all store through it, so a request is mapped the same way whichever path brought it in.
  *
  * Writes as the system: the table's create ACL is admin-only.
  */
@@ -11,13 +11,31 @@ TSANetCaseStore.prototype = {
 
     initialize: function() {},
 
+    NOTE_TABLE: 'x_2256809_connect_note',
+    RESPONSE_TABLE: 'x_2256809_connect_response',
+    ENCRYPTED_TEXT: 'Encrypted. Open it in TSANet to read it.',
+
     /**
-     * Creates or updates the TSANet Case for dto.token.
+     * Creates or updates the TSANet Case for dto.token, with its notes and responses.
      * hostSysId links a TSANet Case that has no case yet; an existing link is never changed.
      * direction is used when the DTO doesn't carry one.
-     * Returns { sysId, number, inserted, updated }, or null if the record couldn't be written.
+     * Returns { sysId, number, inserted, updated, childFailed }, or null if the TSANet Case couldn't be
+     * written. updated is also true when only a note or response changed. childFailed means a note or
+     * response couldn't be stored; the TSANet Case itself was.
      */
     upsert: function(dto, hostSysId, direction) {
+        var result = this._upsertCase(dto, hostSysId, direction);
+        if (!result)
+            return null;
+        // On every path, also when the request itself is unchanged: a new note doesn't always change it.
+        var children = this._storeChildren(result.sysId, dto);
+        if (children.changed && !result.inserted)
+            result.updated = true;
+        result.childFailed = children.failed;
+        return result;
+    },
+
+    _upsertCase: function(dto, hostSysId, direction) {
         var gr = this._find(dto.token);
         if (!gr) {
             gr = new GlideRecord(this.TABLE);
@@ -57,6 +75,102 @@ TSANetCaseStore.prototype = {
                 values[name] = String(gr.getValue(name) || '');
         }
         return JSON.stringify(values);
+    },
+
+    /** Notes by token and responses by id, linked to the TSANet Case. Returns { changed, failed }. */
+    _storeChildren: function(caseSysId, dto) {
+        var outcome = { changed: false, failed: false };
+        var count = function(state) {
+            outcome.changed = outcome.changed || state == 'changed';
+            outcome.failed = outcome.failed || state == 'failed';
+        };
+        (dto.caseNotes || []).forEach(function(note) {
+            if (!note || !note.token)
+                return;
+            // A removed note is never created; one already stored stays and shows it was removed.
+            // A note missing from the answer isn't a deletion, so nothing is deleted.
+            if (note.status == 'REMOVED')
+                count(this._markRemoved(note.token));
+            else
+                count(this._upsertChild(this.NOTE_TABLE, 'token', note.token, function(gr) { this._mapNote(gr, caseSysId, note); }));
+        }, this);
+        (dto.caseResponses || []).forEach(function(response) {
+            if (response && response.id != null)
+                count(this._upsertChild(this.RESPONSE_TABLE, 'response_id', String(response.id), function(gr) { this._mapResponse(gr, caseSysId, response); }));
+        }, this);
+        return outcome;
+    },
+
+    /** Inserts or updates one row by its unique key, writing only what changed. Returns 'changed', 'unchanged' or 'failed'. */
+    _upsertChild: function(table, keyField, key, map) {
+        var gr = new GlideRecord(table);
+        if (!gr.get(keyField, key)) {
+            gr.initialize();
+            gr.setValue(keyField, key);
+            map.call(this, gr);
+            if (gr.insert())
+                return 'changed';
+            // Another run may have stored the same key first (unique index): update that one.
+            gr = new GlideRecord(table);
+            if (!gr.get(keyField, key))
+                return 'failed';
+        }
+        var before = this._values(gr);
+        map.call(this, gr);
+        if (this._values(gr) == before)
+            return 'unchanged';
+        return gr.update() ? 'changed' : 'failed';
+    },
+
+    /** Sets an already-stored note's status to REMOVED. Returns 'changed', 'unchanged' or 'failed'. */
+    _markRemoved: function(token) {
+        var gr = new GlideRecord(this.NOTE_TABLE);
+        if (!gr.get('token', token) || gr.getValue('status') == 'REMOVED')
+            return 'unchanged';
+        gr.setValue('status', 'REMOVED');
+        return gr.update() ? 'changed' : 'failed';
+    },
+
+    /** The note's text without tags, with the common HTML entities decoded (&amp; last, so "&amp;lt;" stays "&lt;"). */
+    _plain: function(html) {
+        if (html == null)
+            return '';
+        return String(html).replace(/<[^>]*>/g, ' ').replace(/&nbsp;|&#160;/g, ' ').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+            .replace(/&quot;|&#34;/g, '"').replace(/&#39;|&apos;/g, "'").replace(/&amp;/g, '&').replace(/\s+/g, ' ').trim();
+    },
+
+    /** A CaseNoteDTO. The type code is kept as sent (an open set); an encrypted note's text is never stored. */
+    _mapNote: function(gr, caseSysId, note) {
+        var encrypted = note.encrypted === true;
+        var html = encrypted ? this.ENCRYPTED_TEXT : note.description;
+        this._set(gr, 'tsanet_case', caseSysId);
+        this._set(gr, 'direction', note.direction);
+        this._set(gr, 'type', note.type && note.type.code);
+        this._set(gr, 'priority', note.priority);
+        this._set(gr, 'status', note.status);
+        this._set(gr, 'encrypted', encrypted ? 'true' : 'false');
+        this._set(gr, 'summary', encrypted ? 'Encrypted note' : note.summary);
+        this._set(gr, 'description', html);
+        this._set(gr, 'description_plain', this._plain(html));
+        this._set(gr, 'creator_name', note.creatorName);
+        this._set(gr, 'creator_email', note.creatorEmail);
+        this._set(gr, 'creator_username', note.creatorUsername);
+        this._set(gr, 'company_id', note.companyId);
+        this._set(gr, 'company_name', note.companyName);
+        this._setDate(gr, 'tsanet_created', note.createdAt);
+        this._setDate(gr, 'tsanet_updated', note.updatedAt);
+    },
+
+    /** A CaseResponseDTO: the partner's accept, request for information, information or reject. */
+    _mapResponse: function(gr, caseSysId, response) {
+        this._set(gr, 'tsanet_case', caseSysId);
+        this._set(gr, 'type', response.type);
+        this._set(gr, 'engineer_name', response.engineerName);
+        this._set(gr, 'engineer_email', response.engineerEmail);
+        this._set(gr, 'engineer_phone', response.engineerPhone);
+        this._set(gr, 'case_number', response.caseNumber);
+        this._set(gr, 'next_steps', response.nextSteps);
+        this._setDate(gr, 'tsanet_created', response.createdAt);
     },
 
     _find: function(token) {

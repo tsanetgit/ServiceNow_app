@@ -71,5 +71,7 @@ export const x_2256809_connect_note = Table({
         tsanet_created: DateTimeColumn({ label: 'Created in TSANet' }),
         tsanet_updated: DateTimeColumn({ label: 'Updated in TSANet' }),
         copied_to_case: BooleanColumn({ label: 'Copied to case', default: false }),
+        // An encrypted note's text is never stored; the description says to open it in TSANet.
+        encrypted: BooleanColumn({ label: 'Encrypted', default: false }),
     },
 })
