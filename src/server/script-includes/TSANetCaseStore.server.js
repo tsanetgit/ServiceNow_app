@@ -85,8 +85,13 @@ TSANetCaseStore.prototype = {
             outcome.failed = outcome.failed || state == 'failed';
         };
         (dto.caseNotes || []).forEach(function(note) {
-            // A removed note is left out; a note already stored stays, since a missing note isn't a deletion.
-            if (note && note.token && note.status != 'REMOVED')
+            if (!note || !note.token)
+                return;
+            // A removed note is never created; one already stored stays and shows it was removed.
+            // A note missing from the answer isn't a deletion, so nothing is deleted.
+            if (note.status == 'REMOVED')
+                count(this._markRemoved(note.token));
+            else
                 count(this._upsertChild(this.NOTE_TABLE, 'token', note.token, function(gr) { this._mapNote(gr, caseSysId, note); }));
         }, this);
         (dto.caseResponses || []).forEach(function(response) {
@@ -117,6 +122,23 @@ TSANetCaseStore.prototype = {
         return gr.update() ? 'changed' : 'failed';
     },
 
+    /** Sets an already-stored note's status to REMOVED. Returns 'changed', 'unchanged' or 'failed'. */
+    _markRemoved: function(token) {
+        var gr = new GlideRecord(this.NOTE_TABLE);
+        if (!gr.get('token', token) || gr.getValue('status') == 'REMOVED')
+            return 'unchanged';
+        gr.setValue('status', 'REMOVED');
+        return gr.update() ? 'changed' : 'failed';
+    },
+
+    /** The note's text without tags, with the common HTML entities decoded (&amp; last, so "&amp;lt;" stays "&lt;"). */
+    _plain: function(html) {
+        if (html == null)
+            return '';
+        return String(html).replace(/<[^>]*>/g, ' ').replace(/&nbsp;|&#160;/g, ' ').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+            .replace(/&quot;|&#34;/g, '"').replace(/&#39;|&apos;/g, "'").replace(/&amp;/g, '&').replace(/\s+/g, ' ').trim();
+    },
+
     /** A CaseNoteDTO. The type code is kept as sent (an open set); an encrypted note's text is never stored. */
     _mapNote: function(gr, caseSysId, note) {
         var encrypted = note.encrypted === true;
@@ -129,7 +151,7 @@ TSANetCaseStore.prototype = {
         this._set(gr, 'encrypted', encrypted ? 'true' : 'false');
         this._set(gr, 'summary', encrypted ? 'Encrypted note' : note.summary);
         this._set(gr, 'description', html);
-        this._set(gr, 'description_plain', html == null ? '' : String(html).replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim());
+        this._set(gr, 'description_plain', this._plain(html));
         this._set(gr, 'creator_name', note.creatorName);
         this._set(gr, 'creator_email', note.creatorEmail);
         this._set(gr, 'creator_username', note.creatorUsername);
