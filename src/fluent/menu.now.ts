@@ -103,6 +103,35 @@ Record({
 })
 
 Record({
+    $id: Now.ID['module_webhook'],
+    table: 'sys_app_module',
+    data: {
+        title: 'Webhook',
+        application: tsanetMenu,
+        link_type: 'LIST',
+        name: 'x_2256809_connect_webhook',
+        roles: ['x_2256809_connect.admin'],
+        active: true,
+        order: 610,
+    },
+})
+
+Record({
+    $id: Now.ID['module_webhook_deliveries'],
+    table: 'sys_app_module',
+    data: {
+        title: 'Webhook deliveries',
+        application: tsanetMenu,
+        link_type: 'LIST',
+        name: 'x_2256809_connect_webhook_delivery',
+        filter: 'ORDERBYDESCsys_created_on',
+        roles: ['x_2256809_connect.admin'],
+        active: true,
+        order: 620,
+    },
+})
+
+Record({
     $id: Now.ID['module_setup'],
     table: 'sys_app_module',
     data: {
