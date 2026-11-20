@@ -81,6 +81,38 @@ declare global {
                         table: 'sys_security_acl'
                         id: '627c272110cd4469a393cbbd5be92483'
                     }
+                    acl_webhook_create: {
+                        table: 'sys_security_acl'
+                        id: '46cb3bcae65545fa8a10206c51fb9a2a'
+                    }
+                    acl_webhook_delete: {
+                        table: 'sys_security_acl'
+                        id: 'a47b189bc1df48d29dcd983cba660d3e'
+                    }
+                    acl_webhook_delivery_create: {
+                        table: 'sys_security_acl'
+                        id: '410d2878caa748378e78ad3b00dec874'
+                    }
+                    acl_webhook_delivery_delete: {
+                        table: 'sys_security_acl'
+                        id: '24fd945abaa84e00b21e979ce56023a6'
+                    }
+                    acl_webhook_delivery_read: {
+                        table: 'sys_security_acl'
+                        id: '0e305696e9b147df9c2548b3921a35d6'
+                    }
+                    acl_webhook_delivery_write: {
+                        table: 'sys_security_acl'
+                        id: 'b76d9dd6b64e49389c7401dfcf4b2b94'
+                    }
+                    acl_webhook_read: {
+                        table: 'sys_security_acl'
+                        id: 'b3dc0fc4cfc942ab81707b5aca4b606f'
+                    }
+                    acl_webhook_write: {
+                        table: 'sys_security_acl'
+                        id: '9f13854b72df4dbf8616d320df14d11d'
+                    }
                     action_create_tsanet_case: {
                         table: 'sys_ui_action'
                         id: '422d2538bf3d4e7e88acdd8184ef8959'
@@ -92,6 +124,10 @@ declare global {
                     action_tsanet_reject: {
                         table: 'sys_ui_action'
                         id: '42cc2035b1ec41d39195c431bf08d1dc'
+                    }
+                    action_webhook_register: {
+                        table: 'sys_ui_action'
+                        id: '56b07153250244c8ad6f2a15b72e2071'
                     }
                     bom_json: {
                         table: 'sys_module'
@@ -331,6 +367,14 @@ declare global {
                         table: 'sys_app_module'
                         id: 'c850bd14907440a5b4fb80e99d9c14fc'
                     }
+                    module_webhook: {
+                        table: 'sys_app_module'
+                        id: 'e3876d00ef7449f0bba5e1f5e49f1dcf'
+                    }
+                    module_webhook_deliveries: {
+                        table: 'sys_app_module'
+                        id: '8ee1eeb6118e4b2abf24be0486aa3e05'
+                    }
                     package_json: {
                         table: 'sys_module'
                         id: 'c5b5e9db667047d7a08ec04020d81d96'
@@ -408,6 +452,18 @@ declare global {
                         table: 'sys_ws_version'
                         id: 'b8cc6bdee0a645a487b88b50fdcde060'
                     }
+                    rest_webhook: {
+                        table: 'sys_ws_definition'
+                        id: '04db3d5e79d74753b252772b6adc9355'
+                    }
+                    rest_webhook_events: {
+                        table: 'sys_ws_operation'
+                        id: '6d88638a4a784153a172773138ce87c3'
+                    }
+                    rest_webhook_v1: {
+                        table: 'sys_ws_version'
+                        id: '08ca703a3edb47018652d0a0ac1c4f89'
+                    }
                     setup_api_base_url: {
                         table: 'sys_properties_category_m2m'
                         id: '310c12115e014275a4f24574412688d3'
@@ -477,6 +533,10 @@ declare global {
                         table: 'sys_script_include'
                         id: '8616f52bbae94f59b001d2d2b8a6ff8e'
                     }
+                    tsanet_hmac: {
+                        table: 'sys_script_include'
+                        id: 'a57039bfffd64360bd0cd6a430d252bf'
+                    }
                     tsanet_inbound: {
                         table: 'sys_script_include'
                         id: '231f5c07dccf4fbd93b06c20e0c578e3'
@@ -492,6 +552,14 @@ declare global {
                     tsanet_sync: {
                         table: 'sys_script_include'
                         id: '7f02adba7ec34f9883d57808c6443c01'
+                    }
+                    tsanet_webhook: {
+                        table: 'sys_script_include'
+                        id: 'af3f481441674900b2517de8f0506511'
+                    }
+                    webhook_delivery_cleanup: {
+                        table: 'sys_auto_flush'
+                        id: 'd528ea698477410dac4d95636f7e8b00'
                     }
                     ws_audience_user: {
                         table: 'sys_ux_applicability'
@@ -748,6 +816,14 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_dictionary'
+                        id: '073a2abee5a244f6b37f55bf3ffab02b'
+                        key: {
+                            name: 'x_2256809_connect_webhook'
+                            element: 'subscription_id'
+                        }
+                    },
+                    {
                         table: 'sys_documentation'
                         id: '0765f7a95b8541a7b58cc83c942107ef'
                         key: {
@@ -958,6 +1034,14 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_dictionary'
+                        id: '0cae7630ab9c4f059942c4151f852687'
+                        key: {
+                            name: 'x_2256809_connect_webhook_delivery'
+                            element: 'subscription_id'
+                        }
+                    },
+                    {
                         table: 'sys_ui_element'
                         id: '0d8b950e300e4eca801754c29e973df4'
                         key: {
@@ -1103,6 +1187,15 @@ declare global {
                     },
                     {
                         table: 'sys_documentation'
+                        id: '1880b1465ab945ac8fdbb8d17f31c77b'
+                        key: {
+                            name: 'x_2256809_connect_webhook_delivery'
+                            element: 'event_id'
+                            language: 'en'
+                        }
+                    },
+                    {
+                        table: 'sys_documentation'
                         id: '18c66536413f423e837e7ce2b821f59a'
                         key: {
                             name: 'x_2256809_connect_note'
@@ -1153,6 +1246,14 @@ declare global {
                             }
                             element: 'responded'
                             position: '10'
+                        }
+                    },
+                    {
+                        table: 'sys_dictionary'
+                        id: '1b46d891891e4dfdb93610f35871bac7'
+                        key: {
+                            name: 'x_2256809_connect_webhook'
+                            element: 'callback_url'
                         }
                     },
                     {
@@ -1290,6 +1391,19 @@ declare global {
                             }
                             element: 'receiver_phone'
                             position: '3'
+                        }
+                    },
+                    {
+                        table: 'sys_security_acl_role'
+                        id: '23ac873f7395485a8c10c3b32ed69e45'
+                        key: {
+                            sys_security_acl: '9f13854b72df4dbf8616d320df14d11d'
+                            sys_user_role: {
+                                id: '1245d50a3da44472a24ee30c22886d53'
+                                key: {
+                                    name: 'x_2256809_connect.admin'
+                                }
+                            }
                         }
                     },
                     {
@@ -1581,6 +1695,19 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_security_acl_role'
+                        id: '30036b876d6e4ef196c751abc1f96a85'
+                        key: {
+                            sys_security_acl: '0e305696e9b147df9c2548b3921a35d6'
+                            sys_user_role: {
+                                id: '1245d50a3da44472a24ee30c22886d53'
+                                key: {
+                                    name: 'x_2256809_connect.admin'
+                                }
+                            }
+                        }
+                    },
+                    {
                         table: 'sys_ui_list_element'
                         id: '31aee86cd71b4456be4f1110f576ecc7'
                         key: {
@@ -1694,6 +1821,25 @@ declare global {
                         key: {
                             name: 'x_2256809_connect_note'
                             element: 'creator_email'
+                        }
+                    },
+                    {
+                        table: 'sys_dictionary'
+                        id: '376384c87f02420a89e0d1b9d9835621'
+                        key: {
+                            name: 'x_2256809_connect_webhook'
+                            element: 'NULL'
+                        }
+                    },
+                    {
+                        table: 'sys_choice'
+                        id: '37d4c5dd04c848db907cccada50d3a17'
+                        key: {
+                            name: 'x_2256809_connect_webhook_delivery'
+                            element: 'state'
+                            value: 'RECEIVED'
+                            language: 'en'
+                            dependent_value: 'NULL'
                         }
                     },
                     {
@@ -1849,6 +1995,19 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_security_acl_role'
+                        id: '3c25824b6a104a0392427138d3cb347c'
+                        key: {
+                            sys_security_acl: '24fd945abaa84e00b21e979ce56023a6'
+                            sys_user_role: {
+                                id: '1245d50a3da44472a24ee30c22886d53'
+                                key: {
+                                    name: 'x_2256809_connect.admin'
+                                }
+                            }
+                        }
+                    },
+                    {
                         table: 'sys_db_object'
                         id: '3c5b556077c0497ab2eec8e9537904b2'
                         key: {
@@ -1932,6 +2091,14 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_dictionary'
+                        id: '3e629c7eb2c84db781f724d8ba0788aa'
+                        key: {
+                            name: 'x_2256809_connect_webhook_delivery'
+                            element: 'event_type'
+                        }
+                    },
+                    {
                         table: 'sys_choice'
                         id: '3fb7a2d52f1345a7834f3ba28df9568f'
                         key: {
@@ -1977,6 +2144,13 @@ declare global {
                         id: '4279f3107f8b43c4b3c513be8a32d4a5'
                         key: {
                             name: 'x_2256809_connect_create_case.do - BYOUI Files'
+                        }
+                    },
+                    {
+                        table: 'sys_db_object'
+                        id: '4336ef8707a449128d7bf2103874f957'
+                        key: {
+                            name: 'x_2256809_connect_webhook_delivery'
                         }
                     },
                     {
@@ -2130,6 +2304,13 @@ declare global {
                         }
                     },
                     {
+                        table: 'ua_table_licensing_config'
+                        id: '4c79b08203a94b1b99908fb2fb4447f9'
+                        key: {
+                            name: 'x_2256809_connect_webhook_delivery'
+                        }
+                    },
+                    {
                         table: 'sys_dictionary'
                         id: '4d12785e5f434ea88fb6826b694c2074'
                         key: {
@@ -2279,6 +2460,15 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_documentation'
+                        id: '52d19f2388874369a418f46db553d89e'
+                        key: {
+                            name: 'x_2256809_connect_webhook'
+                            element: 'secret'
+                            language: 'en'
+                        }
+                    },
+                    {
                         table: 'sys_dictionary'
                         id: '536d1e7a9b594cfbad99ae507de89b18'
                         key: {
@@ -2320,6 +2510,15 @@ declare global {
                                     name: 'x_2256809_connect.admin'
                                 }
                             }
+                        }
+                    },
+                    {
+                        table: 'sys_documentation'
+                        id: '55789ac8124f4a4aa875fb9285904fda'
+                        key: {
+                            name: 'x_2256809_connect_webhook'
+                            element: 'callback_url'
+                            language: 'en'
                         }
                     },
                     {
@@ -2386,6 +2585,15 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_documentation'
+                        id: '56cfc7932721479eb58b5b8a5603e92c'
+                        key: {
+                            name: 'x_2256809_connect_webhook'
+                            element: 'active'
+                            language: 'en'
+                        }
+                    },
+                    {
                         table: 'sys_dictionary'
                         id: '56d40df19fe0440ba42a127ccddafcb3'
                         key: {
@@ -2400,6 +2608,14 @@ declare global {
                             name: 'x_2256809_connect_case'
                             element: 'submitted_company_name'
                             language: 'en'
+                        }
+                    },
+                    {
+                        table: 'sys_dictionary'
+                        id: '578813cce0ab47b9aa3516bc29707cf7'
+                        key: {
+                            name: 'x_2256809_connect_webhook_delivery'
+                            element: 'request_token'
                         }
                     },
                     {
@@ -2432,6 +2648,15 @@ declare global {
                             }
                             element: 'creator_name'
                             position: '7'
+                        }
+                    },
+                    {
+                        table: 'sys_documentation'
+                        id: '59adedc0f5234d989506f4932bac1e23'
+                        key: {
+                            name: 'x_2256809_connect_webhook'
+                            element: 'subscription_id'
+                            language: 'en'
                         }
                     },
                     {
@@ -2500,6 +2725,19 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_security_acl_role'
+                        id: '5d637fd68d0f4974b60b34a67a4215f4'
+                        key: {
+                            sys_security_acl: 'b3dc0fc4cfc942ab81707b5aca4b606f'
+                            sys_user_role: {
+                                id: '1245d50a3da44472a24ee30c22886d53'
+                                key: {
+                                    name: 'x_2256809_connect.admin'
+                                }
+                            }
+                        }
+                    },
+                    {
                         table: 'sys_ui_list'
                         id: '5e1ec490866843a8a5affb30470926a1'
                         key: {
@@ -2514,6 +2752,19 @@ declare global {
                             element: 'NULL'
                             relationship: 'NULL'
                             parent: 'NULL'
+                        }
+                    },
+                    {
+                        table: 'sys_security_acl_role'
+                        id: '5e432608ab5349a7829f4e4af6737d3b'
+                        key: {
+                            sys_security_acl: 'b76d9dd6b64e49389c7401dfcf4b2b94'
+                            sys_user_role: {
+                                id: '1245d50a3da44472a24ee30c22886d53'
+                                key: {
+                                    name: 'x_2256809_connect.admin'
+                                }
+                            }
                         }
                     },
                     {
@@ -2589,6 +2840,22 @@ declare global {
                             }
                             element: '.end_split'
                             position: '10'
+                        }
+                    },
+                    {
+                        table: 'sys_dictionary'
+                        id: '62663d56d1ce453fae1e9d64eed2d758'
+                        key: {
+                            name: 'x_2256809_connect_webhook'
+                            element: 'active'
+                        }
+                    },
+                    {
+                        table: 'sys_choice_set'
+                        id: '62ca4848b3ed4e548776dbc1ec0496fb'
+                        key: {
+                            name: 'x_2256809_connect_webhook_delivery'
+                            element: 'state'
                         }
                     },
                     {
@@ -2787,6 +3054,14 @@ declare global {
                             name: 'x_2256809_connect_log'
                             element: 'result'
                             language: 'en'
+                        }
+                    },
+                    {
+                        table: 'sys_dictionary'
+                        id: '673243f56f264d10bbce3fcd68a06a5c'
+                        key: {
+                            name: 'x_2256809_connect_webhook_delivery'
+                            element: 'NULL'
                         }
                     },
                     {
@@ -3211,6 +3486,15 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_documentation'
+                        id: '85f7d1c7dd01472f833951e46b8c9be1'
+                        key: {
+                            name: 'x_2256809_connect_webhook_delivery'
+                            element: 'request_token'
+                            language: 'en'
+                        }
+                    },
+                    {
                         table: 'sys_ui_element'
                         id: '8610deca20d04a0da3f4fef6115f5b7b'
                         deleted: true
@@ -3246,6 +3530,13 @@ declare global {
                                 }
                             }
                             sys_domain: 'global'
+                        }
+                    },
+                    {
+                        table: 'sys_db_object'
+                        id: '8833f427cd044e31b8ff2fe8cf04de64'
+                        key: {
+                            name: 'x_2256809_connect_webhook'
                         }
                     },
                     {
@@ -3368,6 +3659,14 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_index'
+                        id: '8d701b3d82c84102a489238f2e502321'
+                        key: {
+                            logical_table_name: 'x_2256809_connect_webhook_delivery'
+                            col_name_string: 'event_id'
+                        }
+                    },
+                    {
                         table: 'sys_ui_element'
                         id: '8d81e9a4905245a7b450aa8e2c8c7580'
                         key: {
@@ -3387,6 +3686,15 @@ declare global {
                             }
                             element: '.split'
                             position: '5'
+                        }
+                    },
+                    {
+                        table: 'sys_documentation'
+                        id: '8f869d4ff8534fc8a8293c0273380bd1'
+                        key: {
+                            name: 'x_2256809_connect_webhook_delivery'
+                            element: 'subscription_id'
+                            language: 'en'
                         }
                     },
                     {
@@ -3605,6 +3913,15 @@ declare global {
                     },
                     {
                         table: 'sys_documentation'
+                        id: '973b3f57ec85429589879da81b38a9ea'
+                        key: {
+                            name: 'x_2256809_connect_webhook'
+                            element: 'NULL'
+                            language: 'en'
+                        }
+                    },
+                    {
+                        table: 'sys_documentation'
                         id: '98855a033b454604b124736c77bf8e9b'
                         key: {
                             name: 'x_2256809_connect_case'
@@ -3764,6 +4081,15 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_documentation'
+                        id: '9ce8e79d9c5f42dfa58d487fbc5f1f43'
+                        key: {
+                            name: 'x_2256809_connect_webhook_delivery'
+                            element: 'state'
+                            language: 'en'
+                        }
+                    },
+                    {
                         table: 'sys_ui_element'
                         id: '9d3a5638a0e5489998cb0ccb94d96b07'
                         key: {
@@ -3836,6 +4162,19 @@ declare global {
                         id: '9fe1af1143304a6d9be96352fb43efed'
                         key: {
                             sys_security_acl: '2677b3e546bf4f288d31b4608fedff03'
+                            sys_user_role: {
+                                id: '1245d50a3da44472a24ee30c22886d53'
+                                key: {
+                                    name: 'x_2256809_connect.admin'
+                                }
+                            }
+                        }
+                    },
+                    {
+                        table: 'sys_security_acl_role'
+                        id: 'a04421d24b45487395ab4f974533418c'
+                        key: {
+                            sys_security_acl: '46cb3bcae65545fa8a10206c51fb9a2a'
                             sys_user_role: {
                                 id: '1245d50a3da44472a24ee30c22886d53'
                                 key: {
@@ -4043,6 +4382,27 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_security_acl_role'
+                        id: 'abbb33a26da74d439fd8d33798cec6c8'
+                        key: {
+                            sys_security_acl: '410d2878caa748378e78ad3b00dec874'
+                            sys_user_role: {
+                                id: '1245d50a3da44472a24ee30c22886d53'
+                                key: {
+                                    name: 'x_2256809_connect.admin'
+                                }
+                            }
+                        }
+                    },
+                    {
+                        table: 'sys_dictionary'
+                        id: 'abfde9ebae924de3af7ec442bde31bc2'
+                        key: {
+                            name: 'x_2256809_connect_webhook_delivery'
+                            element: 'state'
+                        }
+                    },
+                    {
                         table: 'sys_ui_element'
                         id: 'ac27f92258724de1a20a3eaadffdb68f'
                         key: {
@@ -4208,6 +4568,19 @@ declare global {
                             name: 'x_2256809_connect_case'
                             element: 'token'
                             language: 'en'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_action_role'
+                        id: 'b3b5bd43124e40828892ec9efd02a276'
+                        key: {
+                            sys_ui_action: '56b07153250244c8ad6f2a15b72e2071'
+                            sys_user_role: {
+                                id: '1245d50a3da44472a24ee30c22886d53'
+                                key: {
+                                    name: 'x_2256809_connect.admin'
+                                }
+                            }
                         }
                     },
                     {
@@ -4591,6 +4964,19 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_security_acl_role'
+                        id: 'bf4b1b83a7e5419b865cee3e61996dbb'
+                        key: {
+                            sys_security_acl: 'a47b189bc1df48d29dcd983cba660d3e'
+                            sys_user_role: {
+                                id: '1245d50a3da44472a24ee30c22886d53'
+                                key: {
+                                    name: 'x_2256809_connect.admin'
+                                }
+                            }
+                        }
+                    },
+                    {
                         table: 'sys_ux_form_action'
                         id: 'bf66268a628a415eaa46fbffd2da082f'
                         deleted: false
@@ -4677,6 +5063,23 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_dictionary'
+                        id: 'c0b1e440a3fd452fba33904c921433b0'
+                        key: {
+                            name: 'x_2256809_connect_webhook'
+                            element: 'secret'
+                        }
+                    },
+                    {
+                        table: 'sys_documentation'
+                        id: 'c0e0f43ec7504ca48d2722a33cfb0b31'
+                        key: {
+                            name: 'x_2256809_connect_webhook_delivery'
+                            element: 'NULL'
+                            language: 'en'
+                        }
+                    },
+                    {
                         table: 'sys_choice'
                         id: 'c12813a424234d15a5accb91e22e861b'
                         key: {
@@ -4734,6 +5137,14 @@ declare global {
                             value: 'HIGH'
                             language: 'en'
                             dependent_value: 'NULL'
+                        }
+                    },
+                    {
+                        table: 'sys_dictionary'
+                        id: 'c3e9ffed7dcb414d94976557d00fe201'
+                        key: {
+                            name: 'x_2256809_connect_webhook_delivery'
+                            element: 'event_id'
                         }
                     },
                     {
@@ -5123,6 +5534,15 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_documentation'
+                        id: 'cf4a7f52f46446b7bc589f1066a514a5'
+                        key: {
+                            name: 'x_2256809_connect_webhook_delivery'
+                            element: 'note_token'
+                            language: 'en'
+                        }
+                    },
+                    {
                         table: 'sys_choice'
                         id: 'cf679964392b4db4a7d91962cfba47c3'
                         key: {
@@ -5179,6 +5599,13 @@ declare global {
                                 }
                             }
                             element: 'number'
+                        }
+                    },
+                    {
+                        table: 'ua_table_licensing_config'
+                        id: 'd2962f74b9774f20a2299b5a057b9918'
+                        key: {
+                            name: 'x_2256809_connect_webhook'
                         }
                     },
                     {
@@ -5248,6 +5675,15 @@ declare global {
                         key: {
                             name: 'x_2256809_connect_case'
                             element: 'custom_fields_text'
+                            language: 'en'
+                        }
+                    },
+                    {
+                        table: 'sys_documentation'
+                        id: 'd98f3f8f5b7f4dda96077cba92f48f20'
+                        key: {
+                            name: 'x_2256809_connect_webhook_delivery'
+                            element: 'event_type'
                             language: 'en'
                         }
                     },
@@ -5470,6 +5906,14 @@ declare global {
                                 }
                             }
                             element: 'partner'
+                        }
+                    },
+                    {
+                        table: 'sys_dictionary'
+                        id: 'e6f3ce9981cf4c0799bc58dfb960b0dd'
+                        key: {
+                            name: 'x_2256809_connect_webhook_delivery'
+                            element: 'note_token'
                         }
                     },
                     {
