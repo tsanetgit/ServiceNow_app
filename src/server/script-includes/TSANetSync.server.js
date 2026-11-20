@@ -32,7 +32,7 @@ TSANetSync.prototype = {
         }
         if (!Array.isArray(requests)) {
             gs.error('[TSANet] Sync got an empty answer or one that is not a list of requests; nothing was stored');
-            // The call itself succeeded, so the client logged nothing; this row is the only trace of the failed run.
+            // The call itself succeeded, so the client logged nothing; this row is the only trace of the failed run in the transaction log.
             // (A thrown read needs no row here: the client already logged it as FAILED.)
             new TSANetLog().write({ operation: 'Sync', result: 'FAILED', message: 'Unexpected answer: not a list of requests',
                 durationMs: new Date().getTime() - started.getNumericValue() });
