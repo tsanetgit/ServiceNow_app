@@ -7,7 +7,7 @@
  * next step (tsanetgit/ServiceNow_app#39, PR B); until then the poll keeps TSANet Cases current.
  *
  * The endpoint takes no ServiceNow sign-in, because TSANet has no ServiceNow account: the
- * signature is what keeps everyone else out, and nothing is stored before it is checked.
+ * signature is what keeps everyone else out, and no delivery is stored before it is checked.
  */
 var TSANetWebhook = Class.create();
 TSANetWebhook.prototype = {
@@ -17,12 +17,14 @@ TSANetWebhook.prototype = {
     PATH: 'api/x_2256809_connect/v1/webhook/events',
     EVENT_PREFIX: 'org.tsanet.connect.collaboration-request.',
     EVENT_TYPES: ['created', 'closed', 'note.created', 'response.created', 'response.updated'],
+    // TSANet's events name a token and little else; anything larger is refused before it is hashed.
+    MAX_BODY: 65536,
 
     initialize: function(client) {
         this.client = client || null;
     },
 
-    /** Scripted REST handler: 401 for a bad signature, 400 for a malformed event, 500 to make TSANet retry, else 200. */
+    /** Scripted REST handler: 413 for an oversized body, 401 for a bad signature, 400 for a malformed or unsupported event, 500 to make TSANet retry, else 200. */
     receive: function(request, response) {
         var started = new Date().getTime();
         var result;
@@ -40,6 +42,8 @@ TSANetWebhook.prototype = {
     },
 
     _receive: function(body, signature) {
+        if (body.length > this.MAX_BODY)
+            return { status: 413, message: 'Refused: the body is larger than ' + this.MAX_BODY + ' characters' };
         var sub = this._subscription();
         if (!sub)
             return { status: 401, message: 'Refused: this instance has no active webhook subscription' };
@@ -57,7 +61,10 @@ TSANetWebhook.prototype = {
         var token = event && event.data && event.data.requestToken;
         if (!event || !event.id || !event.type || !token)
             return { status: 400, message: 'Refused: the CloudEvent has no id, type or data.requestToken' };
-        var type = String(event.type).replace(this.EVENT_PREFIX, '');
+        // Only the five types this instance subscribed to are stored, so processing can rely on them.
+        var type = String(event.type).substring(this.EVENT_PREFIX.length);
+        if (String(event.type).indexOf(this.EVENT_PREFIX) !== 0 || this.EVENT_TYPES.indexOf(type) < 0)
+            return { status: 400, message: 'Refused: unsupported event type ' + event.type };
         if (String(event.subscriptionid) != sub.getValue('subscription_id'))
             return { status: 401, type: type, message: 'Refused: the event is for subscription ' + event.subscriptionid + ', not this instance\'s' };
 
@@ -109,6 +116,13 @@ TSANetWebhook.prototype = {
                 client.request('DELETE', '/v1/webhooks/' + answer.id);
             } catch (e) {
                 gs.error('[TSANet] Could not remove webhook subscription ' + answer.id + ' at TSANet: ' + e.message);
+            }
+            // Leave the record unregistered, so its button shows again and the admin can retry.
+            if (saved && check.get(saved)) {
+                check.setValue('subscription_id', '');
+                check.setValue('active', false);
+                check.secret.setDisplayValue('');
+                check.update();
             }
             throw new Error('Could not keep the subscription\'s secret, so subscription ' + answer.id + ' was removed at TSANet again');
         }

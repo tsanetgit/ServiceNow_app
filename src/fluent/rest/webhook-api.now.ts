@@ -2,7 +2,7 @@ import { RestApi } from '@servicenow/sdk/core'
 
 // Where TSANet delivers its webhooks: POST /api/x_2256809_connect/v1/webhook/events.
 // No ServiceNow sign-in (TSANet has no account here): TSANetWebhook.receive refuses any delivery
-// whose HMAC signature doesn't match the subscription's secret, before it stores anything.
+// whose HMAC signature doesn't match the subscription's secret, before it stores the delivery.
 RestApi({
     $id: Now.ID['rest_webhook'],
     name: 'TSANet Webhook',
