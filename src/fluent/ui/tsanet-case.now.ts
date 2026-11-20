@@ -122,7 +122,7 @@ List({
     ],
 })
 
-// Notes and responses under the TSANet Case form, through their reference to it.
+// Notes, responses and transactions under the TSANet Case form, through their reference to it.
 const caseRelatedLists = Record({
     $id: Now.ID['case_related_lists'],
     table: 'sys_ui_related_list',
@@ -149,5 +149,15 @@ Record({
         list_id: caseRelatedLists,
         position: 1,
         related_list: 'x_2256809_connect_response.tsanet_case',
+    },
+})
+
+Record({
+    $id: Now.ID['case_related_list_transactions'],
+    table: 'sys_ui_related_list_entry',
+    data: {
+        list_id: caseRelatedLists,
+        position: 2,
+        related_list: 'x_2256809_connect_log.tsanet_case',
     },
 })

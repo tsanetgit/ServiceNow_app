@@ -88,6 +88,21 @@ Record({
 })
 
 Record({
+    $id: Now.ID['module_transactions'],
+    table: 'sys_app_module',
+    data: {
+        title: 'Transactions',
+        application: tsanetMenu,
+        link_type: 'LIST',
+        name: 'x_2256809_connect_log',
+        filter: 'ORDERBYDESCsys_created_on',
+        roles: ['x_2256809_connect.admin'],
+        active: true,
+        order: 600,
+    },
+})
+
+Record({
     $id: Now.ID['module_setup'],
     table: 'sys_app_module',
     data: {

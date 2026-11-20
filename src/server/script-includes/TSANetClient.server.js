@@ -116,7 +116,38 @@ TSANetClient.prototype = {
         return this._send(method, path, query, body, false).body;
     },
 
+    /**
+     * Every call goes through here, so the transaction log sees them all: each failure, including
+     * one before TSANet answers (no connection, unreachable), and each success that changes
+     * something at TSANet. Successful reads aren't logged. The error is rethrown unchanged.
+     */
     _send: function(method, path, query, body, anonymous) {
+        var started = new Date().getTime();
+        try {
+            var result = this._call(method, path, query, body, anonymous);
+            if (method != 'GET')
+                this._record(method, path, 'SUCCESS', result.status, '', started, result.body);
+            return result;
+        } catch (e) {
+            this._record(method, path, 'FAILED', e.status || 0, e.message, started, null);
+            throw e;
+        }
+    },
+
+    /** One row in the transaction log, linked to the TSANet Case by the request token in the path or the answer. */
+    _record: function(method, path, result, status, message, started, answer) {
+        // Logging is incidental: nothing here may replace the call's own result or error.
+        try {
+            var match = /\/collaboration-requests\/([^\/?]+)/.exec(path);
+            var token = match && match[1] != 'list' ? decodeURIComponent(match[1]) : (answer && answer.token);
+            new TSANetLog().write({ operation: method + ' ' + path, result: result, status: status, message: message,
+                durationMs: new Date().getTime() - started, token: token });
+        } catch (e) {
+            gs.warn('[TSANet] Could not log ' + method + ' ' + path + ': ' + e.message);
+        }
+    },
+
+    _call: function(method, path, query, body, anonymous) {
         var conn = this._connection();
 
         var rm = new sn_ws.RESTMessageV2();

@@ -32,6 +32,10 @@ TSANetSync.prototype = {
         }
         if (!Array.isArray(requests)) {
             gs.error('[TSANet] Sync got an empty answer or one that is not a list of requests; nothing was stored');
+            // The call itself succeeded, so the client logged nothing; this row is the only trace of the failed run in the transaction log.
+            // (A thrown read needs no row here: the client already logged it as FAILED.)
+            new TSANetLog().write({ operation: 'Sync', result: 'FAILED', message: 'Unexpected answer: not a list of requests',
+                durationMs: new Date().getTime() - started.getNumericValue() });
             return { error: 'unexpected answer' };
         }
 
@@ -59,8 +63,12 @@ TSANetSync.prototype = {
         // A skipped request is read again on the next run, so the window only moves when none failed.
         if (!counts.failed)
             gs.setProperty(this.SCOPE + '.' + this.LAST_SUCCESS, started.getValue());
-        if (counts.inserted || counts.updated || counts.failed)
+        // A run that found nothing new leaves no row, so the every-minute poll doesn't fill the log.
+        if (counts.inserted || counts.updated || counts.failed) {
             gs.info('[TSANet] Sync: ' + JSON.stringify(counts));
+            new TSANetLog().write({ operation: 'Sync', result: counts.failed ? 'FAILED' : 'SUCCESS', message: JSON.stringify(counts),
+                durationMs: new Date().getTime() - started.getNumericValue() });
+        }
         return counts;
     },
 

@@ -25,6 +25,22 @@ declare global {
                         table: 'sys_security_acl'
                         id: 'd4e687bcfb6345d99579c385b8583d8d'
                     }
+                    acl_log_create: {
+                        table: 'sys_security_acl'
+                        id: 'cd7fe781cd8943778853bdd1ebf4aa9f'
+                    }
+                    acl_log_delete: {
+                        table: 'sys_security_acl'
+                        id: 'd1f3d692ab0e462f92b1a6e702718f21'
+                    }
+                    acl_log_read: {
+                        table: 'sys_security_acl'
+                        id: 'af510f0bf1e74342ab9603868a3cd860'
+                    }
+                    acl_log_write: {
+                        table: 'sys_security_acl'
+                        id: 'a0f6cb2a0d18488baa7a3ef36f91eb27'
+                    }
                     acl_note_create: {
                         table: 'sys_security_acl'
                         id: '2677b3e546bf4f288d31b4608fedff03'
@@ -88,6 +104,10 @@ declare global {
                     case_related_list_responses: {
                         table: 'sys_ui_related_list_entry'
                         id: 'e5a10d05076e46d99776ff55aa439988'
+                    }
+                    case_related_list_transactions: {
+                        table: 'sys_ui_related_list_entry'
+                        id: '6bd2b28fe7c2471dbd06bfd2f8e8161f'
                     }
                     case_related_lists: {
                         table: 'sys_ui_related_list'
@@ -271,6 +291,10 @@ declare global {
                         table: 'sysauto_script'
                         id: 'af88dff8b91c48d5977e57589216e551'
                     }
+                    log_cleanup: {
+                        table: 'sys_auto_flush'
+                        id: '6ca4c37106f744b1a05a796156ebed41'
+                    }
                     module_cases_all: {
                         table: 'sys_app_module'
                         id: '7193a88d530c491f80fe302df20d1933'
@@ -302,6 +326,10 @@ declare global {
                     module_setup: {
                         table: 'sys_app_module'
                         id: '649006f2f1734eed80ae67e7d5a2a947'
+                    }
+                    module_transactions: {
+                        table: 'sys_app_module'
+                        id: 'c850bd14907440a5b4fb80e99d9c14fc'
                     }
                     package_json: {
                         table: 'sys_module'
@@ -453,6 +481,10 @@ declare global {
                         table: 'sys_script_include'
                         id: '231f5c07dccf4fbd93b06c20e0c578e3'
                     }
+                    tsanet_log: {
+                        table: 'sys_script_include'
+                        id: '173819782fc84c4ea56c055c1dc22b1d'
+                    }
                     tsanet_menu: {
                         table: 'sys_app_application'
                         id: '63f7f870c83b4b27ad97c086245792e7'
@@ -537,6 +569,23 @@ declare global {
                             value: 'INFORMATION_RESPONSE'
                             language: 'en'
                             dependent_value: 'NULL'
+                        }
+                    },
+                    {
+                        table: 'sys_documentation'
+                        id: '014625964742497f8eefe5a06682772a'
+                        key: {
+                            name: 'x_2256809_connect_log'
+                            element: 'message'
+                            language: 'en'
+                        }
+                    },
+                    {
+                        table: 'sys_choice_set'
+                        id: '01b2c7fd377d4dd0bf8a235b5e3d4d45'
+                        key: {
+                            name: 'x_2256809_connect_log'
+                            element: 'result'
                         }
                     },
                     {
@@ -787,6 +836,15 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_documentation'
+                        id: '0a65e5a180384b21ae7e49563d4386ee'
+                        key: {
+                            name: 'x_2256809_connect_log'
+                            element: 'duration_ms'
+                            language: 'en'
+                        }
+                    },
+                    {
                         table: 'sys_security_acl_role'
                         id: '0ad5fa9b71664c479dd66548e24d8c16'
                         key: {
@@ -806,6 +864,20 @@ declare global {
                             name: 'x_2256809_connect_case'
                             element: 'status'
                             language: 'en'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_form'
+                        id: '0b0cc6de0b4e41c18c2ef072314da1a2'
+                        key: {
+                            name: 'x_2256809_connect_log'
+                            view: {
+                                id: 'Default view'
+                                key: {
+                                    name: 'NULL'
+                                }
+                            }
+                            sys_domain: 'global'
                         }
                     },
                     {
@@ -954,6 +1026,28 @@ declare global {
                         id: '13c64c9ef7b54505a80e6f46530c6f51'
                         key: {
                             name: 'x_2256809_connect.user'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: '15462840afaf4784abf461bc44e724b9'
+                        key: {
+                            sys_ui_section: {
+                                id: '64c96557cbc74399831a8814f8ffd00d'
+                                key: {
+                                    name: 'x_2256809_connect_log'
+                                    caption: 'Transaction'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'message'
+                            position: '9'
                         }
                     },
                     {
@@ -1404,6 +1498,14 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_dictionary'
+                        id: '2ce8d5c9a33041cb8197612183fec885'
+                        key: {
+                            name: 'x_2256809_connect_log'
+                            element: 'result'
+                        }
+                    },
+                    {
                         table: 'sys_ui_element'
                         id: '2d90c0bb82404958885ad13e8408e5ed'
                         key: {
@@ -1455,6 +1557,27 @@ declare global {
                                 }
                             }
                             element: 'type'
+                        }
+                    },
+                    {
+                        table: 'sys_dictionary'
+                        id: '2ea0c59c995844a094def5da165d6ebb'
+                        key: {
+                            name: 'x_2256809_connect_log'
+                            element: 'tsanet_case'
+                        }
+                    },
+                    {
+                        table: 'sys_security_acl_role'
+                        id: '2f396115cf5f4c14a047d3c25e7b2ea7'
+                        key: {
+                            sys_security_acl: 'af510f0bf1e74342ab9603868a3cd860'
+                            sys_user_role: {
+                                id: '13c64c9ef7b54505a80e6f46530c6f51'
+                                key: {
+                                    name: 'x_2256809_connect.user'
+                                }
+                            }
                         }
                     },
                     {
@@ -1527,6 +1650,23 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_list'
+                        id: '33b6d5bd8251440ba00d315c367d950f'
+                        key: {
+                            name: 'x_2256809_connect_log'
+                            view: {
+                                id: 'Default view'
+                                key: {
+                                    name: 'NULL'
+                                }
+                            }
+                            sys_domain: 'global'
+                            element: 'NULL'
+                            relationship: 'NULL'
+                            parent: 'NULL'
+                        }
+                    },
+                    {
                         table: 'sys_ui_element'
                         id: '36a480504e3b4a35baa4ba0d145c3f7f'
                         key: {
@@ -1554,6 +1694,29 @@ declare global {
                         key: {
                             name: 'x_2256809_connect_note'
                             element: 'creator_email'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_list_element'
+                        id: '37d4ec9218a84d36955b6eb7c465ecba'
+                        key: {
+                            list_id: {
+                                id: '33b6d5bd8251440ba00d315c367d950f'
+                                key: {
+                                    name: 'x_2256809_connect_log'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                    element: 'NULL'
+                                    relationship: 'NULL'
+                                    parent: 'NULL'
+                                }
+                            }
+                            element: 'result'
                         }
                     },
                     {
@@ -1683,6 +1846,13 @@ declare global {
                             name: 'x_2256809_connect_case'
                             element: 'NULL'
                             language: 'en'
+                        }
+                    },
+                    {
+                        table: 'sys_db_object'
+                        id: '3c5b556077c0497ab2eec8e9537904b2'
+                        key: {
+                            name: 'x_2256809_connect_log'
                         }
                     },
                     {
@@ -2052,6 +2222,14 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_dictionary'
+                        id: '4f0ab328fd8a4fe48c47b1634205e0b7'
+                        key: {
+                            name: 'x_2256809_connect_log'
+                            element: 'operation'
+                        }
+                    },
+                    {
                         table: 'sys_choice_set'
                         id: '4f553b40244041128246978670e5a4f5'
                         key: {
@@ -2075,6 +2253,29 @@ declare global {
                             name: 'x_2256809_connect_case'
                             element: 'responded'
                             language: 'en'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_list_element'
+                        id: '52a0c9eb62b34c53858bc24c36a5c040'
+                        key: {
+                            list_id: {
+                                id: '33b6d5bd8251440ba00d315c367d950f'
+                                key: {
+                                    name: 'x_2256809_connect_log'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                    element: 'NULL'
+                                    relationship: 'NULL'
+                                    parent: 'NULL'
+                                }
+                            }
+                            element: 'message'
                         }
                     },
                     {
@@ -2414,6 +2615,14 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_dictionary'
+                        id: '639236ccd25a43e8809d87eb506b031e'
+                        key: {
+                            name: 'x_2256809_connect_log'
+                            element: 'http_status'
+                        }
+                    },
+                    {
                         table: 'sys_ui_element'
                         id: '639dcc9ef07d458597f9c72d7635b246'
                         key: {
@@ -2467,6 +2676,21 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_section'
+                        id: '64c96557cbc74399831a8814f8ffd00d'
+                        key: {
+                            name: 'x_2256809_connect_log'
+                            caption: 'Transaction'
+                            view: {
+                                id: 'Default view'
+                                key: {
+                                    name: 'NULL'
+                                }
+                            }
+                            sys_domain: 'global'
+                        }
+                    },
+                    {
                         table: 'sys_ui_list_element'
                         id: '64e5d2b877c7492099b233a67ebc402c'
                         key: {
@@ -2501,6 +2725,28 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_element'
+                        id: '65a3fc0e5ff446a4928c5ea97e7a50b8'
+                        key: {
+                            sys_ui_section: {
+                                id: '64c96557cbc74399831a8814f8ffd00d'
+                                key: {
+                                    name: 'x_2256809_connect_log'
+                                    caption: 'Transaction'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'http_status'
+                            position: '3'
+                        }
+                    },
+                    {
                         table: 'sys_documentation'
                         id: '65d2378b4ca24fc0bbbbfaaa11473e28'
                         key: {
@@ -2532,6 +2778,38 @@ declare global {
                         key: {
                             name: 'x_2256809_connect_case'
                             element: 'receiver_case_number'
+                        }
+                    },
+                    {
+                        table: 'sys_documentation'
+                        id: '672f38fbf7a7420fba584d75c522ec78'
+                        key: {
+                            name: 'x_2256809_connect_log'
+                            element: 'result'
+                            language: 'en'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_list_element'
+                        id: '688ebd0e05a449a88428930c10f5a804'
+                        key: {
+                            list_id: {
+                                id: '33b6d5bd8251440ba00d315c367d950f'
+                                key: {
+                                    name: 'x_2256809_connect_log'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                    element: 'NULL'
+                                    relationship: 'NULL'
+                                    parent: 'NULL'
+                                }
+                            }
+                            element: 'http_status'
                         }
                     },
                     {
@@ -2580,6 +2858,14 @@ declare global {
                             name: 'x_2256809_connect_case'
                             element: 'escalation_instructions'
                             language: 'en'
+                        }
+                    },
+                    {
+                        table: 'sys_dictionary'
+                        id: '6d42022fddd94784a33af082c703762d'
+                        key: {
+                            name: 'x_2256809_connect_log'
+                            element: 'NULL'
                         }
                     },
                     {
@@ -2718,6 +3004,15 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_documentation'
+                        id: '7cc690cff7424c319ac91ca0bfaee595'
+                        key: {
+                            name: 'x_2256809_connect_log'
+                            element: 'tsanet_case'
+                            language: 'en'
+                        }
+                    },
+                    {
                         table: 'sys_ui_element'
                         id: '7dc4d81417934c9cad409bb61b03406e'
                         key: {
@@ -2777,6 +3072,28 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_element'
+                        id: '806adfa1ef5843b7a0929ddaa94b2e2f'
+                        key: {
+                            sys_ui_section: {
+                                id: '64c96557cbc74399831a8814f8ffd00d'
+                                key: {
+                                    name: 'x_2256809_connect_log'
+                                    caption: 'Transaction'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'operation'
+                            position: '1'
+                        }
+                    },
+                    {
                         table: 'sys_documentation'
                         id: '809b3c3c3630456fa9b2bd9124fb6d12'
                         key: {
@@ -2792,6 +3109,17 @@ declare global {
                             name: 'x_2256809_connect_case'
                             element: 'response_sla'
                             language: 'en'
+                        }
+                    },
+                    {
+                        table: 'sys_choice'
+                        id: '80d56f4fc06b48fca679ed44fd0f5d53'
+                        key: {
+                            name: 'x_2256809_connect_log'
+                            element: 'result'
+                            value: 'SUCCESS'
+                            language: 'en'
+                            dependent_value: 'NULL'
                         }
                     },
                     {
@@ -3162,6 +3490,19 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_security_acl_role'
+                        id: '9432ccd61321416f95b481196333c982'
+                        key: {
+                            sys_security_acl: 'cd7fe781cd8943778853bdd1ebf4aa9f'
+                            sys_user_role: {
+                                id: '1245d50a3da44472a24ee30c22886d53'
+                                key: {
+                                    name: 'x_2256809_connect.admin'
+                                }
+                            }
+                        }
+                    },
+                    {
                         table: 'sys_ui_element'
                         id: '94456b35ac2148da9a9ae6915c709b23'
                         deleted: true
@@ -3322,6 +3663,29 @@ declare global {
                             }
                             element: 'received_company_name'
                             position: '6'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_list_element'
+                        id: '9a40c6a99ffe40efa0c33506d69bf786'
+                        key: {
+                            list_id: {
+                                id: '33b6d5bd8251440ba00d315c367d950f'
+                                key: {
+                                    name: 'x_2256809_connect_log'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                    element: 'NULL'
+                                    relationship: 'NULL'
+                                    parent: 'NULL'
+                                }
+                            }
+                            element: 'tsanet_case'
                         }
                     },
                     {
@@ -3596,6 +3960,28 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_element'
+                        id: 'a7f6cd0317804c97ad9f606a5ee6f128'
+                        key: {
+                            sys_ui_section: {
+                                id: '64c96557cbc74399831a8814f8ffd00d'
+                                key: {
+                                    name: 'x_2256809_connect_log'
+                                    caption: 'Transaction'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: '.begin_split'
+                            position: '0'
+                        }
+                    },
+                    {
                         table: 'sys_ui_action_role'
                         id: 'a8ad49abc044482eb928a51e2bd17bc8'
                         key: {
@@ -3615,6 +4001,29 @@ declare global {
                             name: 'x_2256809_connect_note'
                             element: 'tsanet_updated'
                             language: 'en'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_list_element'
+                        id: 'a9af536d703046e6ba56f7efdbf873ac'
+                        key: {
+                            list_id: {
+                                id: '33b6d5bd8251440ba00d315c367d950f'
+                                key: {
+                                    name: 'x_2256809_connect_log'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                    element: 'NULL'
+                                    relationship: 'NULL'
+                                    parent: 'NULL'
+                                }
+                            }
+                            element: 'operation'
                         }
                     },
                     {
@@ -3685,6 +4094,28 @@ declare global {
                             value: 'partner'
                             language: 'en'
                             dependent_value: 'NULL'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: 'aec40d6bfbe04d98a999fc4926ae6ec4'
+                        key: {
+                            sys_ui_section: {
+                                id: '64c96557cbc74399831a8814f8ffd00d'
+                                key: {
+                                    name: 'x_2256809_connect_log'
+                                    caption: 'Transaction'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'sys_created_on'
+                            position: '7'
                         }
                     },
                     {
@@ -3788,6 +4219,15 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_documentation'
+                        id: 'b44bc81108854f5aaca5cb023253447b'
+                        key: {
+                            name: 'x_2256809_connect_log'
+                            element: 'http_status'
+                            language: 'en'
+                        }
+                    },
+                    {
                         table: 'sys_ui_element'
                         id: 'b46fdb1d530c45379905d262c3014fc7'
                         key: {
@@ -3831,6 +4271,28 @@ declare global {
                         key: {
                             logical_table_name: 'x_2256809_connect_case'
                             col_name_string: 'token'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: 'b6f28be5474f4869987662ee90e3077b'
+                        key: {
+                            sys_ui_section: {
+                                id: '64c96557cbc74399831a8814f8ffd00d'
+                                key: {
+                                    name: 'x_2256809_connect_log'
+                                    caption: 'Transaction'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'tsanet_case'
+                            position: '5'
                         }
                     },
                     {
@@ -3914,6 +4376,19 @@ declare global {
                             value: 'REJECTED'
                             language: 'en'
                             dependent_value: 'NULL'
+                        }
+                    },
+                    {
+                        table: 'sys_security_acl_role'
+                        id: 'bacaaa2b4b4644b19eeb46dc24f88a8d'
+                        key: {
+                            sys_security_acl: 'a0f6cb2a0d18488baa7a3ef36f91eb27'
+                            sys_user_role: {
+                                id: '1245d50a3da44472a24ee30c22886d53'
+                                key: {
+                                    name: 'x_2256809_connect.admin'
+                                }
+                            }
                         }
                     },
                     {
@@ -4346,6 +4821,28 @@ declare global {
                     },
                     {
                         table: 'sys_ui_element'
+                        id: 'c768e515a85b46df91565efca18f6099'
+                        key: {
+                            sys_ui_section: {
+                                id: '64c96557cbc74399831a8814f8ffd00d'
+                                key: {
+                                    name: 'x_2256809_connect_log'
+                                    caption: 'Transaction'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'result'
+                            position: '2'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
                         id: 'c7da6dd73dc54803ba29777b7810c014'
                         key: {
                             sys_ui_section: {
@@ -4434,6 +4931,50 @@ declare global {
                             }
                             element: 'submitted_company_id'
                             position: '9'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: 'ca99790826e94bbe9e01dc641105ca83'
+                        key: {
+                            sys_ui_section: {
+                                id: '64c96557cbc74399831a8814f8ffd00d'
+                                key: {
+                                    name: 'x_2256809_connect_log'
+                                    caption: 'Transaction'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: 'duration_ms'
+                            position: '6'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: 'cb9251cf99ea43cfab87ff8edb0a295d'
+                        key: {
+                            sys_ui_section: {
+                                id: '64c96557cbc74399831a8814f8ffd00d'
+                                key: {
+                                    name: 'x_2256809_connect_log'
+                                    caption: 'Transaction'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: '.end_split'
+                            position: '8'
                         }
                     },
                     {
@@ -4528,6 +5069,17 @@ declare global {
                             }
                             element: 'priority'
                             position: '5'
+                        }
+                    },
+                    {
+                        table: 'sys_choice'
+                        id: 'cdbc0cca0a314928ab1da4fe2ee386ad'
+                        key: {
+                            name: 'x_2256809_connect_log'
+                            element: 'result'
+                            value: 'FAILED'
+                            language: 'en'
+                            dependent_value: 'NULL'
                         }
                     },
                     {
@@ -4683,6 +5235,14 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_dictionary'
+                        id: 'd72576b8b59c4752994846149660714a'
+                        key: {
+                            name: 'x_2256809_connect_log'
+                            element: 'duration_ms'
+                        }
+                    },
+                    {
                         table: 'sys_documentation'
                         id: 'd9046afeae2f43a092728005e2f7624b'
                         key: {
@@ -4725,6 +5285,28 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_security_acl_role'
+                        id: 'dbe989ef756541eeabfcff17f92c34e2'
+                        key: {
+                            sys_security_acl: 'd1f3d692ab0e462f92b1a6e702718f21'
+                            sys_user_role: {
+                                id: '1245d50a3da44472a24ee30c22886d53'
+                                key: {
+                                    name: 'x_2256809_connect.admin'
+                                }
+                            }
+                        }
+                    },
+                    {
+                        table: 'sys_documentation'
+                        id: 'dbedfae7262d49039537701d65ebcd1d'
+                        key: {
+                            name: 'x_2256809_connect_log'
+                            element: 'operation'
+                            language: 'en'
+                        }
+                    },
+                    {
                         table: 'sys_choice'
                         id: 'dca92a2481b24aba8b4b89903ad4d472'
                         key: {
@@ -4755,6 +5337,15 @@ declare global {
                             }
                             element: '.begin_split'
                             position: '0'
+                        }
+                    },
+                    {
+                        table: 'sys_documentation'
+                        id: 'de28be6438de4f55aa84fce44b32a104'
+                        key: {
+                            name: 'x_2256809_connect_log'
+                            element: 'NULL'
+                            language: 'en'
                         }
                     },
                     {
@@ -4975,6 +5566,13 @@ declare global {
                         }
                     },
                     {
+                        table: 'ua_table_licensing_config'
+                        id: 'ecbe58eafe0f4c838d22ae4aaa902b94'
+                        key: {
+                            name: 'x_2256809_connect_log'
+                        }
+                    },
+                    {
                         table: 'sys_dictionary'
                         id: 'ed2523355d554f018b86ed1530c5036c'
                         key: {
@@ -5046,6 +5644,28 @@ declare global {
                             }
                             element: 'tsanet_email'
                             position: '7'
+                        }
+                    },
+                    {
+                        table: 'sys_ui_element'
+                        id: 'ee6d88a717734f54917cb83028987369'
+                        key: {
+                            sys_ui_section: {
+                                id: '64c96557cbc74399831a8814f8ffd00d'
+                                key: {
+                                    name: 'x_2256809_connect_log'
+                                    caption: 'Transaction'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            element: '.split'
+                            position: '4'
                         }
                     },
                     {
@@ -5252,11 +5872,42 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_list_element'
+                        id: 'f3a9e9f156954c30b48b0429f6e6e013'
+                        key: {
+                            list_id: {
+                                id: '33b6d5bd8251440ba00d315c367d950f'
+                                key: {
+                                    name: 'x_2256809_connect_log'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                    element: 'NULL'
+                                    relationship: 'NULL'
+                                    parent: 'NULL'
+                                }
+                            }
+                            element: 'sys_created_on'
+                        }
+                    },
+                    {
                         table: 'sys_dictionary'
                         id: 'f4034d1fa0914c1bb65541bf24b9fec8'
                         key: {
                             name: 'x_2256809_connect_case'
                             element: 'NULL'
+                        }
+                    },
+                    {
+                        table: 'sys_dictionary'
+                        id: 'f424a5a16f3a4ee3bb59b37eeead22c5'
+                        key: {
+                            name: 'x_2256809_connect_log'
+                            element: 'message'
                         }
                     },
                     {
@@ -5309,6 +5960,39 @@ declare global {
                                 id: '1245d50a3da44472a24ee30c22886d53'
                                 key: {
                                     name: 'x_2256809_connect.admin'
+                                }
+                            }
+                        }
+                    },
+                    {
+                        table: 'sys_ui_form_section'
+                        id: 'f669aee098474dc48366c42aba222a9b'
+                        key: {
+                            sys_ui_form: {
+                                id: '0b0cc6de0b4e41c18c2ef072314da1a2'
+                                key: {
+                                    name: 'x_2256809_connect_log'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
+                                }
+                            }
+                            sys_ui_section: {
+                                id: '64c96557cbc74399831a8814f8ffd00d'
+                                key: {
+                                    name: 'x_2256809_connect_log'
+                                    caption: 'Transaction'
+                                    view: {
+                                        id: 'Default view'
+                                        key: {
+                                            name: 'NULL'
+                                        }
+                                    }
+                                    sys_domain: 'global'
                                 }
                             }
                         }
