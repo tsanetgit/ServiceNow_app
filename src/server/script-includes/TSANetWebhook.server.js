@@ -115,7 +115,8 @@ TSANetWebhook.prototype = {
         }
         delivery.setValue('state', result == 'SUCCESS' ? 'PROCESSED' : 'FAILED');
         delivery.setValue('message', message);
-        delivery.update();
+        if (!delivery.update())
+            throw new Error('Could not update webhook delivery ' + deliverySysId);
         new TSANetLog().write({ operation: 'Webhook ' + delivery.getValue('event_type') + ' processed', result: result,
             message: message, durationMs: new Date().getTime() - started, caseSysId: caseSysId, token: token });
     },
