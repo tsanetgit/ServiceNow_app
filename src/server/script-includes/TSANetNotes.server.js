@@ -131,7 +131,6 @@ TSANetNotes.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
      */
     _send: function(noteSysId) {
         var note = new GlideRecord(this.NOTE_TABLE);
-        note.forUpdate();
         if (!note.get(noteSysId) || note.getValue('send_state') != 'SENDING')
             return;
         var tsanetCase = new GlideRecord(this.CASE_TABLE);
