@@ -107,9 +107,17 @@ TSANetNotes.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
         if (check.getValue('direction') != 'OUTBOUND' || check.getValue('send_state') != 'FAILED' || check.getValue('token'))
             throw this._inputError('Only a note of ours that failed to send can be sent again.');
         this._notable(check.getValue('tsanet_case'));
+        var claim = gs.generateGUID();
+        var transition = new GlideRecord(this.NOTE_TABLE);
+        transition.addQuery('sys_id', noteSysId);
+        transition.addQuery('direction', 'OUTBOUND');
+        transition.addQuery('send_state', 'FAILED');
+        transition.setValue('send_state', 'SENDING');
+        transition.setValue('send_error', claim);
+        transition.updateMultiple();
         var note = new GlideRecord(this.NOTE_TABLE);
-        note.get(noteSysId);
-        note.setValue('send_state', 'SENDING');
+        if (!note.get(noteSysId) || note.getValue('send_state') != 'SENDING' || note.getValue('send_error') != claim)
+            throw this._inputError('This note is already being sent.');
         note.setValue('send_error', '');
         if (!note.update())
             throw this._inputError('The note could not be saved. Nothing was sent to TSANet.');
