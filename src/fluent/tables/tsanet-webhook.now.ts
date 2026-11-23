@@ -15,7 +15,8 @@ export const x_2256809_connect_webhook = Table({
 })
 
 // One row per webhook delivery TSANet sent with a valid signature, once per CloudEvent id
-// (TSANet delivers at least once). Written by TSANetWebhook.receive.
+// (TSANet delivers at least once). Written by TSANetWebhook.receive; TSANetWebhook.process sets
+// Processed or Failed.
 export const x_2256809_connect_webhook_delivery = Table({
     name: 'x_2256809_connect_webhook_delivery',
     label: 'TSANet Webhook Delivery',
@@ -31,8 +32,12 @@ export const x_2256809_connect_webhook_delivery = Table({
             dropdown: 'dropdown_with_none',
             choices: {
                 RECEIVED: { label: 'Received', sequence: 10 },
+                PROCESSED: { label: 'Processed', sequence: 20 },
+                FAILED: { label: 'Failed', sequence: 30 },
             },
         }),
+        // What processing did, or why it failed (TSANetWebhook.process).
+        message: StringColumn({ label: 'Message', maxLength: 4000 }),
     },
     index: [{ name: 'idx_webhook_event_id', unique: true, element: 'event_id' }],
 })
