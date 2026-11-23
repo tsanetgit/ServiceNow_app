@@ -4,7 +4,8 @@
  * The TSANet Case's "Create note" action and a failed note's "Send again" call it through GlideAjax.
  * A note is stored at once as an outbound TSANet Note marked Sending, with the agent as its sender,
  * and the event x_2256809_connect.note.send is queued; _send(), run by its Script Action, posts it to
- * TSANet and stores TSANet's answer through TSANetCaseStore (Sent), or keeps TSANet's reason (Failed).
+ * TSANet and stores TSANet's answer through TSANetCaseStore (Sent), or keeps TSANet's reason (Failed, or
+ * Outcome unknown when TSANet has or may have the note).
  * The agent's input and the request's status are checked here on the server, not taken from the browser.
  */
 var TSANetNotes = Class.create();
@@ -127,7 +128,8 @@ TSANetNotes.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
 
     /**
      * Run by the Script Action for x_2256809_connect.note.send: posts a Sending note to TSANet and
-     * stores TSANet's answer (Sent), or keeps the reason (Failed). Only a Sending note is sent.
+     * stores TSANet's answer (Sent), or keeps the reason (Failed, or Outcome unknown when TSANet has or may
+     * have the note). Only a Sending note is sent.
      */
     _send: function(noteSysId) {
         var note = new GlideRecord(this.NOTE_TABLE);
@@ -148,13 +150,17 @@ TSANetNotes.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
                 type: note.getValue('type') ? { code: note.getValue('type') } : null,
                 submittedBy: { firstName: space > 0 ? name.substring(0, space) : name, lastName: space > 0 ? name.substring(space + 1) : '' },
             });
-            if (!new TSANetCaseStore().storeSentNote(noteSysId, tsanetCase.getUniqueValue(), answer))
-                throw new Error('TSANet has the note, but its answer could not be stored here. It will show after the next sync.');
+            if (!new TSANetCaseStore().storeSentNote(noteSysId, tsanetCase.getUniqueValue(), answer)) {
+                var stored = new Error('TSANet has the note, but its answer could not be stored here. It will show after the next sync.');
+                stored.delivered = true;
+                throw stored;
+            }
         } catch (e) {
             var message = String(e.message || e).replace(/^TSANet: /, '');
-            // No answer at all: the note may have arrived, so sending it again could make a second copy.
-            var outcomeUnknown = e.status === 0 && /reach TSANet/.test(message);
-            if (outcomeUnknown)
+            // TSANet has the note, or may have it (no answer at all): sending it again could make a second
+            // copy, so it is Outcome unknown, which offers no Send again and is matched when TSANet's copy arrives.
+            var outcomeUnknown = e.delivered === true || (e.status === 0 && /reach TSANet/.test(message));
+            if (outcomeUnknown && e.delivered !== true)
                 message += ' The note may have reached TSANet: check the request in TSANet before sending it again.';
             note = new GlideRecord(this.NOTE_TABLE);
             if (note.get(noteSysId) && note.getValue('send_state') == 'SENDING') {
