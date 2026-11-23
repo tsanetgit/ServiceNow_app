@@ -154,11 +154,12 @@ TSANetNotes.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
         } catch (e) {
             var message = String(e.message || e).replace(/^TSANet: /, '');
             // No answer at all: the note may have arrived, so sending it again could make a second copy.
-            if (e.status === 0 && /reach TSANet/.test(message))
+            var outcomeUnknown = e.status === 0 && /reach TSANet/.test(message);
+            if (outcomeUnknown)
                 message += ' The note may have reached TSANet: check the request in TSANet before sending it again.';
             note = new GlideRecord(this.NOTE_TABLE);
             if (note.get(noteSysId) && note.getValue('send_state') == 'SENDING') {
-                note.setValue('send_state', 'FAILED');
+                note.setValue('send_state', outcomeUnknown ? 'UNKNOWN' : 'FAILED');
                 note.setValue('send_error', message.substring(0, 4000));
                 note.update();
             }

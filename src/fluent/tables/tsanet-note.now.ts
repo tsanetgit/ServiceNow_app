@@ -81,6 +81,7 @@ export const x_2256809_connect_note = Table({
                 SENDING: { label: 'Sending', sequence: 10 },
                 SENT: { label: 'Sent', sequence: 20 },
                 FAILED: { label: 'Failed', sequence: 30 },
+                UNKNOWN: { label: 'Outcome unknown', sequence: 40 },
             },
         }),
         send_error: StringColumn({ label: 'Sending error', maxLength: 4000 }),

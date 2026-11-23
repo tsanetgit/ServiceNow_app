@@ -4654,6 +4654,17 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_choice'
+                        id: 'a8183d587c5e433b8ddd437f1b1ebba1'
+                        key: {
+                            name: 'x_2256809_connect_note'
+                            element: 'send_state'
+                            value: 'UNKNOWN'
+                            language: 'en'
+                            dependent_value: 'NULL'
+                        }
+                    },
+                    {
                         table: 'sys_ui_action_role'
                         id: 'a8ad49abc044482eb928a51e2bd17bc8'
                         key: {

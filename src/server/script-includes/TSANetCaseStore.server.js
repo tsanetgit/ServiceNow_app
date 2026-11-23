@@ -91,14 +91,46 @@ TSANetCaseStore.prototype = {
             // A note missing from the answer isn't a deletion, so nothing is deleted.
             if (note.status == 'REMOVED')
                 count(this._markRemoved(note.token));
-            else
-                count(this._upsertChild(this.NOTE_TABLE, 'token', note.token, function(gr) { this._mapNote(gr, caseSysId, note); }));
+            else {
+                var pendingId = this._unknownOutboundNote(caseSysId, note);
+                if (pendingId)
+                    count(this.storeSentNote(pendingId, caseSysId, note) ? 'changed' : 'failed');
+                else
+                    count(this._upsertChild(this.NOTE_TABLE, 'token', note.token, function(gr) { this._mapNote(gr, caseSysId, note); }));
+            }
         }, this);
         (dto.caseResponses || []).forEach(function(response) {
             if (response && response.id != null)
                 count(this._upsertChild(this.RESPONSE_TABLE, 'response_id', String(response.id), function(gr) { this._mapResponse(gr, caseSysId, response); }));
         }, this);
         return outcome;
+    },
+
+    /** Finds the unique ambiguous outbound note represented by a note TSANet returned. */
+    _unknownOutboundNote: function(caseSysId, note) {
+        if (note.direction != 'OUTBOUND')
+            return null;
+        var type = note.type && note.type.code || '';
+        var creatorName = String(note.creatorName || '').trim();
+        var description = this._plain(note.description);
+        var pending = new GlideRecord(this.NOTE_TABLE);
+        pending.addQuery('tsanet_case', caseSysId);
+        pending.addQuery('direction', 'OUTBOUND');
+        pending.addQuery('send_state', 'UNKNOWN');
+        pending.addQuery('summary', String(note.summary || ''));
+        pending.addQuery('type', type);
+        pending.addQuery('priority', String(note.priority || ''));
+        pending.addQuery('creator_name', creatorName);
+        pending.query();
+        var match = null;
+        while (pending.next()) {
+            if (this._plain(pending.getValue('description')) != description)
+                continue;
+            if (match)
+                return null;
+            match = pending.getUniqueValue();
+        }
+        return match;
     },
 
     /** Inserts or updates one row by its unique key, writing only what changed. Returns 'changed', 'unchanged' or 'failed'. */
