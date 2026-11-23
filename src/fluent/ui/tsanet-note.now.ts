@@ -16,6 +16,7 @@ Form({
                         { field: 'priority', type: 'table_field' },
                         { field: 'status', type: 'table_field' },
                         { field: 'encrypted', type: 'table_field' },
+                        { field: 'send_state', type: 'table_field' },
                     ],
                     rightElements: [
                         { field: 'creator_name', type: 'table_field' },
@@ -28,6 +29,7 @@ Form({
                 {
                     layout: 'one-column',
                     elements: [
+                        { field: 'send_error', type: 'table_field' },
                         { field: 'summary', type: 'table_field' },
                         { field: 'description', type: 'table_field' },
                     ],
@@ -58,5 +60,5 @@ Form({
 List({
     table: 'x_2256809_connect_note',
     view: default_view,
-    columns: ['tsanet_case', 'direction', 'type', 'summary', 'creator_name', 'company_name', 'status', 'tsanet_created'],
+    columns: ['tsanet_case', 'direction', 'type', 'summary', 'creator_name', 'company_name', 'status', 'send_state', 'tsanet_created'],
 })

@@ -91,14 +91,46 @@ TSANetCaseStore.prototype = {
             // A note missing from the answer isn't a deletion, so nothing is deleted.
             if (note.status == 'REMOVED')
                 count(this._markRemoved(note.token));
-            else
-                count(this._upsertChild(this.NOTE_TABLE, 'token', note.token, function(gr) { this._mapNote(gr, caseSysId, note); }));
+            else {
+                var pendingId = this._unknownOutboundNote(caseSysId, note);
+                if (pendingId)
+                    count(this.storeSentNote(pendingId, caseSysId, note) ? 'changed' : 'failed');
+                else
+                    count(this._upsertChild(this.NOTE_TABLE, 'token', note.token, function(gr) { this._mapNote(gr, caseSysId, note); }));
+            }
         }, this);
         (dto.caseResponses || []).forEach(function(response) {
             if (response && response.id != null)
                 count(this._upsertChild(this.RESPONSE_TABLE, 'response_id', String(response.id), function(gr) { this._mapResponse(gr, caseSysId, response); }));
         }, this);
         return outcome;
+    },
+
+    /** Finds the unique ambiguous outbound note represented by a note TSANet returned. */
+    _unknownOutboundNote: function(caseSysId, note) {
+        if (note.direction != 'OUTBOUND')
+            return null;
+        var type = note.type && note.type.code || '';
+        var creatorName = String(note.creatorName || '').trim();
+        var description = this._plain(note.description);
+        var pending = new GlideRecord(this.NOTE_TABLE);
+        pending.addQuery('tsanet_case', caseSysId);
+        pending.addQuery('direction', 'OUTBOUND');
+        pending.addQuery('send_state', 'UNKNOWN');
+        pending.addQuery('summary', String(note.summary || ''));
+        pending.addQuery('type', type);
+        pending.addQuery('priority', String(note.priority || ''));
+        pending.addQuery('creator_name', creatorName);
+        pending.query();
+        var match = null;
+        while (pending.next()) {
+            if (this._plain(pending.getValue('description')) != description)
+                continue;
+            if (match)
+                return null;
+            match = pending.getUniqueValue();
+        }
+        return match;
     },
 
     /** Inserts or updates one row by its unique key, writing only what changed. Returns 'changed', 'unchanged' or 'failed'. */
@@ -152,13 +184,41 @@ TSANetCaseStore.prototype = {
         this._set(gr, 'summary', encrypted ? 'Encrypted note' : note.summary);
         this._set(gr, 'description', html);
         this._set(gr, 'description_plain', this._plain(html));
-        this._set(gr, 'creator_name', note.creatorName);
-        this._set(gr, 'creator_email', note.creatorEmail);
+        // A note sent from here keeps the agent who sent it, whatever sender TSANet reports.
+        if (!gr.getValue('send_state')) {
+            this._set(gr, 'creator_name', note.creatorName);
+            this._set(gr, 'creator_email', note.creatorEmail);
+        }
         this._set(gr, 'creator_username', note.creatorUsername);
         this._set(gr, 'company_id', note.companyId);
         this._set(gr, 'company_name', note.companyName);
         this._setDate(gr, 'tsanet_created', note.createdAt);
         this._setDate(gr, 'tsanet_updated', note.updatedAt);
+    },
+
+    /**
+     * Stores TSANet's answer to a note we sent (a CaseNoteDTO) on the pending note noteSysId, now Sent.
+     * TSANet's webhook may have stored the same note first, by its token: then that row is kept, takes
+     * our sender and Sent, and the pending row is deleted, so the note shows once. Returns true when stored.
+     */
+    storeSentNote: function(noteSysId, caseSysId, dto) {
+        var pending = new GlideRecord(this.NOTE_TABLE);
+        if (!dto || !dto.token || !pending.get(noteSysId))
+            return false;
+        var note = new GlideRecord(this.NOTE_TABLE);
+        if (!note.get('token', dto.token))
+            note = pending;
+        note.setValue('token', dto.token);
+        note.setValue('send_state', 'SENT');
+        note.setValue('send_error', '');
+        note.setValue('creator_name', pending.getValue('creator_name'));
+        note.setValue('creator_email', pending.getValue('creator_email'));
+        this._mapNote(note, caseSysId, dto);
+        if (!note.update())
+            return false;
+        if (note.getUniqueValue() != pending.getUniqueValue())
+            pending.deleteRecord();
+        return true;
     },
 
     /** A CaseResponseDTO: the partner's accept, request for information, information or reject. */

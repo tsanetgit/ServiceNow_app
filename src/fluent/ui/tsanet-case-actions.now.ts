@@ -195,3 +195,122 @@ Record({
         active: true,
     },
 })
+
+// Create note: on a request TSANet takes notes on (accepted, or waiting for information), in either
+// direction. Loads the default summary and TSANet's note types, asks for the note, and hands it to
+// TSANetNotes, which stores it as Sending and sends it in the background (GlideAjax).
+const createNoteAction = UiAction({
+    $id: Now.ID['action_tsanet_create_note'],
+    table: 'x_2256809_connect_case',
+    actionName: 'x_2256809_connect_create_note',
+    name: 'Create note',
+    hint: 'Send a note to the partner on this TSANet request',
+    roles: [userRole],
+    condition: "current.status == 'ACCEPTED' || current.status == 'INFORMATION'",
+    showInsert: false,
+    showUpdate: true,
+    order: 120,
+    client: { isClient: true },
+    workspace: {
+        isConfigurableWorkspace: true,
+        showFormButtonV2: true,
+        clientScriptV2: `function onClick(g_form) {
+    function call(method, params, done) {
+        try {
+            var ga = new GlideAjax('x_2256809_connect.TSANetNotes');
+            ga.addParam('sysparm_name', method);
+            ga.addParam('sysparm_case_id', g_form.getUniqueValue());
+            for (var name in params)
+                ga.addParam(name, params[name]);
+            ga.getXMLAnswer(function(answer) {
+                var result = { error: 'No answer from the server. Reload the form to check whether the note was saved.' };
+                if (answer) {
+                    try {
+                        result = JSON.parse(answer);
+                    } catch (e) {
+                        result = { error: 'Unexpected answer from the server: ' + answer };
+                    }
+                }
+                if (result.error)
+                    g_form.addErrorMessage(result.error);
+                else
+                    done(result);
+            });
+        } catch (e) {
+            g_form.addErrorMessage('Could not create the note: ' + e.message);
+        }
+    }
+    function value(result, name) {
+        var fields = (result && result.updatedFields) || [];
+        for (var i = 0; i < fields.length; i++)
+            if (fields[i].name == name)
+                return fields[i].value;
+        return '';
+    }
+    call('ajaxNoteForm', {}, function(form) {
+        var types = [{ displayValue: 'None', value: '' }];
+        for (var i = 0; i < form.types.length; i++)
+            types.push({ displayValue: form.types[i].label, value: form.types[i].value });
+        if (form.warning)
+            g_form.addInfoMessage(form.warning);
+        g_modal.showFields({
+            title: 'Create note',
+            fields: [
+                { type: 'string', name: 'summary', label: 'Summary', value: form.summary, mandatory: true },
+                { type: 'textarea', name: 'description', label: 'Description', mandatory: true },
+                { type: 'choice', name: 'priority', label: 'Priority', value: 'MEDIUM', mandatory: true, choices: [
+                    { displayValue: 'Low', value: 'LOW' }, { displayValue: 'Medium', value: 'MEDIUM' }, { displayValue: 'High', value: 'HIGH' }] },
+                { type: 'choice', name: 'type', label: 'Type', value: '', choices: types }
+            ],
+            size: 'md'
+        }).then(function(result) {
+            call('ajaxCreateNote', {
+                sysparm_summary: value(result, 'summary'),
+                sysparm_description: value(result, 'description'),
+                sysparm_priority: value(result, 'priority'),
+                sysparm_type: value(result, 'type')
+            }, function() {
+                g_form.reload();
+                g_form.addInfoMessage('Sending your note to TSANet. It shows as Sent in the Notes list once TSANet has it.');
+            });
+        });
+    });
+}`,
+    },
+})
+
+const createNoteFormAction = Record({
+    $id: Now.ID['form_action_tsanet_create_note'],
+    table: 'sys_ux_form_action',
+    data: { name: 'Create note', table: 'x_2256809_connect_case', action_type: 'ui_action', ui_action: createNoteAction, active: true },
+})
+
+const createNoteItem = Record({
+    $id: Now.ID['form_action_item_tsanet_create_note'],
+    table: 'sys_ux_form_action_layout_item',
+    data: {
+        name: 'Create note',
+        label: 'Create note',
+        table: 'x_2256809_connect_case',
+        item_type: 'action',
+        action: createNoteFormAction,
+        overflow: false,
+        color: 'secondary',
+        order: 120,
+        active: true,
+    },
+})
+
+Record({
+    $id: Now.ID['form_action_item_link_tsanet_create_note'],
+    table: 'sys_ux_m2m_action_layout_item',
+    data: {
+        ux_form_action_layout: caseActionLayout,
+        ux_form_action_layout_item: createNoteItem,
+        table: 'x_2256809_connect_case',
+        display_type: BUTTON,
+        variant: 'secondary',
+        order: 120,
+        active: true,
+    },
+})
