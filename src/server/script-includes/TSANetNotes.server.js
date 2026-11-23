@@ -78,8 +78,7 @@ TSANetNotes.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
             throw this._inputError('The summary can be up to ' + this.MAX_SUMMARY + ' characters and the description up to ' + this.MAX_DESCRIPTION + '.');
         if (this.PRIORITIES.indexOf(priority) < 0)
             throw this._inputError('Priority must be Low, Medium or High.');
-        if (type && !/^[A-Za-z0-9_-]{1,64}$/.test(type))
-            throw this._inputError('That note type is not one TSANet offers.');
+        // Type codes are an open TSANet-defined set; let TSANet validate the selected code.
         var engineer = new TSANetEngineer().current();
 
         var note = new GlideRecord(this.NOTE_TABLE);
