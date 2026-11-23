@@ -125,6 +125,10 @@ declare global {
                         table: 'sys_ui_action'
                         id: '42cc2035b1ec41d39195c431bf08d1dc'
                     }
+                    action_webhook_process: {
+                        table: 'sysevent_script_action'
+                        id: 'bf6dd24c2da148f9bee9658215d832e1'
+                    }
                     action_webhook_register: {
                         table: 'sys_ui_action'
                         id: '56b07153250244c8ad6f2a15b72e2071'
@@ -285,6 +289,10 @@ declare global {
                     csp_table_sys_user_read: {
                         table: 'sys_scope_privilege'
                         id: '2644aa90b6a5478a8739788cf1b1a4e8'
+                    }
+                    event_webhook_received: {
+                        table: 'sysevent_register'
+                        id: '64ff6785536740e89dc20f8dd5ae31d9'
                     }
                     form_action_item_create_tsanet_case: {
                         table: 'sys_ux_form_action_layout_item'
@@ -1407,11 +1415,31 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_documentation'
+                        id: '23f6a2fe0ada42b59a8c30470271089e'
+                        key: {
+                            name: 'x_2256809_connect_webhook_delivery'
+                            element: 'message'
+                            language: 'en'
+                        }
+                    },
+                    {
                         table: 'sys_dictionary'
                         id: '24683d2a51fc488f8ddaa66d232cee09'
                         key: {
                             name: 'x_2256809_connect_case'
                             element: 'partner'
+                        }
+                    },
+                    {
+                        table: 'sys_choice'
+                        id: '2566981a370d47f2a70dab465eab1dc6'
+                        key: {
+                            name: 'x_2256809_connect_webhook_delivery'
+                            element: 'state'
+                            value: 'FAILED'
+                            language: 'en'
+                            dependent_value: 'NULL'
                         }
                     },
                     {
@@ -1983,6 +2011,17 @@ declare global {
                             }
                             element: '.end_split'
                             position: '12'
+                        }
+                    },
+                    {
+                        table: 'sys_choice'
+                        id: '3bc5737cc6b9470eaaacbd8c02d079fb'
+                        key: {
+                            name: 'x_2256809_connect_webhook_delivery'
+                            element: 'state'
+                            value: 'PROCESSED'
+                            language: 'en'
+                            dependent_value: 'NULL'
                         }
                     },
                     {
@@ -4512,6 +4551,14 @@ declare global {
                             }
                             element: 'reminder_sent'
                             position: '8'
+                        }
+                    },
+                    {
+                        table: 'sys_dictionary'
+                        id: 'af4607d56d114d8fb269803bf9a4a5e0'
+                        key: {
+                            name: 'x_2256809_connect_webhook_delivery'
+                            element: 'message'
                         }
                     },
                     {

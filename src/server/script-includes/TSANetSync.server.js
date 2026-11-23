@@ -6,6 +6,7 @@
  * run goes back x_2256809_connect.sync.lookback_days) and stores each one through
  * TSANetCaseStore. A TSANet Case with no case yet is linked to the case in the host table whose
  * number matches our case number on the request. The sync never changes the case itself.
+ * TSANetWebhook stores the request each webhook delivery names through storeOne, the same way.
  */
 var TSANetSync = Class.create();
 TSANetSync.prototype = {
@@ -44,15 +45,7 @@ TSANetSync.prototype = {
         requests.forEach(function(request) {
             // One bad request is skipped; the rest of the run goes on.
             try {
-                // The token is what makes a request one record; without it the request can't be stored safely.
-                if (!request || !request.token)
-                    throw new Error('it has no token');
-                var stored = this.store.upsert(request, this._hostFor(request, hostTable));
-                if (!stored)
-                    throw new Error('it could not be stored');
-                // Counted as failed so the window doesn't move and the next run stores the rest.
-                if (stored.childFailed)
-                    throw new Error('not all of its notes and responses could be stored');
+                var stored = this.storeOne(request, hostTable);
                 counts[stored.inserted ? 'inserted' : stored.updated ? 'updated' : 'unchanged']++;
             } catch (e) {
                 counts.failed++;
@@ -63,13 +56,33 @@ TSANetSync.prototype = {
         // A skipped request is read again on the next run, so the window only moves when none failed.
         if (!counts.failed)
             gs.setProperty(this.SCOPE + '.' + this.LAST_SUCCESS, started.getValue());
-        // A run that found nothing new leaves no row, so the every-minute poll doesn't fill the log.
+        // A run that found nothing new leaves no row, so the regular poll doesn't fill the log.
         if (counts.inserted || counts.updated || counts.failed) {
             gs.info('[TSANet] Sync: ' + JSON.stringify(counts));
             new TSANetLog().write({ operation: 'Sync', result: counts.failed ? 'FAILED' : 'SUCCESS', message: JSON.stringify(counts),
                 durationMs: new Date().getTime() - started.getNumericValue() });
         }
         return counts;
+    },
+
+    /**
+     * Stores one request from TSANet (the poll's list, or a webhook's fetch), linked to its case by case
+     * number. hostTable defaults to the configured one. Returns TSANetCaseStore.upsert's result; throws
+     * when the request can't be stored completely.
+     */
+    storeOne: function(request, hostTable) {
+        if (hostTable === undefined)
+            hostTable = this._hostTable();
+        // The token is what makes a request one record; without it the request can't be stored safely.
+        if (!request || !request.token)
+            throw new Error('The request has no token');
+        var stored = this.store.upsert(request, this._hostFor(request, hostTable));
+        if (!stored)
+            throw new Error('The request could not be stored');
+        // A failure, so the poll's window doesn't move and its next run stores the rest.
+        if (stored.childFailed)
+            throw new Error('Not all of the request\'s notes and responses could be stored');
+        return stored;
     },
 
     /** updatedAfter for this run, as the API wants it: YYYY-MM-DDTHH:MM:SSZ in UTC. */

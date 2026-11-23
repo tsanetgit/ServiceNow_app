@@ -3,8 +3,9 @@
  *
  * TSANet POSTs a signed CloudEvent to the "TSANet Webhook" REST API for every request, note and
  * response it creates or changes. receive() checks the HMAC signature over the raw body, records
- * the delivery once per CloudEvent id, and answers straight away. Storing what changed is the
- * next step (tsanetgit/ServiceNow_app#39, PR B); until then the poll keeps TSANet Cases current.
+ * the delivery once per CloudEvent id, queues the event x_2256809_connect.webhook.received and
+ * answers straight away. process(), run by the Script Action for that event, fetches the request
+ * and stores it with its notes and responses. The poll stays as the safety net for missed deliveries.
  *
  * The endpoint takes no ServiceNow sign-in, because TSANet has no ServiceNow account: the
  * signature is what keeps everyone else out, and no delivery is stored before it is checked.
@@ -19,6 +20,8 @@ TSANetWebhook.prototype = {
     EVENT_TYPES: ['created', 'closed', 'note.created', 'response.created', 'response.updated'],
     // TSANet's events name a token and little else; anything larger is refused before it is hashed.
     MAX_BODY: 65536,
+    // Registered in tsanet-webhook-event.now.ts.
+    EVENT: 'x_2256809_connect.webhook.received',
 
     initialize: function(client) {
         this.client = client || null;
@@ -82,7 +85,40 @@ TSANetWebhook.prototype = {
         delivery.setValue('state', 'RECEIVED');
         if (!delivery.insert())
             return { status: 500, type: type, token: token, message: 'Could not store delivery ' + event.id };
+        // Processed in the background, so TSANet gets its answer now (it waits 30 seconds at most).
+        gs.eventQueue(this.EVENT, delivery, delivery.getUniqueValue(), token);
         return { status: 200, type: type, token: token, message: 'Received ' + event.id };
+    },
+
+    /**
+     * Run by the Script Action for x_2256809_connect.webhook.received: fetches the delivery's request
+     * from TSANet and stores it. Only a Received delivery is processed, so each one is processed once;
+     * a failed one stays Failed (no automatic retry) and the next poll brings the request in.
+     */
+    process: function(deliverySysId) {
+        var delivery = new GlideRecord(this.DELIVERY_TABLE);
+        if (!delivery.get(deliverySysId) || delivery.getValue('state') != 'RECEIVED')
+            return;
+        var started = new Date().getTime();
+        var token = delivery.getValue('request_token');
+        var result = 'SUCCESS', message, caseSysId = null;
+        try {
+            var request = (this.client || new TSANetClient()).getRequest(token);
+            if (!request || request.token != token)
+                throw new Error('TSANet did not return request ' + token);
+            var stored = new TSANetSync().storeOne(request);
+            caseSysId = stored.sysId;
+            message = stored.inserted ? 'Stored a new TSANet Case' : stored.updated ? 'Updated the TSANet Case' : 'No change';
+        } catch (e) {
+            result = 'FAILED';
+            message = String(e.message).replace(/^TSANet: /, '');
+        }
+        delivery.setValue('state', result == 'SUCCESS' ? 'PROCESSED' : 'FAILED');
+        delivery.setValue('message', message);
+        if (!delivery.update())
+            throw new Error('Could not update webhook delivery ' + deliverySysId);
+        new TSANetLog().write({ operation: 'Webhook ' + delivery.getValue('event_type') + ' processed', result: result,
+            message: message, durationMs: new Date().getTime() - started, caseSysId: caseSysId, token: token });
     },
 
     /**
