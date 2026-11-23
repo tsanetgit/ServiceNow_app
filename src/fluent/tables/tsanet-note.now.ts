@@ -73,5 +73,16 @@ export const x_2256809_connect_note = Table({
         copied_to_case: BooleanColumn({ label: 'Copied to case', default: false }),
         // An encrypted note's text is never stored; the description says to open it in TSANet.
         encrypted: BooleanColumn({ label: 'Encrypted', default: false }),
+        // A note sent from here (TSANetNotes): where its sending stands. Empty on a note TSANet brought in.
+        send_state: ChoiceColumn({
+            label: 'Sending',
+            dropdown: 'dropdown_with_none',
+            choices: {
+                SENDING: { label: 'Sending', sequence: 10 },
+                SENT: { label: 'Sent', sequence: 20 },
+                FAILED: { label: 'Failed', sequence: 30 },
+            },
+        }),
+        send_error: StringColumn({ label: 'Sending error', maxLength: 4000 }),
     },
 })

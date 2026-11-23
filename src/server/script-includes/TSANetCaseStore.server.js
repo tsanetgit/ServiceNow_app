@@ -152,13 +152,41 @@ TSANetCaseStore.prototype = {
         this._set(gr, 'summary', encrypted ? 'Encrypted note' : note.summary);
         this._set(gr, 'description', html);
         this._set(gr, 'description_plain', this._plain(html));
-        this._set(gr, 'creator_name', note.creatorName);
-        this._set(gr, 'creator_email', note.creatorEmail);
+        // A note sent from here keeps the agent who sent it, whatever sender TSANet reports.
+        if (!gr.getValue('send_state')) {
+            this._set(gr, 'creator_name', note.creatorName);
+            this._set(gr, 'creator_email', note.creatorEmail);
+        }
         this._set(gr, 'creator_username', note.creatorUsername);
         this._set(gr, 'company_id', note.companyId);
         this._set(gr, 'company_name', note.companyName);
         this._setDate(gr, 'tsanet_created', note.createdAt);
         this._setDate(gr, 'tsanet_updated', note.updatedAt);
+    },
+
+    /**
+     * Stores TSANet's answer to a note we sent (a CaseNoteDTO) on the pending note noteSysId, now Sent.
+     * TSANet's webhook may have stored the same note first, by its token: then that row is kept, takes
+     * our sender and Sent, and the pending row is deleted, so the note shows once. Returns true when stored.
+     */
+    storeSentNote: function(noteSysId, caseSysId, dto) {
+        var pending = new GlideRecord(this.NOTE_TABLE);
+        if (!dto || !dto.token || !pending.get(noteSysId))
+            return false;
+        var note = new GlideRecord(this.NOTE_TABLE);
+        if (!note.get('token', dto.token))
+            note = pending;
+        note.setValue('token', dto.token);
+        note.setValue('send_state', 'SENT');
+        note.setValue('send_error', '');
+        note.setValue('creator_name', pending.getValue('creator_name'));
+        note.setValue('creator_email', pending.getValue('creator_email'));
+        this._mapNote(note, caseSysId, dto);
+        if (!note.update())
+            return false;
+        if (note.getUniqueValue() != pending.getUniqueValue())
+            pending.deleteRecord();
+        return true;
     },
 
     /** A CaseResponseDTO: the partner's accept, request for information, information or reject. */
