@@ -3,7 +3,7 @@
  *
  * The TSANet Case's "Create note" action and a failed note's "Send again" call it through GlideAjax.
  * A note is stored at once as an outbound TSANet Note marked Sending, with the agent as its sender,
- * and the event x_2256809_connect.note.send is queued; send(), run by its Script Action, posts it to
+ * and the event x_2256809_connect.note.send is queued; _send(), run by its Script Action, posts it to
  * TSANet and stores TSANet's answer through TSANetCaseStore (Sent), or keeps TSANet's reason (Failed).
  * The agent's input and the request's status are checked here on the server, not taken from the browser.
  */
@@ -129,8 +129,9 @@ TSANetNotes.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
      * Run by the Script Action for x_2256809_connect.note.send: posts a Sending note to TSANet and
      * stores TSANet's answer (Sent), or keeps the reason (Failed). Only a Sending note is sent.
      */
-    send: function(noteSysId) {
+    _send: function(noteSysId) {
         var note = new GlideRecord(this.NOTE_TABLE);
+        note.forUpdate();
         if (!note.get(noteSysId) || note.getValue('send_state') != 'SENDING')
             return;
         var tsanetCase = new GlideRecord(this.CASE_TABLE);

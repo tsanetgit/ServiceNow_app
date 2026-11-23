@@ -19,6 +19,6 @@ ScriptAction({
     name: 'TSANet - send note',
     eventName: 'x_2256809_connect.note.send',
     active: true,
-    description: 'Sends a Sending note to TSANet and stores the answer (TSANetNotes.send).',
-    script: `new TSANetNotes().send(event.parm1);`,
+    description: 'Sends a Sending note to TSANet and stores the answer (TSANetNotes._send).',
+    script: `new TSANetNotes()._send(event.parm1);`,
 })
