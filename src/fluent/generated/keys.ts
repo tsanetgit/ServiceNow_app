@@ -294,6 +294,10 @@ declare global {
                         table: 'sys_scope_privilege'
                         id: 'c90477a6c9864734bc78e5225b8b5323'
                     }
+                    csp_table_customerservice_case_write: {
+                        table: 'sys_scope_privilege'
+                        id: '250a1d3ae62141bbb38286fac3376f4a'
+                    }
                     csp_table_http_connection_read: {
                         table: 'sys_scope_privilege'
                         id: '5371b2d99d9a4f1b9a4db8aad9fdc068'
@@ -1126,6 +1130,15 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_documentation'
+                        id: '0df153a98b944099a319face7fd23ca7'
+                        key: {
+                            name: 'x_2256809_connect_note'
+                            element: 'copy_claim'
+                            language: 'en'
+                        }
+                    },
+                    {
                         table: 'sys_ui_action_role'
                         id: '0edff4015ccf44359088fbea10e44908'
                         key: {
@@ -1246,6 +1259,14 @@ declare global {
                         key: {
                             name: 'x_2256809_connect_case'
                             element: 'direction'
+                        }
+                    },
+                    {
+                        table: 'sys_dictionary'
+                        id: '17e12ce57e244d20acbd8cf2750da153'
+                        key: {
+                            name: 'x_2256809_connect_note'
+                            element: 'copy_claim'
                         }
                     },
                     {
@@ -3365,6 +3386,15 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_documentation'
+                        id: '6c9ccd205232484daf7da139c3c8f5c9'
+                        key: {
+                            name: 'x_2256809_connect_response'
+                            element: 'copied_to_case'
+                            language: 'en'
+                        }
+                    },
+                    {
                         table: 'sys_dictionary'
                         id: '6d1a11347cfc4ce2a8644a8a56747579'
                         key: {
@@ -4063,6 +4093,14 @@ declare global {
                     },
                     {
                         table: 'sys_dictionary'
+                        id: '90f8d241839b44c08d11ed864fcb071f'
+                        key: {
+                            name: 'x_2256809_connect_response'
+                            element: 'copied_to_case'
+                        }
+                    },
+                    {
+                        table: 'sys_dictionary'
                         id: '91978088deb84280a2e1cd14ae7b1ed2'
                         key: {
                             name: 'x_2256809_connect_response'
@@ -4695,6 +4733,14 @@ declare global {
                             value: 'SENDING'
                             language: 'en'
                             dependent_value: 'NULL'
+                        }
+                    },
+                    {
+                        table: 'sys_dictionary'
+                        id: 'a9966da570d94575bb777e4731aa1a0f'
+                        key: {
+                            name: 'x_2256809_connect_response'
+                            element: 'copy_claim'
                         }
                     },
                     {
@@ -6037,6 +6083,15 @@ declare global {
                         id: 'd2962f74b9774f20a2299b5a057b9918'
                         key: {
                             name: 'x_2256809_connect_webhook'
+                        }
+                    },
+                    {
+                        table: 'sys_documentation'
+                        id: 'd42265e6e8d14d74895fb3b7d0c5e9ad'
+                        key: {
+                            name: 'x_2256809_connect_response'
+                            element: 'copy_claim'
+                            language: 'en'
                         }
                     },
                     {

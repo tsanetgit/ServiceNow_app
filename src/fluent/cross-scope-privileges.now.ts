@@ -18,6 +18,16 @@ CrossScopePrivilege({
     status: 'allowed',
 })
 
+// Copying TSANet notes and responses to the linked case's work notes (TSANetCaseStore._copyToCase).
+CrossScopePrivilege({
+    $id: Now.ID['csp_table_customerservice_case_write'],
+    targetName: 'sn_customerservice_case',
+    targetScope: '51d811fad7223100b7490ee60e61034f',
+    targetType: 'sys_db_object',
+    operation: 'write',
+    status: 'allowed',
+})
+
 CrossScopePrivilege({
     $id: Now.ID['csp_table_sys_user_read'],
     targetName: 'sys_user',
