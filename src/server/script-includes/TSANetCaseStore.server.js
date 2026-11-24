@@ -58,6 +58,21 @@ TSANetCaseStore.prototype = {
         return gr.update() ? this._result(gr, false, true) : null;
     },
 
+    /**
+     * Links a TSANet Case to a case in the host table, only if it has none (an existing link is never
+     * changed). One conditional update, so of two racing links exactly one lands. Returns the case that
+     * is linked afterwards (this one or the one that won), or '' if none is.
+     */
+    linkHost: function(tsanetCaseSysId, hostSysId) {
+        var claim = new GlideRecord(this.TABLE);
+        claim.addQuery('sys_id', tsanetCaseSysId);
+        claim.addNullQuery('host_record');
+        claim.setValue('host_record', hostSysId);
+        claim.updateMultiple();
+        var gr = new GlideRecord(this.TABLE);
+        return gr.get(tsanetCaseSysId) ? (gr.getValue('host_record') || '') : '';
+    },
+
     _apply: function(gr, dto, hostSysId, direction) {
         this._map(gr, dto, dto.direction || direction);
         if (hostSysId && !gr.getValue('host_record'))
