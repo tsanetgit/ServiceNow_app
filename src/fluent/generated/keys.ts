@@ -294,6 +294,10 @@ declare global {
                         table: 'sys_scope_privilege'
                         id: 'c90477a6c9864734bc78e5225b8b5323'
                     }
+                    csp_table_customerservice_case_write: {
+                        table: 'sys_scope_privilege'
+                        id: '250a1d3ae62141bbb38286fac3376f4a'
+                    }
                     csp_table_http_connection_read: {
                         table: 'sys_scope_privilege'
                         id: '5371b2d99d9a4f1b9a4db8aad9fdc068'
@@ -3365,6 +3369,15 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_documentation'
+                        id: '6c9ccd205232484daf7da139c3c8f5c9'
+                        key: {
+                            name: 'x_2256809_connect_response'
+                            element: 'copied_to_case'
+                            language: 'en'
+                        }
+                    },
+                    {
                         table: 'sys_dictionary'
                         id: '6d1a11347cfc4ce2a8644a8a56747579'
                         key: {
@@ -4059,6 +4072,14 @@ declare global {
                             name: 'x_2256809_connect_case'
                             element: 'receiver_case_number'
                             language: 'en'
+                        }
+                    },
+                    {
+                        table: 'sys_dictionary'
+                        id: '90f8d241839b44c08d11ed864fcb071f'
+                        key: {
+                            name: 'x_2256809_connect_response'
+                            element: 'copied_to_case'
                         }
                     },
                     {

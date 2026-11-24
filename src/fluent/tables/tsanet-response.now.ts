@@ -1,4 +1,4 @@
-import { ChoiceColumn, DateTimeColumn, HtmlColumn, ReferenceColumn, StringColumn, Table } from '@servicenow/sdk/core'
+import { BooleanColumn, ChoiceColumn, DateTimeColumn, HtmlColumn, ReferenceColumn, StringColumn, Table } from '@servicenow/sdk/core'
 
 // The partner's answer on a TSANet Case. Choice values are the Connect API's own (CaseResponseDTO).
 export const x_2256809_connect_response = Table({
@@ -29,5 +29,7 @@ export const x_2256809_connect_response = Table({
         case_number: StringColumn({ label: 'Case number', maxLength: 255 }),
         next_steps: HtmlColumn({ label: 'Next steps', maxLength: 65000 }),
         tsanet_created: DateTimeColumn({ label: 'Created in TSANet' }),
+        // Set once the response is copied to the linked case's work notes (TSANetCaseStore._copyToCase).
+        copied_to_case: BooleanColumn({ label: 'Copied to case', default: false }),
     },
 })

@@ -81,8 +81,18 @@ TSANetCaseStore.prototype = {
     _storeChildren: function(caseSysId, dto) {
         var outcome = { changed: false, failed: false };
         var count = function(state) {
-            outcome.changed = outcome.changed || state == 'changed';
+            outcome.changed = outcome.changed || state == 'changed' || state == 'inserted';
             outcome.failed = outcome.failed || state == 'failed';
+        };
+        // A note or response stored for the first time is copied to the case's work notes once.
+        var store = function(table, keyField, key, map) {
+            var state = this._upsertChild(table, keyField, key, map);
+            if (state == 'inserted') {
+                var stored = new GlideRecord(table);
+                if (stored.get(keyField, key))
+                    this._copyToCase(stored);
+            }
+            count(state);
         };
         (dto.caseNotes || []).forEach(function(note) {
             if (!note || !note.token)
@@ -96,12 +106,12 @@ TSANetCaseStore.prototype = {
                 if (pendingId)
                     count(this.storeSentNote(pendingId, caseSysId, note) ? 'changed' : 'failed');
                 else
-                    count(this._upsertChild(this.NOTE_TABLE, 'token', note.token, function(gr) { this._mapNote(gr, caseSysId, note); }));
+                    store.call(this, this.NOTE_TABLE, 'token', note.token, function(gr) { this._mapNote(gr, caseSysId, note); });
             }
         }, this);
         (dto.caseResponses || []).forEach(function(response) {
             if (response && response.id != null)
-                count(this._upsertChild(this.RESPONSE_TABLE, 'response_id', String(response.id), function(gr) { this._mapResponse(gr, caseSysId, response); }));
+                store.call(this, this.RESPONSE_TABLE, 'response_id', String(response.id), function(gr) { this._mapResponse(gr, caseSysId, response); });
         }, this);
         return outcome;
     },
@@ -141,7 +151,7 @@ TSANetCaseStore.prototype = {
             gr.setValue(keyField, key);
             map.call(this, gr);
             if (gr.insert())
-                return 'changed';
+                return 'inserted';
             // Another run may have stored the same key first (unique index): update that one.
             gr = new GlideRecord(table);
             if (!gr.get(keyField, key))
@@ -218,7 +228,54 @@ TSANetCaseStore.prototype = {
             return false;
         if (note.getUniqueValue() != pending.getUniqueValue())
             pending.deleteRecord();
+        // Ours is copied once it's Sent; a row the webhook stored first was copied then (copied_to_case).
+        this._copyToCase(note);
         return true;
+    },
+
+    /**
+     * Copies a stored note or response once to the linked case's work notes, when the setting
+     * x_2256809_connect.notes.to_work_notes is on and TSANet created it today (so a full sync doesn't
+     * copy old ones). An encrypted note's text was never stored, so only its placeholder is copied.
+     * Incidental: a failed copy is logged and never fails storing the note or response.
+     */
+    _copyToCase: function(gr) {
+        try {
+            if (gs.getProperty('x_2256809_connect.notes.to_work_notes', 'true') != 'true' || gr.getValue('copied_to_case') == '1')
+                return;
+            var created = gr.getValue('tsanet_created');
+            var today = new GlideDateTime();
+            today.setDisplayValue(new GlideDateTime().getLocalDate().getValue() + ' 00:00:00');
+            if (!created || new GlideDateTime(created).compareTo(today) < 0)
+                return;
+            var tsanetCase = new GlideRecord(this.TABLE);
+            if (!tsanetCase.get(gr.getValue('tsanet_case')) || !tsanetCase.getValue('host_record'))
+                return;
+            var host = new GlideRecord(gs.getProperty('x_2256809_connect.host.table', 'sn_customerservice_case'));
+            if (!host.get(tsanetCase.getValue('host_record')))
+                return;
+            host.work_notes = this._workNote(gr, tsanetCase.getValue('number'));
+            if (!host.update())
+                throw new Error('the case could not be updated');
+            gr.setValue('copied_to_case', true);
+            gr.update();
+        } catch (e) {
+            gs.warn('[TSANet] Could not copy ' + gr.getTableName() + ' ' + gr.getUniqueValue() + ' to the case: ' + e.message);
+        }
+    },
+
+    /** The work note's text: who and what in one line, then the text. */
+    _workNote: function(gr, tsanetNumber) {
+        if (gr.getTableName() == this.RESPONSE_TABLE) {
+            var did = { APPROVAL: 'accepted', REJECTION: 'rejected', INFORMATION_REQUEST: 'asked for information', INFORMATION_RESPONSE: 'sent information' };
+            var line = 'TSANet response on ' + tsanetNumber + ': ' + (gr.getValue('engineer_name') || 'the engineer') + ' ' +
+                (did[gr.getValue('type')] || gr.getDisplayValue('type'));
+            if (gr.getValue('case_number'))
+                line += ' (case ' + gr.getValue('case_number') + ')';
+            return line + '\n\n' + this._plain(gr.getValue('next_steps'));
+        }
+        var who = gr.getValue('direction') == 'OUTBOUND' ? 'sent by ' + (gr.getValue('creator_name') || 'us') : 'from ' + (gr.getValue('company_name') || 'the partner');
+        return 'TSANet note on ' + tsanetNumber + ' ' + who + ': ' + (gr.getValue('summary') || '') + '\n\n' + (gr.getValue('description_plain') || '');
     },
 
     /** A CaseResponseDTO: the partner's accept, request for information, information or reject. */
