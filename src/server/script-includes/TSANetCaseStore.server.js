@@ -268,8 +268,13 @@ TSANetCaseStore.prototype = {
             if (!mine.get(gr.getUniqueValue()) || mine.getValue('copy_claim') != marker)
                 return;
             // The partner's text goes in as plain text: [code] tags, which some instances render as HTML
-            // in journals, are removed.
-            host.work_notes = this._workNote(gr, tsanetCase.getValue('number')).replace(/\[\/?code\]/gi, '');
+            // in journals, are removed, again and again until none is left ("[co[code]de]" is one too).
+            var text = this._workNote(gr, tsanetCase.getValue('number')), was;
+            do {
+                was = text;
+                text = text.replace(/\[\/?code\]/gi, '');
+            } while (text != was);
+            host.work_notes = text;
             if (!host.update()) {
                 // Not copied after all: release the claim so a later store can try again.
                 mine.setValue('copied_to_case', false);
