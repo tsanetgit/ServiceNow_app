@@ -84,10 +84,11 @@ TSANetCaseStore.prototype = {
             outcome.changed = outcome.changed || state == 'changed' || state == 'inserted';
             outcome.failed = outcome.failed || state == 'failed';
         };
-        // A note or response stored for the first time is copied to the case's work notes once.
+        // Each stored note or response is copied to the case's work notes once. Rows already stored
+        // are tried too: one stored before the TSANet Case was linked to a case is copied once it is.
         var store = function(table, keyField, key, map) {
             var state = this._upsertChild(table, keyField, key, map);
-            if (state == 'inserted') {
+            if (state != 'failed') {
                 var stored = new GlideRecord(table);
                 if (stored.get(keyField, key))
                     this._copyToCase(stored);
@@ -254,11 +255,28 @@ TSANetCaseStore.prototype = {
             var host = new GlideRecord(gs.getProperty('x_2256809_connect.host.table', 'sn_customerservice_case'));
             if (!host.get(tsanetCase.getValue('host_record')))
                 return;
-            host.work_notes = this._workNote(gr, tsanetCase.getValue('number'));
-            if (!host.update())
+            // Claim the row in one conditional update, so two writers storing the same note at once
+            // (the webhook and our send) can't both copy it: only the one whose marker is on the row goes on.
+            var marker = gs.generateGUID();
+            var claim = new GlideRecord(gr.getTableName());
+            claim.addQuery('sys_id', gr.getUniqueValue());
+            claim.addQuery('copied_to_case', false);
+            claim.setValue('copied_to_case', true);
+            claim.setValue('copy_claim', marker);
+            claim.updateMultiple();
+            var mine = new GlideRecord(gr.getTableName());
+            if (!mine.get(gr.getUniqueValue()) || mine.getValue('copy_claim') != marker)
+                return;
+            // The partner's text goes in as plain text: [code] tags, which some instances render as HTML
+            // in journals, are removed.
+            host.work_notes = this._workNote(gr, tsanetCase.getValue('number')).replace(/\[\/?code\]/gi, '');
+            if (!host.update()) {
+                // Not copied after all: release the claim so a later store can try again.
+                mine.setValue('copied_to_case', false);
+                mine.setValue('copy_claim', '');
+                mine.update();
                 throw new Error('the case could not be updated');
-            gr.setValue('copied_to_case', true);
-            gr.update();
+            }
         } catch (e) {
             gs.warn('[TSANet] Could not copy ' + gr.getTableName() + ' ' + gr.getUniqueValue() + ' to the case: ' + e.message);
         }

@@ -31,5 +31,7 @@ export const x_2256809_connect_response = Table({
         tsanet_created: DateTimeColumn({ label: 'Created in TSANet' }),
         // Set once the response is copied to the linked case's work notes (TSANetCaseStore._copyToCase).
         copied_to_case: BooleanColumn({ label: 'Copied to case', default: false }),
+        // Which copy claimed the response, so it's copied to the case only once.
+        copy_claim: StringColumn({ label: 'Copy claim', maxLength: 40, active: false }),
     },
 })
