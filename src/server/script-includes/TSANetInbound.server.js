@@ -139,10 +139,13 @@ TSANetInbound.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
         var sysId = gr.insert();
         if (!sysId)
             throw this._inputError('The case could not be created. Pick an existing case instead.');
-        new TSANetCaseStore().linkHost(tsanetCase.getUniqueValue(), sysId);
+        // If another Accept linked a case first, that case is the one TSANet gets; this one stays unlinked.
+        var linked = new TSANetCaseStore().linkHost(tsanetCase.getUniqueValue(), sysId);
+        if (!linked)
+            throw this._inputError('The new case ' + gr.getValue('number') + ' could not be linked. Nothing was sent to TSANet.');
         var created = new GlideRecordSecure(table);
-        if (!created.get(sysId))
-            throw this._inputError('The new case could not be read.');
+        if (!created.get(linked))
+            throw this._inputError('The linked case could not be read.');
         return created;
     },
 
