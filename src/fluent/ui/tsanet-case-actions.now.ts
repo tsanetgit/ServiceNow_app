@@ -62,16 +62,39 @@ const acceptAction = UiAction({
         showFormButtonV2: true,
         clientScriptV2: `function onClick(g_form) {
     ${SEND}
-    var fields = [];
-    // TSANet gets our case number, so a request that has no case yet needs one first.
-    if (!g_form.getValue('host_record'))
-        fields.push({ type: 'string', name: 'host', label: 'Case number (for example CS0001005)', mandatory: true });
-    fields.push({ type: 'textarea', name: 'next_steps', label: 'Next steps', mandatory: true });
-    g_modal.showFields({ title: 'Accept TSANet Case', fields: fields, size: 'md' }).then(function(result) {
-        send('ajaxAccept', {
-            sysparm_host_number: value(result, 'host'),
-            sysparm_next_steps: value(result, 'next_steps')
-        }, 'Accepted. TSANet has your answer.');
+    // TSANet gets our case number, so a request with no case yet gets one here: a case the agent
+    // picks, or a new one created from the request. The server says which table the cases are in.
+    var ga = new GlideAjax('x_2256809_connect.TSANetInbound');
+    ga.addParam('sysparm_name', 'ajaxAcceptForm');
+    ga.addParam('sysparm_case_id', g_form.getUniqueValue());
+    ga.getXMLAnswer(function(answer) {
+        var form;
+        try {
+            form = JSON.parse(answer);
+        } catch (e) {
+            form = { error: answer ? 'Unexpected answer from the server: ' + answer : 'No answer from the server. Reload the form and try again.' };
+        }
+        if (form.error) {
+            g_form.addErrorMessage(form.error);
+            return;
+        }
+        var fields = [];
+        if (!form.linked) {
+            fields.push({ type: 'choice', name: 'host_choice', label: 'Case for this request', value: 'existing', mandatory: true, choices: [
+                { displayValue: 'An existing case (pick it below)', value: 'existing' },
+                { displayValue: 'A new case, created from this request', value: 'new' }] });
+            // A real field of the TSANet Case (host_record), so the workspace can look up the cases.
+            fields.push({ type: 'reference', name: 'host_record', label: 'Existing ' + form.label, reference: form.table,
+                referringTable: 'x_2256809_connect_case', referringRecordId: g_form.getUniqueValue(), value: '', displayValue: '' });
+        }
+        fields.push({ type: 'textarea', name: 'next_steps', label: 'Next steps', mandatory: true });
+        g_modal.showFields({ title: 'Accept TSANet Case', fields: fields, size: 'md' }).then(function(result) {
+            send('ajaxAccept', {
+                sysparm_host_choice: value(result, 'host_choice'),
+                sysparm_host_id: value(result, 'host_record'),
+                sysparm_next_steps: value(result, 'next_steps')
+            }, 'Accepted. TSANet has your answer.');
+        });
     });
 }`,
     },

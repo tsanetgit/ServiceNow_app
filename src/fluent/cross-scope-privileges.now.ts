@@ -28,6 +28,16 @@ CrossScopePrivilege({
     status: 'allowed',
 })
 
+// Accept on a request with no case yet can create a new case for it (TSANetInbound._newHost).
+CrossScopePrivilege({
+    $id: Now.ID['csp_table_customerservice_case_create'],
+    targetName: 'sn_customerservice_case',
+    targetScope: '51d811fad7223100b7490ee60e61034f',
+    targetType: 'sys_db_object',
+    operation: 'create',
+    status: 'allowed',
+})
+
 CrossScopePrivilege({
     $id: Now.ID['csp_table_sys_user_read'],
     targetName: 'sys_user',

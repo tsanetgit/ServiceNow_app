@@ -290,6 +290,10 @@ declare global {
                         table: 'sys_scope_privilege'
                         id: 'be66a435e22a4fdb958527e79c622eca'
                     }
+                    csp_table_customerservice_case_create: {
+                        table: 'sys_scope_privilege'
+                        id: 'c4b054f0fc6f44148d1268d94616c12e'
+                    }
                     csp_table_customerservice_case_read: {
                         table: 'sys_scope_privilege'
                         id: 'c90477a6c9864734bc78e5225b8b5323'

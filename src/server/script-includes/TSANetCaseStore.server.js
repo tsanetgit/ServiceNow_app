@@ -58,6 +58,15 @@ TSANetCaseStore.prototype = {
         return gr.update() ? this._result(gr, false, true) : null;
     },
 
+    /** Links a TSANet Case to a case in the host table, only if it has none (an existing link is never changed). */
+    linkHost: function(tsanetCaseSysId, hostSysId) {
+        var gr = new GlideRecord(this.TABLE);
+        if (!gr.get(tsanetCaseSysId) || gr.getValue('host_record'))
+            return false;
+        gr.setValue('host_record', hostSysId);
+        return !!gr.update();
+    },
+
     _apply: function(gr, dto, hostSysId, direction) {
         this._map(gr, dto, dto.direction || direction);
         if (hostSysId && !gr.getValue('host_record'))
