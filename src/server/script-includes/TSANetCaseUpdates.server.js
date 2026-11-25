@@ -1,10 +1,11 @@
 /**
- * TSANetCaseUpdates - tells TSANet when a linked case changes owner.
+ * TSANetCaseUpdates - tells TSANet when a TSANet Case's linked case changes, or that case's owner does.
  *
- * The business rule "TSANet - case owner changed" calls queueOwner() when a case's Assigned to changes:
- * every TSANet Case linked to it that TSANet still takes updates on is marked Update: Sending, and the
- * event x_2256809_connect.case.update is queued. _send(), run by its Script Action, reads the case's
- * assignee at that moment (so a later reassignment wins over an earlier one) and sends them to TSANet:
+ * Two things queue an update: the business rule "TSANet - case owner changed" (queueOwner(), for every
+ * TSANet Case linked to the reassigned case) and Change case (TSANetChangeCase, through queue()). Each
+ * TSANet Case is marked Update: Sending and the event x_2256809_connect.case.update is queued. _send(), run
+ * by its Script Action, reads the TSANet Case's state at that moment (so a later change wins over an
+ * earlier one) and sends it to TSANet: the linked case's number, plus that case's owner when it has one,
  * as the engineer of a request we received and accepted, or as the submitter contact of one we sent.
  */
 var TSANetCaseUpdates = Class.create();
@@ -16,7 +17,7 @@ TSANetCaseUpdates.prototype = {
 
     initialize: function() {},
 
-    /** Marks each TSANet Case linked to the case as Sending and queues its update. */
+    /** Queues an update for each TSANet Case linked to the case that TSANet still takes updates on. */
     queueOwner: function(hostCase) {
         if (!hostCase.getValue('assigned_to'))
             return;
@@ -25,33 +26,51 @@ TSANetCaseUpdates.prototype = {
         gr.addNotNullQuery('token');
         gr.query();
         while (gr.next()) {
-            if (!this._updatable(gr))
-                continue;
-            gr.setValue('update_state', 'SENDING');
-            gr.setValue('update_error', '');
-            gr.update();
-            gs.eventQueue(this.EVENT, gr, gr.getUniqueValue(), '');
+            if (this.updatable(gr))
+                this.queue(gr);
         }
     },
 
-    /** Run by the Script Action: sends the linked case's current assignee to TSANet (Sent), or keeps the reason (Failed). */
+    /** Marks the TSANet Case Sending and queues its update. */
+    queue: function(gr) {
+        gr.setValue('update_state', 'SENDING');
+        gr.setValue('update_error', '');
+        gr.update();
+        gs.eventQueue(this.EVENT, gr, gr.getUniqueValue(), '');
+    },
+
+    /** Whether TSANet takes updates on the TSANet Case in its direction and status. */
+    updatable: function(gr) {
+        return (this.UPDATABLE[gr.getValue('direction')] || []).indexOf(gr.getValue('status')) >= 0;
+    },
+
+    /** Run by the Script Action: sends the TSANet Case's current case and owner to TSANet (Sent), or keeps the reason (Failed). */
     _send: function(tsanetCaseSysId) {
         var gr = new GlideRecord(this.CASE_TABLE);
         if (!gr.get(tsanetCaseSysId) || gr.getValue('update_state') != 'SENDING')
             return;
-        var state = 'SENT', error = '';
+        var state = 'SENT', error = '', sent;
         try {
-            if (!this._updatable(gr) || !gr.getValue('host_record'))
+            if (!this.updatable(gr) || !gr.getValue('host_record'))
                 throw new Error('This request is ' + gr.getDisplayValue('status') + ' or has no case, so TSANet was not updated.');
-            var assignee = gr.host_record.assigned_to.toString();
-            if (!assignee)
-                throw new Error('The case has no one assigned, so TSANet was not updated.');
-            var engineer = new TSANetEngineer().forUser(assignee);
-            var client = this._client(), token = gr.getValue('token'), dto;
-            if (gr.getValue('direction') == 'INBOUND')
-                dto = client.updateApproval(token, { engineerName: engineer.name, engineerEmail: engineer.email, engineerPhone: engineer.phone });
-            else
-                dto = client.updateRequest(token, { submitterContactDetails: engineer });
+            sent = this._state(gr);
+            var number = gr.host_record.number.toString();
+            var engineer = sent.assignee ? new TSANetEngineer().forUser(sent.assignee) : null;
+            var client = this._client(), token = gr.getValue('token'), dto, body;
+            if (gr.getValue('direction') == 'INBOUND') {
+                body = { caseNumber: number };
+                if (engineer) {
+                    body.engineerName = engineer.name;
+                    body.engineerEmail = engineer.email;
+                    body.engineerPhone = engineer.phone;
+                }
+                dto = client.updateApproval(token, body);
+            } else {
+                body = { internalCaseNumber: number };
+                if (engineer)
+                    body.submitterContactDetails = engineer;
+                dto = client.updateRequest(token, body);
+            }
             if (!dto || !dto.token || !new TSANetCaseStore().upsert(dto, null, gr.getValue('direction')))
                 error = 'TSANet has the update, but its answer could not be stored here. It will show after the next sync.';
         } catch (e) {
@@ -60,9 +79,9 @@ TSANetCaseUpdates.prototype = {
         }
         gr = new GlideRecord(this.CASE_TABLE);
         if (gr.get(tsanetCaseSysId) && gr.getValue('update_state') == 'SENDING') {
-            // Reassigned again while this was sending: stay Sending and send the new assignee too.
-            var now = gr.getValue('host_record') ? gr.host_record.assigned_to.toString() : '';
-            if (assignee && now && now != assignee) {
+            // The case or its owner changed while this was sending: stay Sending and send the new state too.
+            var now = this._state(gr);
+            if (sent && (now.host != sent.host || now.assignee != sent.assignee)) {
                 gs.eventQueue(this.EVENT, gr, gr.getUniqueValue(), '');
                 return;
             }
@@ -72,14 +91,16 @@ TSANetCaseUpdates.prototype = {
         }
     },
 
+    /** The linked case and its owner, as sys_ids ('' when none). */
+    _state: function(gr) {
+        var host = gr.getValue('host_record') || '';
+        return { host: host, assignee: host ? gr.host_record.assigned_to.toString() : '' };
+    },
+
     _client: function() {
         if (!this.client)
             this.client = new TSANetClient();
         return this.client;
-    },
-
-    _updatable: function(gr) {
-        return (this.UPDATABLE[gr.getValue('direction')] || []).indexOf(gr.getValue('status')) >= 0;
     },
 
     type: 'TSANetCaseUpdates'

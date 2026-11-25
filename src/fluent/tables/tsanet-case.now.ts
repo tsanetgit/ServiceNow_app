@@ -96,7 +96,7 @@ export const x_2256809_connect_case = Table({
         responded: BooleanColumn({ label: 'Responded', default: false }),
         reminder_sent: BooleanColumn({ label: 'Reminder sent', default: false }),
         feedback_requested: BooleanColumn({ label: 'Feedback requested', default: false }),
-        // The last owner update sent to TSANet (TSANetCaseUpdates): Sending, then Sent or Failed with TSANet's reason.
+        // The last update sent to TSANet, the linked case's number and owner (TSANetCaseUpdates): Sending, then Sent or Failed with TSANet's reason.
         update_state: ChoiceColumn({
             label: 'Update to TSANet',
             readOnly: true,
