@@ -1,6 +1,6 @@
 import { BusinessRule } from '@servicenow/sdk/core'
 
-// A case's new owner goes to TSANet for every open TSANet Case linked to it (TSANetCaseUpdates).
+// When a case's owner changes, every open TSANet Case linked to it sends TSANet its case number and new owner (TSANetCaseUpdates).
 // Only queues events: nothing is sent to TSANet inside the reassignment's own transaction.
 BusinessRule({
     $id: Now.ID['br_case_owner_changed'],

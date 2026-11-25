@@ -5,8 +5,8 @@ ScriptInclude({
     name: 'TSANetCaseUpdates',
     apiName: 'x_2256809_connect.TSANetCaseUpdates',
     active: true,
-    // Server only: called by the case owner business rule and the case.update Script Action.
+    // Server only: called by the case owner business rule, TSANetChangeCase, the Change case condition and the case.update Script Action.
     accessibleFrom: 'package_private',
-    description: 'Sends a linked case\'s new owner to TSANet in the background, for each open TSANet Case on it.',
+    description: 'Sends a TSANet Case\'s linked case number and owner to TSANet in the background, after an owner change or Change case.',
     script: Now.include('../../server/script-includes/TSANetCaseUpdates.server.js'),
 })
