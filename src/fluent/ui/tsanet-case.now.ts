@@ -22,6 +22,8 @@ Form({
                         { field: 'response_sla', type: 'table_field' },
                         { field: 'responded', type: 'table_field' },
                         { field: 'tsanet_updated', type: 'table_field' },
+                        { field: 'update_state', type: 'table_field' },
+                        { field: 'update_error', type: 'table_field' },
                     ],
                 },
                 {
