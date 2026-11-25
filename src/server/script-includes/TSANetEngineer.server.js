@@ -10,8 +10,19 @@ TSANetEngineer.prototype = {
 
     /** { name, email, phone } of the signed-in user. Throws an input error when the name or email is blank. */
     current: function() {
+        return this._read(gs.getUserID(), 'Your user profile has');
+    },
+
+    /** { name, email, phone } of another user, such as a case's new assignee. Throws when the name or email is blank. */
+    forUser: function(userSysId) {
         var user = new GlideRecord('sys_user');
-        var found = user.get(gs.getUserID());
+        var who = user.get(userSysId) ? (user.getValue('name') || user.getValue('user_name')) : 'The assigned user';
+        return this._read(userSysId, who + "'s user profile has");
+    },
+
+    _read: function(userSysId, subject) {
+        var user = new GlideRecord('sys_user');
+        var found = user.get(userSysId);
         var read = function(value) {
             return found ? String(value || '').trim() : '';
         };
@@ -26,7 +37,7 @@ TSANetEngineer.prototype = {
         if (!engineer.email)
             missing.push('email address');
         if (missing.length) {
-            var e = new Error('Your user profile has no ' + missing.join(' or ') + '. Add it before sending to TSANet.');
+            var e = new Error(subject + ' no ' + missing.join(' or ') + '. Add it before sending to TSANet.');
             e.inputError = true;
             throw e;
         }

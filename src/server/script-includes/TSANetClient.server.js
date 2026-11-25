@@ -55,6 +55,11 @@ TSANetClient.prototype = {
         return this.request('POST', '/v1/collaboration-requests', null, dto);
     },
 
+    /** Our case number or submitter contact on a request we submitted (TSANet takes it only from the submitter). */
+    updateRequest: function(token, dto) {
+        return this.request('PATCH', this._path(token, ''), null, dto);
+    },
+
     /* ---------- Responses ---------- */
 
     approve: function(token, dto) {
