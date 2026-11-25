@@ -60,6 +60,12 @@ TSANetCaseUpdates.prototype = {
         }
         gr = new GlideRecord(this.CASE_TABLE);
         if (gr.get(tsanetCaseSysId) && gr.getValue('update_state') == 'SENDING') {
+            // Reassigned again while this was sending: stay Sending and send the new assignee too.
+            var now = gr.getValue('host_record') ? gr.host_record.assigned_to.toString() : '';
+            if (assignee && now && now != assignee) {
+                gs.eventQueue(this.EVENT, gr, gr.getUniqueValue(), '');
+                return;
+            }
             gr.setValue('update_state', state);
             gr.setValue('update_error', error.substring(0, 4000));
             gr.update();

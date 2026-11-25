@@ -1,5 +1,6 @@
 /**
- * TSANetEngineer - the signed-in agent as TSANet's engineer contact: the one place it is read.
+ * TSANetEngineer - TSANet's engineer contact: the signed-in agent (current), or another user such as a
+ * case's new assignee (forUser). The one place it is read.
  *
  * TSANet requires the engineer's name and email on a new request, an accept and a reject,
  * so a blank one stops the action here, before anything is sent to TSANet.
