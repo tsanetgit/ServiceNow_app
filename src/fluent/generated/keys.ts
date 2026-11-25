@@ -77,6 +77,10 @@ declare global {
                         table: 'sys_security_acl'
                         id: 'df470c48ecd949b980b9ebe4ce6379e2'
                     }
+                    acl_tsanet_change_case_execute: {
+                        table: 'sys_security_acl'
+                        id: '8d8fba3c9a8a468396707c888545e955'
+                    }
                     acl_tsanet_inbound_execute: {
                         table: 'sys_security_acl'
                         id: '627c272110cd4469a393cbbd5be92483'
@@ -132,6 +136,10 @@ declare global {
                     action_tsanet_accept: {
                         table: 'sys_ui_action'
                         id: '7bba3df8080a4768a1e927e3bc01647f'
+                    }
+                    action_tsanet_change_case: {
+                        table: 'sys_ui_action'
+                        id: '91b8babc120b46a78294edc872fd6ba7'
                     }
                     action_tsanet_create_note: {
                         table: 'sys_ui_action'
@@ -351,6 +359,10 @@ declare global {
                         id: '15355d0c00234e7a8a15d8b9c6108626'
                         deleted: false
                     }
+                    form_action_item_link_tsanet_change_case: {
+                        table: 'sys_ux_m2m_action_layout_item'
+                        id: '5053bf8ab750485ba5755c66e1645c83'
+                    }
                     form_action_item_link_tsanet_create_note: {
                         table: 'sys_ux_m2m_action_layout_item'
                         id: '53185ce58b4a4d7695c01731349a27b1'
@@ -368,6 +380,10 @@ declare global {
                         table: 'sys_ux_form_action_layout_item'
                         id: '7fc6bfab9a8d4efb9a461e0b6e750ad6'
                         deleted: false
+                    }
+                    form_action_item_tsanet_change_case: {
+                        table: 'sys_ux_form_action_layout_item'
+                        id: '7d993c2c6c36448e8e0722be0110c3af'
                     }
                     form_action_item_tsanet_create_note: {
                         table: 'sys_ux_form_action_layout_item'
@@ -592,6 +608,10 @@ declare global {
                     tsanet_case_updates: {
                         table: 'sys_script_include'
                         id: '5aec81bd461e4ade8dd830ccde5bf80a'
+                    }
+                    tsanet_change_case: {
+                        table: 'sys_script_include'
+                        id: '25f6663929154f4b960a4c85ab28fa84'
                     }
                     tsanet_client: {
                         table: 'sys_script_include'
@@ -4707,6 +4727,19 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_action_role'
+                        id: 'a16cf84db41b4976be48694eb1744f9d'
+                        key: {
+                            sys_ui_action: '91b8babc120b46a78294edc872fd6ba7'
+                            sys_user_role: {
+                                id: '13c64c9ef7b54505a80e6f46530c6f51'
+                                key: {
+                                    name: 'x_2256809_connect.user'
+                                }
+                            }
+                        }
+                    },
+                    {
                         table: 'sys_ui_element'
                         id: 'a17e1d7582fc4d8aa5d30d3a0b1e10f8'
                         key: {
@@ -4830,6 +4863,13 @@ declare global {
                             name: 'x_2256809_connect_note'
                             element: 'token'
                             language: 'en'
+                        }
+                    },
+                    {
+                        table: 'sys_ux_form_action'
+                        id: 'a7d6a0b629d641edb1d540e317477835'
+                        key: {
+                            ui_action: '91b8babc120b46a78294edc872fd6ba7'
                         }
                     },
                     {
@@ -6048,6 +6088,19 @@ declare global {
                             }
                             element: '.end_split'
                             position: '8'
+                        }
+                    },
+                    {
+                        table: 'sys_security_acl_role'
+                        id: 'cbc0de26604348d5ab32b48655d51980'
+                        key: {
+                            sys_security_acl: '8d8fba3c9a8a468396707c888545e955'
+                            sys_user_role: {
+                                id: '13c64c9ef7b54505a80e6f46530c6f51'
+                                key: {
+                                    name: 'x_2256809_connect.user'
+                                }
+                            }
                         }
                     },
                     {

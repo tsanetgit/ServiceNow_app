@@ -73,6 +73,18 @@ TSANetCaseStore.prototype = {
         return gr.get(tsanetCaseSysId) ? (gr.getValue('host_record') || '') : '';
     },
 
+    /**
+     * Moves a TSANet Case to another case in the host table (Change case). Unlike linkHost, it replaces
+     * an existing link; callers check the agent may do so. Returns whether it was saved.
+     */
+    changeHost: function(tsanetCaseSysId, hostSysId) {
+        var gr = new GlideRecord(this.TABLE);
+        if (!gr.get(tsanetCaseSysId))
+            return false;
+        gr.setValue('host_record', hostSysId);
+        return !!gr.update();
+    },
+
     _apply: function(gr, dto, hostSysId, direction) {
         this._map(gr, dto, dto.direction || direction);
         if (hostSysId && !gr.getValue('host_record'))

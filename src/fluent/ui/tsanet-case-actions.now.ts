@@ -337,3 +337,111 @@ Record({
         active: true,
     },
 })
+
+// Change case: on a linked TSANet Case that TSANet takes updates on (TSANetCaseUpdates.updatable), in
+// either direction. Picks another case with the same picker as Accept and hands it to TSANetChangeCase,
+// which links it and sends the new case number to TSANet in the background (GlideAjax).
+const changeCaseAction = UiAction({
+    $id: Now.ID['action_tsanet_change_case'],
+    table: 'x_2256809_connect_case',
+    actionName: 'x_2256809_connect_change_case',
+    name: 'Change case',
+    hint: 'Link this TSANet request to another of our cases and tell TSANet',
+    roles: [userRole],
+    // The platform keeps only 254 characters of a condition, so the status rule is called, not written out.
+    condition: '!current.host_record.nil() && !current.token.nil() && new TSANetCaseUpdates().updatable(current)',
+    showInsert: false,
+    showUpdate: true,
+    order: 130,
+    client: { isClient: true },
+    workspace: {
+        isConfigurableWorkspace: true,
+        showFormButtonV2: true,
+        clientScriptV2: `function onClick(g_form) {
+    function call(method, params, done) {
+        try {
+            var ga = new GlideAjax('x_2256809_connect.TSANetChangeCase');
+            ga.addParam('sysparm_name', method);
+            ga.addParam('sysparm_case_id', g_form.getUniqueValue());
+            for (var name in params)
+                ga.addParam(name, params[name]);
+            ga.getXMLAnswer(function(answer) {
+                var result = { error: 'No answer from the server. Reload the form to check which case is linked.' };
+                if (answer) {
+                    try {
+                        result = JSON.parse(answer);
+                    } catch (e) {
+                        result = { error: 'Unexpected answer from the server: ' + answer };
+                    }
+                }
+                if (result.error)
+                    g_form.addErrorMessage(result.error);
+                else
+                    done(result);
+            });
+        } catch (e) {
+            g_form.addErrorMessage('Could not change the case: ' + e.message);
+        }
+    }
+    function value(result, name) {
+        var fields = (result && result.updatedFields) || [];
+        for (var i = 0; i < fields.length; i++)
+            if (fields[i].name == name)
+                return fields[i].value;
+        return '';
+    }
+    call('ajaxChangeCaseForm', {}, function(form) {
+        g_modal.showFields({
+            title: 'Change case',
+            fields: [
+                // A real field of the TSANet Case (host_record), so the workspace can look up the cases.
+                { type: 'reference', name: 'host_record', label: form.label, reference: form.table, mandatory: true,
+                    referringTable: 'x_2256809_connect_case', referringRecordId: g_form.getUniqueValue(), value: '', displayValue: '' }
+            ],
+            size: 'md'
+        }).then(function(result) {
+            call('ajaxChangeCase', { sysparm_host_id: value(result, 'host_record') }, function(done) {
+                g_form.reload();
+                g_form.addInfoMessage('Linked to ' + done.number + '. Sending the new case number to TSANet.');
+            });
+        });
+    });
+}`,
+    },
+})
+
+const changeCaseFormAction = Record({
+    $id: Now.ID['form_action_tsanet_change_case'],
+    table: 'sys_ux_form_action',
+    data: { name: 'Change case', table: 'x_2256809_connect_case', action_type: 'ui_action', ui_action: changeCaseAction, active: true },
+})
+
+const changeCaseItem = Record({
+    $id: Now.ID['form_action_item_tsanet_change_case'],
+    table: 'sys_ux_form_action_layout_item',
+    data: {
+        name: 'Change case',
+        label: 'Change case',
+        table: 'x_2256809_connect_case',
+        item_type: 'action',
+        action: changeCaseFormAction,
+        overflow: false,
+        color: 'secondary',
+        order: 130,
+        active: true,
+    },
+})
+
+Record({
+    $id: Now.ID['form_action_item_link_tsanet_change_case'],
+    table: 'sys_ux_m2m_action_layout_item',
+    data: {
+        ux_form_action_layout: caseActionLayout,
+        ux_form_action_layout_item: changeCaseItem,
+        table: 'x_2256809_connect_case',
+        display_type: BUTTON,
+        variant: 'secondary',
+        order: 130,
+        active: true,
+    },
+})
