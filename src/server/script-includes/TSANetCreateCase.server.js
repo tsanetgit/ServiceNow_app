@@ -35,6 +35,33 @@ TSANetCreateCase.prototype = {
     },
 
     /**
+     * The case or incident the page starts from, read as the signed-in user, in one shape for both: a case
+     * gives its account and contact, an incident its company and caller. A field the agent can't read is empty.
+     */
+    host: function(sysId) {
+        // REST query parameters arrive as arrays; String() of a one-value array is its value.
+        var gr = this._hostCase(String(sysId || ''));
+        var incident = gr.isValidField('caller_id');
+        var org = incident ? 'company' : 'account', person = incident ? 'caller_id' : 'contact';
+        var read = function(path) {
+            var el = gr.getElement(path);
+            return el && el.canRead() ? String(el.getDisplayValue() || '') : '';
+        };
+        return {
+            number: gr.getValue('number'),
+            type: gr.getClassDisplayValue(),
+            shortDescription: read('short_description'),
+            description: read('description'),
+            priority: read('priority') ? String(gr.getValue('priority') || '') : '',
+            organizationLabel: incident ? 'Company' : 'Account',
+            organization: read(org),
+            contactName: read(person + '.name'),
+            contactEmail: read(person + '.email'),
+            contactPhone: read(person + '.phone'),
+        };
+    },
+
+    /**
      * Submits the request and stores the outbound TSANet Case.
      * input: caseSysId, companyId, departmentId, summary, description, priority,
      *        fields (the partner's field values, by fieldId)

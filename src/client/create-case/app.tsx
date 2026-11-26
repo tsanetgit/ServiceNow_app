@@ -17,18 +17,19 @@ const PRIORITIES = [
     { id: 'MEDIUM', label: 'Medium' },
     { id: 'HIGH', label: 'High' },
 ]
-// Case priority 1 Critical and 2 High are High for TSANet, 3 Moderate is Medium, 4 Low is Low.
-const tsanetPriority = (casePriority) => ({ '1': 'HIGH', '2': 'HIGH', '3': 'MEDIUM' })[casePriority?.value] || 'LOW'
+// Case or incident priority 1 Critical and 2 High are High for TSANet, 3 Moderate is Medium, the rest Low.
+const tsanetPriority = (hostPriority) => ({ '1': 'HIGH', '2': 'HIGH', '3': 'MEDIUM' })[hostPriority] || 'LOW'
 
 const SECTIONS = { CONTACT_SECTION: 0, COMMON_CUSTOMER_SECTION: 1, PROBLEM_SECTION: 2 }
 const SEARCH_DELAY_MS = 300
 
-// The partner's customer fields, filled in from the case's account and contact.
+// The partner's customer fields, filled in from the case's account and contact, or the incident's
+// company and caller (the server returns both in one shape).
 const prefill = (hostCase) => ({
-    'Customer Company': display(hostCase['account.name']),
-    'Customer Name': display(hostCase['contact.name']),
-    'Customer Email': display(hostCase['contact.email']),
-    'Customer Phone Including Country Code': display(hostCase['contact.phone']),
+    'Customer Company': hostCase.organization,
+    'Customer Name': hostCase.contactName,
+    'Customer Email': hostCase.contactEmail,
+    'Customer Phone Including Country Code': hostCase.contactPhone,
 })
 
 // Admin notes and escalation instructions come as HTML from TSANet; show their text only.
@@ -73,8 +74,8 @@ export default function App() {
                 }
                 setHostCase(c)
                 setAgent(u)
-                setSummary(c.short_description?.value || '')
-                setDescription(c.description?.value || '')
+                setSummary(c.shortDescription || '')
+                setDescription(c.description || '')
                 setPriority(tsanetPriority(c.priority))
             })
             .catch((e) => setError(e.message))
@@ -166,8 +167,8 @@ export default function App() {
             <LabelValueStacked
                 align="horizontal-equal"
                 items={[
-                    { label: 'Case', value: display(hostCase.number) },
-                    { label: 'Account', value: display(hostCase.account) },
+                    { label: hostCase.type, value: hostCase.number },
+                    { label: hostCase.organizationLabel, value: hostCase.organization },
                     { label: 'Engineer', value: display(agent.name) },
                     { label: 'Email', value: display(agent.email) },
                     { label: 'Phone', value: display(agent.phone) },

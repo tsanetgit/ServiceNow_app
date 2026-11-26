@@ -51,6 +51,18 @@ RestApi({
 })(request, response);`,
         },
         {
+            $id: Now.ID['rest_create_case_host'],
+            name: 'Get the case or incident',
+            method: 'GET',
+            path: '/host',
+            version: 1,
+            enforceAcl: [createCaseApiAcl],
+            parameters: [{ $id: Now.ID['rest_create_case_host_id'], name: 'id', required: true }],
+            script: `(function process(request, response) {
+    TSANetCreateCase.respond(response, function(svc) { return svc.host(request.queryParams.id); });
+})(request, response);`,
+        },
+        {
             $id: Now.ID['rest_create_case_submit'],
             name: 'Submit request',
             method: 'POST',
