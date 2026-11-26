@@ -40,7 +40,8 @@ TSANetSync.prototype = {
             return { error: 'unexpected answer' };
         }
 
-        var hosts = new TSANetHostRecords();
+        // The poll logs a bad entry in the host tables setting, once per run.
+        var hosts = new TSANetHostRecords(true);
         var counts = { read: requests.length, inserted: 0, updated: 0, unchanged: 0, failed: 0 };
         requests.forEach(function(request) {
             // One bad request is skipped; the rest of the run goes on.

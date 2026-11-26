@@ -104,7 +104,7 @@ TSANetInbound.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
         var hosts = new TSANetHostRecords();
         var linked = tsanetCase.getValue('host_record');
         if (linked) {
-            var current = hosts.read(linked, true);
+            var current = hosts.linked(linked, true);
             if (!current)
                 throw this._inputError('The linked case could not be read.');
             return current;

@@ -3,8 +3,12 @@
  * or both. The one place that reads the setting x_2256809_connect.host.table, a comma-separated list.
  *
  * Only sn_customerservice_case and incident are supported, with any table that extends them. A listed
- * table that isn't supported or doesn't exist on this instance is skipped and logged, never allowed.
- * One instance reads the setting once, so a sync run logs a bad entry once.
+ * table that isn't supported or doesn't exist on this instance is skipped, never allowed. Only the poll
+ * logs a bad entry (new TSANetHostRecords(true), once per run), so a misconfigured setting doesn't log
+ * on every picker search or webhook.
+ *
+ * The setting decides what an agent can pick and what the sync links. A record that is already linked is
+ * read whether or not its table is still allowed (linked()), so narrowing the setting doesn't strand it.
  */
 var TSANetHostRecords = Class.create();
 TSANetHostRecords.prototype = {
@@ -13,19 +17,19 @@ TSANetHostRecords.prototype = {
     CASE_TABLE: 'sn_customerservice_case',
     SUPPORTED: ['sn_customerservice_case', 'incident'],
 
-    initialize: function() {
+    initialize: function(log) {
         var seen = {}, list = [], supported = this.SUPPORTED;
         String(gs.getProperty(this.PROPERTY, this.DEFAULT) || '').split(',').forEach(function(table) {
             table = table.trim();
             if (!table || seen[table])
                 return;
             seen[table] = true;
-            if (supported.indexOf(table) < 0)
-                gs.error('[TSANet] Host tables: "' + table + '" is not supported (only sn_customerservice_case and incident), so it is ignored');
-            else if (!new GlideRecord(table).isValid())
-                gs.error('[TSANet] Host tables: "' + table + '" does not exist on this instance, so it is ignored');
-            else
+            var problem = supported.indexOf(table) < 0 ? 'is not supported (only sn_customerservice_case and incident)'
+                : !new GlideRecord(table).isValid() ? 'does not exist on this instance' : '';
+            if (!problem)
                 list.push(table);
+            else if (log)
+                gs.error('[TSANet] Host tables: "' + table + '" ' + problem + ', so it is ignored');
         });
         this.list = list;
     },
@@ -39,12 +43,23 @@ TSANetHostRecords.prototype = {
         return this.list.indexOf(table) >= 0;
     },
 
-    /** The record, if it's in an allowed table (or one extending it); read as the signed-in user when secure. */
+    /** A record to pick: found only in an allowed table (or one extending it); read as the signed-in user when secure. */
     read: function(sysId, secure) {
+        return this._find(sysId, secure, this.list);
+    },
+
+    /** The record a TSANet Case is already linked to: a case or incident, allowed now or not. */
+    linked: function(sysId, secure) {
+        return this._find(sysId, secure, this.SUPPORTED.filter(function(table) {
+            return new GlideRecord(table).isValid();
+        }));
+    },
+
+    _find: function(sysId, secure, tables) {
         if (!/^[0-9a-f]{32}$/.test(String(sysId || '')))
             return null;
-        for (var i = 0; i < this.list.length; i++) {
-            var gr = secure ? new GlideRecordSecure(this.list[i]) : new GlideRecord(this.list[i]);
+        for (var i = 0; i < tables.length; i++) {
+            var gr = secure ? new GlideRecordSecure(tables[i]) : new GlideRecord(tables[i]);
             if (gr.get(sysId))
                 return gr;
         }
