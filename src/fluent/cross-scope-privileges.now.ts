@@ -38,6 +38,25 @@ CrossScopePrivilege({
     status: 'allowed',
 })
 
+// Incidents as host records (#50): read for the pickers, checks and the sync, write for the work-note copy.
+CrossScopePrivilege({
+    $id: Now.ID['csp_table_incident_read'],
+    targetName: 'incident',
+    targetScope: 'global',
+    targetType: 'sys_db_object',
+    operation: 'read',
+    status: 'allowed',
+})
+
+CrossScopePrivilege({
+    $id: Now.ID['csp_table_incident_write'],
+    targetName: 'incident',
+    targetScope: 'global',
+    targetType: 'sys_db_object',
+    operation: 'write',
+    status: 'allowed',
+})
+
 CrossScopePrivilege({
     $id: Now.ID['csp_table_sys_user_read'],
     targetName: 'sys_user',

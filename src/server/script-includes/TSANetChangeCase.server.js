@@ -15,8 +15,9 @@ TSANetChangeCase.prototype = Object.extendsObject(global.AbstractAjaxProcessor, 
         var self = this;
         return this._answer(function() {
             self._changeable(self.getParameter('sysparm_case_id'));
-            var table = self._hostTable();
-            return { table: table, label: new GlideRecord(table).getClassDisplayValue() };
+            // The picker resolves through the Case field (a task reference limited to the allowed tables).
+            var label = new TSANetHostRecords().label();
+            return { table: 'task', label: label.charAt(0).toUpperCase() + label.substring(1) };
         });
     },
 
@@ -33,9 +34,10 @@ TSANetChangeCase.prototype = Object.extendsObject(global.AbstractAjaxProcessor, 
         var tsanetCase = this._changeable(caseSysId);
         if (!/^[0-9a-f]{32}$/.test(String(hostSysId || '')))
             throw this._inputError('Pick the case to link.');
-        var host = new GlideRecordSecure(this._hostTable());
-        if (!host.get(hostSysId))
-            throw this._inputError('The case you picked could not be read.');
+        var hosts = new TSANetHostRecords();
+        var host = hosts.read(hostSysId, true);
+        if (!host)
+            throw this._inputError('The ' + hosts.label() + ' you picked could not be read.');
         if (host.getUniqueValue() == tsanetCase.getValue('host_record'))
             throw this._inputError('This TSANet Case is already linked to ' + host.getValue('number') + '.');
         var store = new TSANetCaseStore();
@@ -59,10 +61,6 @@ TSANetChangeCase.prototype = Object.extendsObject(global.AbstractAjaxProcessor, 
         if (!new TSANetCaseUpdates().updatable(gr))
             throw this._inputError('This request is ' + gr.getDisplayValue('status') + ', so its case can\'t be changed in TSANet now.');
         return gr;
-    },
-
-    _hostTable: function() {
-        return gs.getProperty(this.SCOPE + '.host.table', 'sn_customerservice_case');
     },
 
     /** Runs one action for GlideAjax: the result, or the message the agent sees, as JSON. */

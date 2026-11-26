@@ -169,6 +169,10 @@ declare global {
                         table: 'sys_script'
                         id: 'd1377f00d5be4b169d2180b03ff0689a'
                     }
+                    br_incident_owner_changed: {
+                        table: 'sys_script'
+                        id: 'c53c0a29dd0b472daa0af3163a899b41'
+                    }
                     case_related_list_notes: {
                         table: 'sys_ui_related_list_entry'
                         id: 'ec1d7008b46943769ac238f5d0dc38ca'
@@ -321,6 +325,14 @@ declare global {
                     csp_table_http_connection_read: {
                         table: 'sys_scope_privilege'
                         id: '5371b2d99d9a4f1b9a4db8aad9fdc068'
+                    }
+                    csp_table_incident_read: {
+                        table: 'sys_scope_privilege'
+                        id: '905edb54681f492aa065e824d10ccca5'
+                    }
+                    csp_table_incident_write: {
+                        table: 'sys_scope_privilege'
+                        id: 'd926de7040c8480c84566eb5ba81dec5'
                     }
                     csp_table_oauth_credentials_read: {
                         table: 'sys_scope_privilege'
@@ -628,6 +640,10 @@ declare global {
                     tsanet_hmac: {
                         table: 'sys_script_include'
                         id: 'a57039bfffd64360bd0cd6a430d252bf'
+                    }
+                    tsanet_host_records: {
+                        table: 'sys_script_include'
+                        id: '0faa01ddfb0e4d8a962ac5ce7b5b3d1e'
                     }
                     tsanet_inbound: {
                         table: 'sys_script_include'

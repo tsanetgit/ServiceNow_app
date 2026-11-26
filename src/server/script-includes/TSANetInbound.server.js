@@ -21,8 +21,8 @@ TSANetInbound.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
         var self = this;
         return this._answer(function() {
             var tsanetCase = self._answerable(self.getParameter('sysparm_case_id'));
-            var table = self._hostTable();
-            return { linked: !!tsanetCase.getValue('host_record'), table: table, label: new GlideRecord(table).getClassDisplayValue() };
+            // The picker resolves through the Case field (a task reference limited to the allowed tables).
+            return { linked: !!tsanetCase.getValue('host_record'), table: 'task', label: new TSANetHostRecords().label() };
         });
     },
 
@@ -97,16 +97,17 @@ TSANetInbound.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
     },
 
     /**
-     * The case in the host table, read as the signed-in user: its number is what TSANet gets. The case
-     * already linked when there is one; otherwise the one the agent picked, or a new one ('new').
+     * The case or incident (an allowed host record), read as the signed-in user: its number is what TSANet
+     * gets. The one already linked when there is one; otherwise the one the agent picked, or a new case ('new').
      */
     _host: function(tsanetCase, hostChoice, hostSysId) {
-        var gr = new GlideRecordSecure(this._hostTable());
+        var hosts = new TSANetHostRecords();
         var linked = tsanetCase.getValue('host_record');
         if (linked) {
-            if (!gr.get(linked))
+            var current = hosts.linked(linked, true);
+            if (!current)
                 throw this._inputError('The linked case could not be read.');
-            return gr;
+            return current;
         }
         if (hostChoice == 'new')
             return this._newHost(tsanetCase);
@@ -114,9 +115,10 @@ TSANetInbound.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
             throw this._inputError('Choose an existing case or a new case for this request.');
         if (!/^[0-9a-f]{32}$/.test(String(hostSysId || '')))
             throw this._inputError('Pick the case to link before accepting.');
-        if (!gr.get(hostSysId))
-            throw this._inputError('The case you picked could not be read.');
-        return gr;
+        var picked = hosts.read(hostSysId, true);
+        if (!picked)
+            throw this._inputError('The ' + hosts.label() + ' you picked could not be read.');
+        return picked;
     },
 
     /**
@@ -124,9 +126,9 @@ TSANetInbound.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
      * linked to the TSANet Case at once, so if TSANet then refuses the answer, trying again reuses it.
      */
     _newHost: function(tsanetCase) {
-        var table = this._hostTable();
-        if (table != 'sn_customerservice_case')
-            throw this._inputError('A new record can be created only for a Customer Service case. Pick an existing ' + table + ' instead.');
+        var hosts = new TSANetHostRecords(), table = hosts.CASE_TABLE;
+        if (!hosts.allows(table))
+            throw this._inputError('A new record can be created only when cases are allowed in the TSANet settings. Pick an existing ' + hosts.label() + ' instead.');
         var gr = new GlideRecordSecure(table);
         gr.initialize();
         if (!gr.canCreate())
@@ -147,10 +149,6 @@ TSANetInbound.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
         if (!created.get(linked))
             throw this._inputError('The linked case could not be read.');
         return created;
-    },
-
-    _hostTable: function() {
-        return gs.getProperty(this.SCOPE + '.host.table', 'sn_customerservice_case');
     },
 
     /** Stores TSANet's reply, so the TSANet Case shows the new status straight away. */
