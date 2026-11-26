@@ -40,12 +40,12 @@ TSANetSync.prototype = {
             return { error: 'unexpected answer' };
         }
 
-        var hostTable = this._hostTable();
+        var hosts = new TSANetHostRecords();
         var counts = { read: requests.length, inserted: 0, updated: 0, unchanged: 0, failed: 0 };
         requests.forEach(function(request) {
             // One bad request is skipped; the rest of the run goes on.
             try {
-                var stored = this.storeOne(request, hostTable);
+                var stored = this.storeOne(request, hosts);
                 counts[stored.inserted ? 'inserted' : stored.updated ? 'updated' : 'unchanged']++;
             } catch (e) {
                 counts.failed++;
@@ -67,16 +67,16 @@ TSANetSync.prototype = {
 
     /**
      * Stores one request from TSANet (the poll's list, or a webhook's fetch), linked to its case by case
-     * number. hostTable defaults to the configured one. Returns TSANetCaseStore.upsert's result; throws
+     * number in the allowed host tables (hosts, a TSANetHostRecords; a new one when not given). Returns TSANetCaseStore.upsert's result; throws
      * when the request can't be stored completely.
      */
-    storeOne: function(request, hostTable) {
-        if (hostTable === undefined)
-            hostTable = this._hostTable();
+    storeOne: function(request, hosts) {
+        if (hosts === undefined)
+            hosts = new TSANetHostRecords();
         // The token is what makes a request one record; without it the request can't be stored safely.
         if (!request || !request.token)
             throw new Error('The request has no token');
-        var stored = this.store.upsert(request, this._hostFor(request, hostTable));
+        var stored = this.store.upsert(request, this._hostFor(request, hosts));
         if (!stored)
             throw new Error('The request could not be stored');
         // A failure, so the poll's window doesn't move and its next run stores the rest.
@@ -99,22 +99,14 @@ TSANetSync.prototype = {
         return since.getValue().replace(' ', 'T') + 'Z';
     },
 
-    /** The host table, if it exists on this instance; otherwise TSANet Cases are stored unlinked. */
-    _hostTable: function() {
-        var table = this._prop('host.table', '');
-        if (table && new GlideRecord(table).isValid())
-            return table;
-        gs.error('[TSANet] Sync: host table "' + table + '" does not exist on this instance; TSANet Cases are stored without a case');
-        return null;
-    },
-
-    /** The case our case number on the request names: submitter for outbound, receiver for inbound. */
-    _hostFor: function(request, hostTable) {
+    /**
+     * The case or incident our case number on the request names (submitter for outbound, receiver for
+     * inbound), in the allowed host tables. A table that doesn't exist here is skipped and logged by
+     * TSANetHostRecords; with none left, TSANet Cases are stored without a case.
+     */
+    _hostFor: function(request, hosts) {
         var number = request.direction == 'INBOUND' ? request.receiverCaseNumber : request.submitterCaseNumber;
-        if (!hostTable || !number)
-            return null;
-        var host = new GlideRecord(hostTable);
-        return host.get('number', number) ? host.getUniqueValue() : null;
+        return hosts.findByNumber(number);
     },
 
     _prop: function(name, dflt) {

@@ -279,8 +279,8 @@ TSANetCaseStore.prototype = {
             var tsanetCase = new GlideRecord(this.TABLE);
             if (!tsanetCase.get(gr.getValue('tsanet_case')) || !tsanetCase.getValue('host_record'))
                 return;
-            var host = new GlideRecord(gs.getProperty('x_2256809_connect.host.table', 'sn_customerservice_case'));
-            if (!host.get(tsanetCase.getValue('host_record')))
+            var host = new TSANetHostRecords().read(tsanetCase.getValue('host_record'), false);
+            if (!host)
                 return;
             // Claim the row in one conditional update, so two writers storing the same note at once
             // (the webhook and our send) can't both copy it: only the one whose marker is on the row goes on.

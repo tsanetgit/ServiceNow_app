@@ -8,7 +8,6 @@
  */
 var TSANetCreateCase = Class.create();
 TSANetCreateCase.prototype = {
-    HOST_TABLE: 'sn_customerservice_case',
     PRIORITIES: ['LOW', 'MEDIUM', 'HIGH'],
     // The API's own form keys the page never sends back (the Connect web app doesn't either).
     READ_ONLY_KEYS: ['adminNote', 'escalationInstructions'],
@@ -137,11 +136,12 @@ TSANetCreateCase.prototype = {
         return gr.hasNext();
     },
 
-    /** The case, read as the signed-in user, so an agent can only start from a case they can see. */
+    /** The case or incident (an allowed host record), read as the signed-in user, so an agent can only start from one they can see. */
     _hostCase: function(sysId) {
-        var gr = new GlideRecordSecure(this.HOST_TABLE);
-        if (!/^[0-9a-f]{32}$/.test(String(sysId || '')) || !gr.get(sysId))
-            throw this._inputError('The case could not be read.');
+        var hosts = new TSANetHostRecords();
+        var gr = hosts.read(sysId, true);
+        if (!gr)
+            throw this._inputError('The ' + hosts.label() + ' could not be read.');
         return gr;
     },
 

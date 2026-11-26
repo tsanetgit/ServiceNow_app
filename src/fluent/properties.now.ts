@@ -26,7 +26,7 @@ const hostTable = Property({
     name: 'x_2256809_connect.host.table',
     type: 'string',
     value: 'sn_customerservice_case',
-    description: 'Host table. Table whose records link to a TSANet case (sn_customerservice_case, or incident)',
+    description: 'Host tables. Comma-separated tables whose records link to a TSANet Case: sn_customerservice_case, incident, or both',
     roles: { read: [userRole], write: [adminRole] },
 })
 

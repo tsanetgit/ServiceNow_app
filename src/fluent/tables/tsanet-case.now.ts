@@ -27,12 +27,12 @@ export const x_2256809_connect_case = Table({
             default: 'javascript:global.getNextObjNumberPadded();',
         }),
         // Covers CSM cases and incidents; the member's record itself is never changed. Pickers on it
-        // (the form and the Accept dialog) offer only records of the configured host table (or a table extending it), not every task.
+        // (the form, Accept and Change case) offer only records of the allowed host tables (TSANetHostRecords), not every task.
         host_record: ReferenceColumn({
             label: 'Case',
             referenceTable: 'task',
             useReferenceQualifier: 'advanced',
-            referenceQual: "javascript:'sys_class_nameINSTANCEOF' + gs.getProperty('x_2256809_connect.host.table', 'sn_customerservice_case')",
+            referenceQual: 'javascript:new TSANetHostRecords().qualifier()',
         }),
         direction: ChoiceColumn({
             label: 'Direction',
