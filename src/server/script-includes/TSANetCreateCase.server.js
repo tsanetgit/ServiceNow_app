@@ -1,10 +1,10 @@
 /**
  * TSANetCreateCase - the server side of the Create TSANet Case page.
  *
- * The page calls it through the "Create TSANet Case" REST API. It finds partners,
- * loads a partner's form, and submits an outbound collaboration request for a
- * case, storing the TSANet Case only once TSANet has accepted the request.
- * The case number is read here and the engineer's details through TSANetEngineer, not taken from the browser.
+ * The page calls it through the "Create TSANet Case" REST API. It reads the case or incident the page
+ * starts from, finds partners, loads a partner's form, and submits an outbound collaboration request for
+ * that case or incident, storing the TSANet Case only once TSANet has accepted the request.
+ * The record's number is read here and the engineer's details through TSANetEngineer, not taken from the browser.
  */
 var TSANetCreateCase = Class.create();
 TSANetCreateCase.prototype = {
@@ -32,6 +32,33 @@ TSANetCreateCase.prototype = {
         if (companyId)
             return this.client.getFormByCompany(companyId);
         throw this._inputError('Choose a partner first.');
+    },
+
+    /**
+     * The case or incident the page starts from, read as the signed-in user, in one shape for both: a case
+     * gives its account and contact, an incident its company and caller. A field the agent can't read is empty.
+     */
+    host: function(sysId) {
+        // REST query parameters arrive as arrays; String() of a one-value array is its value.
+        var gr = this._hostCase(String(sysId || ''));
+        var incident = gr.isValidField('caller_id');
+        var org = incident ? 'company' : 'account', person = incident ? 'caller_id' : 'contact';
+        var read = function(path) {
+            var el = gr.getElement(path);
+            return el && el.canRead() ? String(el.getDisplayValue() || '') : '';
+        };
+        return {
+            number: read('number'),
+            type: gr.getClassDisplayValue(),
+            shortDescription: read('short_description'),
+            description: read('description'),
+            priority: read('priority') ? String(gr.getValue('priority') || '') : '',
+            organizationLabel: incident ? 'Company' : 'Account',
+            organization: read(org),
+            contactName: read(person + '.name'),
+            contactEmail: read(person + '.email'),
+            contactPhone: read(person + '.phone'),
+        };
     },
 
     /**

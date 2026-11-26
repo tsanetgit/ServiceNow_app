@@ -1,4 +1,4 @@
-// Reads the case the action was started from and the agent starting it, and calls the
+// Reads the case or incident the action was started from and the agent starting it, and calls the
 // app's Create TSANet Case API, which talks to TSANet on the server.
 const headers = { Accept: 'application/json', 'X-UserToken': window['g_ck'] }
 const API = '/api/x_2256809_connect/v1/create_case'
@@ -12,12 +12,9 @@ async function send(path: string, init: RequestInit = {}) {
 
 const get = (path: string) => send(path)
 
+// The server reads the record as the agent and returns one shape for a case and an incident.
 export function getCase(sysId: string) {
-    const fields =
-        'number,short_description,description,priority,account,account.name,contact.name,contact.email,contact.phone'
-    return get(
-        `/api/now/table/sn_customerservice_case/${encodeURIComponent(sysId)}?sysparm_display_value=all&sysparm_fields=${fields}`
-    )
+    return get(`${API}/host?id=${encodeURIComponent(sysId)}`)
 }
 
 export async function getCurrentUser() {

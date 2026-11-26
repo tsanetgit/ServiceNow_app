@@ -532,6 +532,14 @@ declare global {
                         table: 'sys_ws_query_parameter'
                         id: 'edbb0819c78d47eabcb051943f575f07'
                     }
+                    rest_create_case_host: {
+                        table: 'sys_ws_operation'
+                        id: '342c1c06e3b8433fbd4efd58378b8d9b'
+                    }
+                    rest_create_case_host_id: {
+                        table: 'sys_ws_query_parameter'
+                        id: '75cc8742457a4cb7929b334aa4902886'
+                    }
                     rest_create_case_partners: {
                         table: 'sys_ws_operation'
                         id: '55cc1d93b6db49e3afdcae8a2755c31b'
@@ -3720,6 +3728,14 @@ declare global {
                             name: 'x_2256809_connect_log'
                             element: 'tsanet_case'
                             language: 'en'
+                        }
+                    },
+                    {
+                        table: 'sys_ws_query_parameter_map'
+                        id: '7d53dc363e4f4011a4e94d618234f0c5'
+                        key: {
+                            web_service_operation: '342c1c06e3b8433fbd4efd58378b8d9b'
+                            web_service_query_parameter: '75cc8742457a4cb7929b334aa4902886'
                         }
                     },
                     {
