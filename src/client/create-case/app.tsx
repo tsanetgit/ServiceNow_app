@@ -60,7 +60,7 @@ export default function App() {
 
     useEffect(() => {
         if (!/^[0-9a-f]{32}$/.test(caseId)) {
-            setError('Open this from a case: ⋯ Create TSANet Case.')
+            setError('Open this from a case (⋯ Create TSANet Case) or an incident (⋯ TSANet Request).')
             return
         }
         Promise.all([getCase(caseId), getCurrentUser()])
@@ -151,13 +151,13 @@ export default function App() {
     }
 
     if (error) return <Alert status="critical" header="Create TSANet Case" content={error} />
-    if (!hostCase || !agent) return <Loader label="Loading the case" />
+    if (!hostCase || !agent) return <Loader label="Loading" />
     if (created)
         return (
             <Alert
                 status="positive"
                 header={`${created.number} sent to ${created.partner}`}
-                content={`TSANet has the request (token ${created.token}). It shows in the case's TSANet Cases list.`}
+                content={`TSANet has the request (token ${created.token}). It shows in the ${hostCase.kind == 'incident' ? "incident's TSANet Request" : "case's TSANet Cases"} list.`}
             />
         )
 

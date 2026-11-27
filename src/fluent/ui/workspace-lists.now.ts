@@ -7,12 +7,16 @@ import { userRole } from '../roles.now'
 // the category points at a config that doesn't exist and simply doesn't show.
 const CSM_WORKSPACE_LIST_MENU = '0b62b8ba77d650102c30945caa106138'
 
-const COLUMNS = 'number,host_record,direction,status,priority,partner,summary,request_date,response_sla'
+// Shared with the Service Operations Workspace's TSANet lists (sow-workspace-lists.now.ts).
+export const COLUMNS = 'number,host_record,direction,status,priority,partner,summary,request_date,response_sla'
+export const INBOUND_OPEN = 'direction=INBOUND^status=OPEN^ORDERBYDESCrequest_date'
+export const OUTBOUND = 'direction=OUTBOUND^ORDERBYDESCrequest_date'
+export const ALL = 'ORDERBYDESCrequest_date'
 
 // The lists' roles are the role name as text: Record() data can't take a Role object
 // (it renders as [object Object]), unlike Applicability's roles.
 
-const tsanetAudience = Applicability({
+export const tsanetAudience = Applicability({
     $id: Now.ID['ws_audience_user'],
     name: 'TSANet Connect - User',
     description: 'Agents with the TSANet Connect user role',
@@ -38,7 +42,7 @@ const inboundOpenList = Record({
         category: tsanetCategory,
         title: 'Inbound - Open',
         table: 'x_2256809_connect_case',
-        condition: 'direction=INBOUND^status=OPEN^ORDERBYDESCrequest_date',
+        condition: INBOUND_OPEN,
         columns: COLUMNS,
         roles: 'x_2256809_connect.user',
         active: true,
@@ -54,7 +58,7 @@ const outboundList = Record({
         category: tsanetCategory,
         title: 'Outbound',
         table: 'x_2256809_connect_case',
-        condition: 'direction=OUTBOUND^ORDERBYDESCrequest_date',
+        condition: OUTBOUND,
         columns: COLUMNS,
         roles: 'x_2256809_connect.user',
         active: true,
@@ -70,7 +74,7 @@ const allList = Record({
         category: tsanetCategory,
         title: 'All TSANet Cases',
         table: 'x_2256809_connect_case',
-        condition: 'ORDERBYDESCrequest_date',
+        condition: ALL,
         columns: COLUMNS,
         roles: 'x_2256809_connect.user',
         active: true,

@@ -133,6 +133,10 @@ declare global {
                         table: 'sysevent_script_action'
                         id: '1f33531397304405934df9575d0c84bf'
                     }
+                    action_sow_incident_tsanet_request: {
+                        table: 'sys_ui_action'
+                        id: '5e94049cbfbf4f9f92f3bb887331bf14'
+                    }
                     action_tsanet_accept: {
                         table: 'sys_ui_action'
                         id: '7bba3df8080a4768a1e927e3bc01647f'
@@ -366,6 +370,10 @@ declare global {
                         table: 'sys_ux_m2m_action_layout_item'
                         id: 'b6214ea8eb6c4974b87fbaa4a6d93c1e'
                     }
+                    form_action_item_link_sow_incident_tsanet_request: {
+                        table: 'sys_ux_m2m_action_layout_item'
+                        id: '4cb6a5118ae4461d98fdafa072b3c646'
+                    }
                     form_action_item_link_tsanet_accept: {
                         table: 'sys_ux_m2m_action_layout_item'
                         id: '15355d0c00234e7a8a15d8b9c6108626'
@@ -387,6 +395,10 @@ declare global {
                         table: 'sys_ux_m2m_action_layout_item'
                         id: '02009508c1ba4ecc9836b42f7f87ab5e'
                         deleted: false
+                    }
+                    form_action_item_sow_incident_tsanet_request: {
+                        table: 'sys_ux_form_action_layout_item'
+                        id: 'a2ea989934394a26a9caa0ce1e3dc3a5'
                     }
                     form_action_item_tsanet_accept: {
                         table: 'sys_ux_form_action_layout_item'
@@ -516,6 +528,10 @@ declare global {
                         table: 'sys_properties'
                         id: 'f90bf43f8afb4b4db23923d272662bc4'
                     }
+                    rel_tsanet_request_incident: {
+                        table: 'sys_relationship'
+                        id: 'e716a28ff0fd4280808b8d2c5f36fbf0'
+                    }
                     rest_create_case: {
                         table: 'sys_ws_definition'
                         id: 'e964e9b764284af59d3493ef9cc418a3'
@@ -608,6 +624,38 @@ declare global {
                     setup_sync_overlap_minutes: {
                         table: 'sys_properties_category_m2m'
                         id: '9f115ded55744d04b7c58e2f7f5349ba'
+                    }
+                    sow_category_tsanet: {
+                        table: 'sys_ux_list_category'
+                        id: '72149b7c3d3b4d8a9a8ef074d037e29f'
+                    }
+                    sow_incident_related_list_tsanet: {
+                        table: 'sys_ui_related_list_entry'
+                        id: '6b01b62fa29d4c72aa889b0eaabcc352'
+                    }
+                    sow_list_all: {
+                        table: 'sys_ux_list'
+                        id: 'd18e3f91db6e45f699ca935d7c58b9da'
+                    }
+                    sow_list_all_audience: {
+                        table: 'sys_ux_applicability_m2m_list'
+                        id: '4c7b2d094712424fa39db1d6284b25a6'
+                    }
+                    sow_list_inbound_open: {
+                        table: 'sys_ux_list'
+                        id: '411e5810f790417491904935ec0f18fa'
+                    }
+                    sow_list_inbound_open_audience: {
+                        table: 'sys_ux_applicability_m2m_list'
+                        id: '65fb87b2eece4a8a8d275e2ec62a045f'
+                    }
+                    sow_list_outbound: {
+                        table: 'sys_ux_list'
+                        id: 'cb3b710e809d402998f246fa1bde3545'
+                    }
+                    sow_list_outbound_audience: {
+                        table: 'sys_ux_applicability_m2m_list'
+                        id: '5a7f7fa4082041729377f246dc6a1e5d'
                     }
                     'src_server_scheduled-jobs_tsanet-sync-job_js': {
                         table: 'sys_module'
@@ -3333,6 +3381,19 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_ui_action_role'
+                        id: '64716545b1d54086880c847f9cbc3e74'
+                        key: {
+                            sys_ui_action: '5e94049cbfbf4f9f92f3bb887331bf14'
+                            sys_user_role: {
+                                id: '13c64c9ef7b54505a80e6f46530c6f51'
+                                key: {
+                                    name: 'x_2256809_connect.user'
+                                }
+                            }
+                        }
+                    },
+                    {
                         table: 'sys_ui_section'
                         id: '64c96557cbc74399831a8814f8ffd00d'
                         key: {
@@ -4433,6 +4494,13 @@ declare global {
                             name: 'x_2256809_connect_case'
                             element: 'priority_note'
                             language: 'en'
+                        }
+                    },
+                    {
+                        table: 'sys_ux_form_action'
+                        id: '95d563af47a9402182a759df2622a4db'
+                        key: {
+                            ui_action: '5e94049cbfbf4f9f92f3bb887331bf14'
                         }
                     },
                     {
