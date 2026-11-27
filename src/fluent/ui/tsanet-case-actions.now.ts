@@ -445,3 +445,77 @@ Record({
         active: true,
     },
 })
+
+// The same buttons in the Service Operations Workspace (#50), for a TSANet Case opened there (for
+// example from an incident's TSANet Request list). The workspace has its own action config, so the
+// TSANet Case gets a second layout of ours on it, linking the same layout items: the actions, their
+// conditions and scripts are shared. Where the workspace isn't installed the layout points at nothing.
+const SOW_ACTION_CONFIG = 'f03cde97534130108b91ddeeff7b12f5'
+
+const sowCaseActionLayout = Record({
+    $id: Now.ID['form_action_layout_tsanet_case_sow'],
+    table: 'sys_ux_form_action_layout',
+    data: {
+        name: 'TSANet Case Actions (Service Operations Workspace)',
+        table: 'x_2256809_connect_case',
+        action_config: SOW_ACTION_CONFIG,
+        specificity: 10,
+        active: true,
+    },
+})
+
+Record({
+    $id: Now.ID['form_action_item_link_tsanet_accept_sow'],
+    table: 'sys_ux_m2m_action_layout_item',
+    data: {
+        ux_form_action_layout: sowCaseActionLayout,
+        ux_form_action_layout_item: acceptItem,
+        table: 'x_2256809_connect_case',
+        display_type: BUTTON,
+        variant: 'primary',
+        order: 100,
+        active: true,
+    },
+})
+
+Record({
+    $id: Now.ID['form_action_item_link_tsanet_reject_sow'],
+    table: 'sys_ux_m2m_action_layout_item',
+    data: {
+        ux_form_action_layout: sowCaseActionLayout,
+        ux_form_action_layout_item: rejectItem,
+        table: 'x_2256809_connect_case',
+        display_type: BUTTON,
+        variant: 'secondary',
+        order: 110,
+        active: true,
+    },
+})
+
+Record({
+    $id: Now.ID['form_action_item_link_tsanet_create_note_sow'],
+    table: 'sys_ux_m2m_action_layout_item',
+    data: {
+        ux_form_action_layout: sowCaseActionLayout,
+        ux_form_action_layout_item: createNoteItem,
+        table: 'x_2256809_connect_case',
+        display_type: BUTTON,
+        variant: 'secondary',
+        order: 120,
+        active: true,
+    },
+})
+
+Record({
+    $id: Now.ID['form_action_item_link_tsanet_change_case_sow'],
+    table: 'sys_ux_m2m_action_layout_item',
+    data: {
+        ux_form_action_layout: sowCaseActionLayout,
+        ux_form_action_layout_item: changeCaseItem,
+        table: 'x_2256809_connect_case',
+        display_type: BUTTON,
+        variant: 'secondary',
+        order: 130,
+        active: true,
+    },
+})

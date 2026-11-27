@@ -379,22 +379,42 @@ declare global {
                         id: '15355d0c00234e7a8a15d8b9c6108626'
                         deleted: false
                     }
+                    form_action_item_link_tsanet_accept_sow: {
+                        table: 'sys_ux_m2m_action_layout_item'
+                        id: '67a6e6670d6b41ccab34e8cf9a130a40'
+                    }
                     form_action_item_link_tsanet_change_case: {
                         table: 'sys_ux_m2m_action_layout_item'
                         id: '5053bf8ab750485ba5755c66e1645c83'
+                    }
+                    form_action_item_link_tsanet_change_case_sow: {
+                        table: 'sys_ux_m2m_action_layout_item'
+                        id: '7b0499b04df146d1b3c183b631db4065'
                     }
                     form_action_item_link_tsanet_create_note: {
                         table: 'sys_ux_m2m_action_layout_item'
                         id: '53185ce58b4a4d7695c01731349a27b1'
                     }
+                    form_action_item_link_tsanet_create_note_sow: {
+                        table: 'sys_ux_m2m_action_layout_item'
+                        id: 'b096ddf87c204e42a76fb1ed07185314'
+                    }
                     form_action_item_link_tsanet_note_send_again: {
                         table: 'sys_ux_m2m_action_layout_item'
                         id: 'a183af9fb31a4d7cb34847b0afdf4b25'
+                    }
+                    form_action_item_link_tsanet_note_send_again_sow: {
+                        table: 'sys_ux_m2m_action_layout_item'
+                        id: 'b19d1e2eb49d4c4d980700459f691079'
                     }
                     form_action_item_link_tsanet_reject: {
                         table: 'sys_ux_m2m_action_layout_item'
                         id: '02009508c1ba4ecc9836b42f7f87ab5e'
                         deleted: false
+                    }
+                    form_action_item_link_tsanet_reject_sow: {
+                        table: 'sys_ux_m2m_action_layout_item'
+                        id: '122ada35a3e845c9b643a5da219de0b6'
                     }
                     form_action_item_sow_incident_tsanet_request: {
                         table: 'sys_ux_form_action_layout_item'
@@ -427,9 +447,17 @@ declare global {
                         id: 'bd47953964b54b00b3b734d65be967c6'
                         deleted: false
                     }
+                    form_action_layout_tsanet_case_sow: {
+                        table: 'sys_ux_form_action_layout'
+                        id: '730b5ee7137144939b975d49b595ff23'
+                    }
                     form_action_layout_tsanet_note: {
                         table: 'sys_ux_form_action_layout'
                         id: 'c2b1a4ffe3e94887b303207dbc537bc5'
+                    }
+                    form_action_layout_tsanet_note_sow: {
+                        table: 'sys_ux_form_action_layout'
+                        id: '12fe3cc855cf4fc0b60feb9b2aca85a5'
                     }
                     job_tsanet_sync: {
                         table: 'sysauto_script'
