@@ -157,7 +157,7 @@ export default function App() {
             <Alert
                 status="positive"
                 header={`${created.number} sent to ${created.partner}`}
-                content={`TSANet has the request (token ${created.token}). It shows in the ${hostCase.type.toLowerCase()}'s ${hostCase.type == 'Incident' ? 'TSANet Request' : 'TSANet Cases'} list.`}
+                content={`TSANet has the request (token ${created.token}). It shows in the ${hostCase.kind == 'incident' ? "incident's TSANet Request" : "case's TSANet Cases"} list.`}
             />
         )
 

@@ -48,6 +48,8 @@ TSANetCreateCase.prototype = {
             return el && el.canRead() ? String(el.getDisplayValue() || '') : '';
         };
         return {
+            // A fixed value for the page to decide wording on; type is the (translatable) label it shows.
+            kind: incident ? 'incident' : 'case',
             number: read('number'),
             type: gr.getClassDisplayValue(),
             shortDescription: read('short_description'),
