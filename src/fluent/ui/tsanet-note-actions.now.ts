@@ -98,3 +98,33 @@ Record({
         active: true,
     },
 })
+
+// Send again in the Service Operations Workspace too (#50): a second layout of ours on that
+// workspace's action config, linking the same layout item.
+const SOW_ACTION_CONFIG = 'f03cde97534130108b91ddeeff7b12f5'
+
+const sowNoteActionLayout = Record({
+    $id: Now.ID['form_action_layout_tsanet_note_sow'],
+    table: 'sys_ux_form_action_layout',
+    data: {
+        name: 'TSANet Note Actions (Service Operations Workspace)',
+        table: 'x_2256809_connect_note',
+        action_config: SOW_ACTION_CONFIG,
+        specificity: 10,
+        active: true,
+    },
+})
+
+Record({
+    $id: Now.ID['form_action_item_link_tsanet_note_send_again_sow'],
+    table: 'sys_ux_m2m_action_layout_item',
+    data: {
+        ux_form_action_layout: sowNoteActionLayout,
+        ux_form_action_layout_item: sendAgainItem,
+        table: 'x_2256809_connect_note',
+        display_type: BUTTON,
+        variant: 'primary',
+        order: 100,
+        active: true,
+    },
+})
